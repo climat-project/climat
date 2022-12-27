@@ -1,0 +1,11 @@
+{
+  "name": "climat",
+  "action": "",
+  "children": [
+    {
+      "name": "exec",
+      "params": { "pathToJson": "req:arg:p", "command": "req:arg:c" },
+      "action": "climatExec('$(pathToJson)', '$(command)')"
+    }
+  ]
+}

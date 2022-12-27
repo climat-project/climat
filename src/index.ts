@@ -1,3 +1,9 @@
+#!/usr/bin/env node
+
+import { ToolchainProcessor } from 'climat-lib';
+import fs from 'fs';
+import child_process from 'child_process';
+import manifest from './manifest.climat.json';
 /**
  * @file This is the entrypoint for your project.
  * If used as a node module, when someone runs
@@ -7,4 +13,16 @@
  * For small projects you could put all your code right in this file.
  */
 
-export default undefined;
+export function climatExec(pathToJson: string, command: string): void {
+  const json = fs.readFileSync(pathToJson, 'utf8');
+
+  new ToolchainProcessor(json, (command) => {
+    child_process.execSync(command, {
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+  }).executeFromString(command);
+}
+
+new ToolchainProcessor(JSON.stringify(manifest), (js) => eval(js)).execute(
+  process.argv.slice(2),
+);

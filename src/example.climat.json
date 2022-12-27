@@ -1,0 +1,11 @@
+{
+  "name": "example",
+  "action": "",
+  "children": [
+    {
+      "name": "random",
+      "params": { "arg1": "req:arg:p", "arg2": "req:arg:c" },
+      "action": "echo 'Hello! I was executed with arg1 = $(arg1) and arg2 = $(arg2)'"
+    }
+  ]
+}
