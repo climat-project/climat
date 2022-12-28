@@ -1,5 +1,5 @@
 {
-  "include": ["./src", "./test"],
+  "include": ["./src/main", "./src/test"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "target": "es2017",
@@ -32,8 +32,8 @@
         to a local or npm module.)
       */
       "@/*": ["src/lib/*"],
-      "$/*": ["src/*"],
-      "$test/*": ["test/*"]
+      "$/*": ["src/main/*"],
+      "$test/*": ["src/test/*"]
     }
   }
 }

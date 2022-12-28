@@ -3,7 +3,7 @@ const ShebangPlugin = require('webpack-shebang-plugin');
 const { config } = require('process');
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './src/main/index.ts',
   devtool: 'inline-source-map',
   module: {
     rules: [

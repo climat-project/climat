@@ -46,7 +46,7 @@
     "@typescript-eslint/prefer-namespace-keyword": "error",
     "@typescript-eslint/triple-slash-reference": "error",
     "@typescript-eslint/no-floating-promises": ["error"],
-    "@typescript-eslint/comma-dangle": "error",
+    "@typescript-eslint/comma-dangle": "off",
     "@typescript-eslint/comma-spacing": "error",
     "no-var": "error",
     "prefer-const": "error",

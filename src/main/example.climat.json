@@ -4,7 +4,11 @@
   "children": [
     {
       "name": "random",
-      "params": { "arg1": "req:arg:p", "arg2": "req:arg:c" },
+      "params": { "arg1": "opt:arg:p", "arg2": "opt:arg:c" },
+      "paramDefaults": {
+        "arg1": "<no value for arg1!>",
+        "arg2": "<no value for arg2!>"
+      },
       "action": "echo 'Hello! I was executed with arg1 = $(arg1) and arg2 = $(arg2)'"
     }
   ]
