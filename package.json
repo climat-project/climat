@@ -29,11 +29,11 @@
   },
   "dependencies": {
     "climat-lib": "file:../climat-lib/build/developmentLibrary",
-    "lowdb": "^5.0.5"
+    "lowdb": "^5.0.5",
+    "ndoe": "^0.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.18",
-    "@types/fs-extra": "^9.0.11",
     "@types/mocha": "^8.2.2",
     "@types/node": "^15.6.0",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
@@ -42,7 +42,6 @@
     "conventional-changelog-cli": "^2.1.1",
     "eslint": "8.30.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "fs-extra": "^10.0.0",
     "mocha": "^10.2.0",
     "prettier": "^2.3.0",
     "rimraf": "^3.0.2",
@@ -56,6 +55,6 @@
   },
   "bin": {
     "climat": "./build/main.js",
-    "climat-dev": "./build/src/index.js"
+    "climat-dev": "./build/main/index.js"
   }
 }

@@ -14,6 +14,7 @@ module.exports = {
       },
     ],
   },
+  target: 'node',
   plugins: [new ShebangPlugin()],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],

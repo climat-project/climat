@@ -10,42 +10,17 @@
  */
 
 import { expect } from 'chai';
-import fs from 'fs-extra';
-
-const sandboxRoot = './sandbox';
-const samplesRoot = './samples';
-
-/**
- * Clone any files in a "./samples" folder into
- * a "./sandbox" folder, overwriting any files
- * currently in there. This is useful for allowing
- * your test suite to make changes to files without
- * changing the originals, so that you can easily
- * reset back to an original state prior to running a test.
- */
-function resetSandbox(): void {
-  if (!fs.existsSync(samplesRoot)) {
-    // Then no samples exist, and no sandbox needed
-    return;
-  }
-  fs.ensureDirSync(sandboxRoot);
-  fs.emptyDirSync(sandboxRoot);
-  fs.copySync(samplesRoot, sandboxRoot);
-}
 
 describe('Test Suite', function () {
   before(function () {
-    resetSandbox();
   });
 
   describe('Test Group', function () {
     it('can do something', function () {
-      resetSandbox();
       expect(false).to.be.true;
     });
   });
 
   after(function () {
-    resetSandbox();
   });
 });

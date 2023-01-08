@@ -22,9 +22,6 @@ const climat = {
       });
     }).executeFromString(command);
   },
-
-  install: (pathToJson: string): void => {},
-  uninstall: (pathToJson: string): void => {},
 };
 ToolchainProcessor.createFromJsonString(JSON.stringify(manifest), (js) =>
   eval(js),
