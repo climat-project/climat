@@ -1,28 +1,30 @@
 import fs from 'fs-extra';
 import { ToolchainProcessor } from '../../../climat-lib/build/developmentLibrary';
-import os from 'os';
+import { EOL, homedir } from 'os';
 import path from 'path';
 import { promisified as regedit } from 'regedit';
 import * as upath from 'upath';
 
-const eol = os.EOL;
 const CLIMAT_HOME_DIR_NAME = '.climat';
 
-function moveJsonToClimatHome(pathToJson: string, name: string): void {
-  const climatHome = path.join(os.homedir(), CLIMAT_HOME_DIR_NAME);
-
+function moveJsonToClimatHome(
+  pathToJson: string,
+  name: string,
+  path: path.PlatformPath,
+): void {
+  const climatHome = path.join(homedir(), CLIMAT_HOME_DIR_NAME);
   fs.ensureDirSync(climatHome);
-  fs.copyFileSync(pathToJson, path.join(climatHome, name + '.json'));
+  fs.copyFileSync(pathToJson, path.join(climatHome, `${name}.json`));
 }
 
 function unix(pathToJson: string, name: string): void {
   const climatStaple = '#CLIMAT INIT';
-  const home = os.homedir();
+  const home = homedir();
   const bashrc = path.join(home, '.bashrc');
   const climatHome = path.join(home, CLIMAT_HOME_DIR_NAME);
   const bashAliases = path.join(climatHome, '.bash_aliases');
 
-  moveJsonToClimatHome(pathToJson, name);
+  moveJsonToClimatHome(pathToJson, name, path.posix);
 
   const aliasExists =
     fs.pathExistsSync(bashAliases) &&
@@ -31,7 +33,7 @@ function unix(pathToJson: string, name: string): void {
   if (!aliasExists) {
     fs.appendFileSync(
       bashAliases,
-      `alias ${name}='climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}.json'${eol}"`,
+      `alias ${name}='climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}.json'${EOL}"`,
     );
   }
 
@@ -42,13 +44,13 @@ function unix(pathToJson: string, name: string): void {
     fs.appendFileSync(
       bashrc,
       [
-        eol,
+        EOL,
         climatStaple,
         `if [ -f ${bashAliases} ]; then`,
         `  . ${bashAliases}`,
         'fi',
-        eol,
-      ].join(eol),
+        EOL,
+      ].join(EOL),
     );
   }
 }
@@ -56,9 +58,10 @@ function unix(pathToJson: string, name: string): void {
 async function windows(pathToJson: string, name: string): Promise<void> {
   const hkey = 'HKCU\\Environment';
   const join = path.win32.join;
-  const climatHome = join(os.homedir(), CLIMAT_HOME_DIR_NAME);
+  const climatHome = join(homedir(), CLIMAT_HOME_DIR_NAME);
   const climatBin = join(climatHome, 'bin');
-  moveJsonToClimatHome(pathToJson, name);
+
+  moveJsonToClimatHome(pathToJson, name, path.win32);
 
   fs.ensureDirSync(climatBin);
   fs.writeFileSync(
@@ -95,7 +98,7 @@ export default async function install(pathToJson: string): Promise<void> {
   const { name } = ToolchainProcessor.Companion.parse(json);
 
   switch (process.platform) {
-    case 'linux': // TODO check if other unix like systems are supported
+    case 'linux': // TODO check if other unix like systems are supported by the current unix implementation
       unix(pathToJson, name);
       break;
     case 'win32':
