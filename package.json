@@ -31,7 +31,9 @@
     "climat-lib": "file:../climat-lib/build/developmentLibrary",
     "fs-extra": "11.1.0",
     "lowdb": "^5.0.5",
-    "ndoe": "^0.0.0"
+    "ndoe": "^0.0.0",
+    "regedit": "^5.1.1",
+    "upath": "^2.0.1"
   },
   "devDependencies": {
     "@types/chai": "^4.2.18",

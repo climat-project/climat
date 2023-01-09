@@ -12,8 +12,7 @@
 import { expect } from 'chai';
 
 describe('Test Suite', function () {
-  before(function () {
-  });
+  before(function () {});
 
   describe('Test Group', function () {
     it('can do something', function () {
@@ -21,6 +20,5 @@ describe('Test Suite', function () {
     });
   });
 
-  after(function () {
-  });
+  after(function () {});
 });
