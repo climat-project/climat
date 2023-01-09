@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 import child_process from 'child_process';
 import process from 'process';
 import manifest from './manifest.climat.json';
-import install from './install';
+import install from './install/install';
 
 function getExec(skipValidation: boolean) {
   return function (pathToJson: string, command: string): void {
