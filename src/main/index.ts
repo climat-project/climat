@@ -6,10 +6,11 @@ import child_process from 'child_process';
 import process from 'process';
 import manifest from './manifest.climat.json';
 import install from './install/install';
+import untildify from 'untildify';
 
 function getExec(skipValidation: boolean) {
   return function (pathToJson: string, command: string): void {
-    const json = fs.readFileSync(pathToJson, 'utf8');
+    const json = fs.readFileSync(untildify(pathToJson), 'utf8');
 
     ToolchainProcessor.createFromJsonString(
       json,

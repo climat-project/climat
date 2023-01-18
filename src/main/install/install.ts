@@ -2,9 +2,10 @@ import fs from 'fs-extra';
 import { ToolchainProcessor } from 'climat-lib';
 import windows from './windows';
 import unix from './unix';
+import untildify from 'untildify';
 
 export default async function install(pathToJson: string): Promise<void> {
-  const json = fs.readFileSync(pathToJson, 'utf8');
+  const json = fs.readFileSync(untildify(pathToJson), 'utf8');
   const { name } = ToolchainProcessor.Companion.parse(json);
 
   switch (process.platform) {
