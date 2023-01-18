@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
-import { ToolchainProcessor } from '../../../../climat-lib/build/developmentLibrary';
-import windows from '$/install/windows';
-import unix from '$/install/unix';
+import { ToolchainProcessor } from 'climat-lib';
+import windows from './windows';
+import unix from './unix';
 
 export default async function install(pathToJson: string): Promise<void> {
   const json = fs.readFileSync(pathToJson, 'utf8');

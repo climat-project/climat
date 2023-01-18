@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import path from 'path';
 
 export const CLIMAT_HOME_DIR_NAME = '.climat';
+export const MAIN_JSON_NAME = 'climat.json';
 
 export function moveJsonToClimatHome(
   pathToJson: string,
@@ -11,5 +12,6 @@ export function moveJsonToClimatHome(
 ): void {
   const climatHome = path.join(homedir(), CLIMAT_HOME_DIR_NAME);
   fs.ensureDirSync(climatHome);
-  fs.copyFileSync(pathToJson, path.join(climatHome, `${name}.json`));
+  fs.ensureDirSync(path.join(climatHome, name));
+  fs.copyFileSync(pathToJson, path.join(climatHome, name, MAIN_JSON_NAME));
 }

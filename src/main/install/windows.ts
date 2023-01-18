@@ -1,10 +1,13 @@
 import path from 'path';
 import { homedir } from 'os';
-import { moveJsonToClimatHome } from '$/install/utils';
+import {
+  CLIMAT_HOME_DIR_NAME,
+  MAIN_JSON_NAME,
+  moveJsonToClimatHome,
+} from './utils';
 import fs from 'fs-extra';
 import upath from 'upath';
 import { promisified as regedit } from 'regedit';
-import { CLIMAT_HOME_DIR_NAME } from './utils';
 
 const HKCU_ENVIRONMENT = 'HKCU\\Environment';
 const join = path.win32.join;
@@ -13,7 +16,7 @@ const climatBinPath = join(climatHome, 'bin');
 
 function getBatchScript(name: string): string {
   return `climat execNoValidation "${upath.toUnix(
-    join(climatHome, `${name}.json`),
+    join(climatHome, name, MAIN_JSON_NAME),
   )}"`;
 }
 

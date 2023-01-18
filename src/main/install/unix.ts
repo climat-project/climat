@@ -1,8 +1,11 @@
 import { EOL, homedir } from 'os';
 import path from 'path';
-import { moveJsonToClimatHome } from '$/install/utils';
+import {
+  CLIMAT_HOME_DIR_NAME,
+  MAIN_JSON_NAME,
+  moveJsonToClimatHome,
+} from './utils';
 import fs from 'fs-extra';
-import { CLIMAT_HOME_DIR_NAME } from './utils';
 
 const CLIMAT_STAPLE = '#CLIMAT INIT';
 const home = homedir();
@@ -33,7 +36,7 @@ function getAliasesInitializationBashSnippet(): string {
 }
 
 function getAliasCommand(name: string): string {
-  return `alias ${name}='climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}.json'${EOL}"`;
+  return `alias ${name}='climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}/${MAIN_JSON_NAME}"'${EOL}`;
 }
 
 export default function unix(pathToJson: string, name: string): void {
