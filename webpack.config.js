@@ -18,10 +18,6 @@ module.exports = {
   plugins: [new ShebangPlugin()],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    fallback: {
-      fs: false,
-      child_process: false,
-    },
   },
   output: {
     filename: 'main.js',
