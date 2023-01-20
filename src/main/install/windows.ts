@@ -50,10 +50,10 @@ async function augmentPathWithClimatBin(): Promise<void> {
 }
 
 export default async function windows(
-  pathToJson: string,
+  json: string,
   name: string,
 ): Promise<void> {
-  moveJsonToClimatHome(pathToJson, name, path.win32);
+  moveJsonToClimatHome(json, name, path.win32);
 
   fs.ensureDirSync(climatBinPath);
   fs.writeFileSync(getBatchFilePath(name), getBatchScript(name));

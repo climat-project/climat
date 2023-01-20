@@ -39,8 +39,8 @@ function getAliasCommand(name: string): string {
   return `alias ${name}='climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}/${MAIN_JSON_NAME}"'${EOL}`;
 }
 
-export default function unix(pathToJson: string, name: string): void {
-  moveJsonToClimatHome(pathToJson, name, path.posix);
+export default function unix(json: string, name: string): void {
+  moveJsonToClimatHome(json, name, path.posix);
 
   if (!aliasExists(name)) {
     fs.appendFileSync(bashAliasesPath, getAliasCommand(name));

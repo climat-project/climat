@@ -13,5 +13,5 @@ export function moveJsonToClimatHome(
   const climatHome = path.join(homedir(), CLIMAT_HOME_DIR_NAME);
   fs.ensureDirSync(climatHome);
   fs.ensureDirSync(path.join(climatHome, name));
-  fs.copyFileSync(pathToJson, path.join(climatHome, name, MAIN_JSON_NAME));
+  fs.writeFileSync(path.join(climatHome, name, MAIN_JSON_NAME), pathToJson);
 }
