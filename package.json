@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "climat-lib": "file:../climat-lib/build/developmentLibrary",
+    "colors": "^1.4.0",
     "fs-extra": "11.1.0",
     "lowdb": "^5.0.5",
     "ndoe": "^0.0.0",
