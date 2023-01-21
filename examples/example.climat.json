@@ -12,7 +12,13 @@
         "arg1": "<no value for arg1!>",
         "arg2": "<no value for arg2!>"
       },
-      "action": "echo 'Hello! I was executed with arg1 = $(arg1) and arg2 = $(arg2)'"
+      "action": "echo 'Hello! I was executed with arg1 = $(arg1) and arg2 = $(arg2)'",
+      "children": [
+        {
+          "name": "abc",
+          "action" : "echo 'Hello from the other side'"
+        }
+      ]
     }
   ]
 }

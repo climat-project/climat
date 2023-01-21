@@ -1,11 +1,15 @@
 {
   "name": "climat",
-  "action": "",
   "children": [
     {
       "name": "exec",
       "parameters": ["req:arg:pathToJson:p", "req:arg:command:c"],
       "action": "climat.exec('$(pathToJson)', '$(command)')"
+    },
+    {
+      "name": "run",
+      "parameters": ["req:arg:command:c"],
+      "action": "climat.run('$(command)')"
     },
     {
       "name": "execNoValidation",
