@@ -4,7 +4,7 @@ import {
   CLIMAT_HOME_DIR_NAME,
   MAIN_JSON_NAME,
   moveJsonToClimatHome,
-  removeJsonFromClimatHome,
+  removeToolchainFromClimatHome,
 } from './utils';
 import fs from 'fs-extra';
 import upath from 'upath';
@@ -63,6 +63,6 @@ export async function windowsInstall(
 }
 
 export function windowsUninstall(name: string): void {
-  removeJsonFromClimatHome(name, path.win32);
+  removeToolchainFromClimatHome(name, path.win32);
   fs.unlinkSync(getBatchFilePath(name));
 }

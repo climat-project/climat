@@ -4,7 +4,7 @@ import {
   CLIMAT_HOME_DIR_NAME,
   MAIN_JSON_NAME,
   moveJsonToClimatHome,
-  removeJsonFromClimatHome,
+  removeToolchainFromClimatHome,
 } from './utils';
 import fs from 'fs-extra';
 
@@ -54,7 +54,7 @@ export function unixInstall(json: string, name: string): void {
 }
 
 export function unixUninstall(name: string): void {
-  removeJsonFromClimatHome(name, path.posix);
+  removeToolchainFromClimatHome(name, path.posix);
   const newData = fs
     .readFileSync(bashAliasesPath, 'utf8')
     .replace(new RegExp(`^alias ${name}.*${EOL}`), '');

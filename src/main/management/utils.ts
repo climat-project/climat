@@ -1,6 +1,7 @@
 import { homedir } from 'os';
 import fs from 'fs-extra';
 import path from 'path';
+import { isError } from '../exceptions';
 
 export const CLIMAT_HOME_DIR_NAME = '.climat';
 export const MAIN_JSON_NAME = 'climat.json';
@@ -17,12 +18,20 @@ export function moveJsonToClimatHome(
   fs.writeFileSync(path.join(climatHome, name, MAIN_JSON_NAME), pathToJson);
 }
 
-export function removeJsonFromClimatHome(
+export function removeToolchainFromClimatHome(
   name: string,
   path: path.PlatformPath,
 ): void {
-  fs.rmSync(path.join(climatHome, name), {
-    recursive: true,
-    force: true,
-  });
+  try {
+    fs.rmSync(path.join(climatHome, name), {
+      recursive: true,
+    });
+  } catch (e) {
+    if (isError(e)) {
+      if (e.code === 'ENOENT') {
+        throw new Error(`Toolchain named \`${name}\` was not found`);
+      }
+    }
+    throw e;
+  }
 }

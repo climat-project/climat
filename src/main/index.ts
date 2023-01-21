@@ -7,18 +7,43 @@ import install from './management/install';
 import uninstall from './management/uninstall';
 import { getExec, run } from './run';
 
+function prettifyErrorsAsync<T extends unknown[]>(
+  fn: (...args: T) => Promise<void>,
+): () => Promise<void> {
+  return async (...args: T) => {
+    try {
+      await fn(...args);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error(e.message);
+      } else {
+        console.error(e);
+      }
+    }
+  };
+}
+
+function prettifyErrors<T extends unknown[]>(
+  fn: (...args: T) => void,
+): () => void {
+  return prettifyErrorsAsync((...args: T) => {
+    fn(...args);
+    return Promise.resolve();
+  });
+}
+
 const climat = {
-  exec: getExec(false),
-  execNoValidation: getExec(true),
+  exec: prettifyErrors(getExec(false)),
+  execNoValidation: prettifyErrors(getExec(true)),
 
-  validate: (pathToJson: string): void => {
+  validate: prettifyErrors((pathToJson: string): void => {
     ToolchainProcessor.Companion.parse(pathToJson);
-  },
+  }),
 
-  run,
+  run: prettifyErrors(run),
 
-  uninstall,
-  install,
+  uninstall: prettifyErrors(uninstall),
+  install: prettifyErrorsAsync(install),
 };
 ToolchainProcessor.createFromJsonString(JSON.stringify(manifest), (js) =>
   eval(js),

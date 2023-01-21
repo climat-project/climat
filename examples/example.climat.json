@@ -16,7 +16,7 @@
       "children": [
         {
           "name": "abc",
-          "action" : "echo 'Hello from the other side'"
+          "action" : "echo 'Hello from the other side' $(arg1) $(arg2)"
         }
       ]
     }
