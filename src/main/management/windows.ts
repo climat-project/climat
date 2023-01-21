@@ -4,6 +4,7 @@ import {
   CLIMAT_HOME_DIR_NAME,
   MAIN_JSON_NAME,
   moveJsonToClimatHome,
+  removeJsonFromClimatHome,
 } from './utils';
 import fs from 'fs-extra';
 import upath from 'upath';
@@ -49,7 +50,7 @@ async function augmentPathWithClimatBin(): Promise<void> {
   });
 }
 
-export default async function windows(
+export async function windowsInstall(
   json: string,
   name: string,
 ): Promise<void> {
@@ -59,4 +60,9 @@ export default async function windows(
   fs.writeFileSync(getBatchFilePath(name), getBatchScript(name));
 
   await augmentPathWithClimatBin();
+}
+
+export function windowsUninstall(name: string): void {
+  removeJsonFromClimatHome(name, path.win32);
+  fs.unlinkSync(getBatchFilePath(name));
 }

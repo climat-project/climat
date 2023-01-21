@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import { ToolchainProcessor } from 'climat-lib';
-import windows from './windows';
-import unix from './unix';
+import { windowsInstall } from './windows';
+import { unixInstall } from './unix';
 import untildify from 'untildify';
 import fetch from 'node-fetch';
 
@@ -22,10 +22,10 @@ export default async function install(uriToJson: string): Promise<void> {
 
   switch (process.platform) {
     case 'linux': // TODO check if other unix like systems are supported by the current unix implementation
-      unix(json, name);
+      unixInstall(json, name);
       break;
     case 'win32':
-      await windows(json, name);
+      await windowsInstall(json, name);
       break;
     default:
       throw new Error(`${process.platform} OS is not supported`);

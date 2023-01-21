@@ -4,14 +4,16 @@ import {
   CLIMAT_HOME_DIR_NAME,
   MAIN_JSON_NAME,
   moveJsonToClimatHome,
+  removeJsonFromClimatHome,
 } from './utils';
 import fs from 'fs-extra';
 
 const CLIMAT_STAPLE = '#CLIMAT INIT';
 const home = homedir();
-const bashrcPath = path.join(home, '.bashrc');
-const climatHome = path.join(home, CLIMAT_HOME_DIR_NAME);
-const bashAliasesPath = path.join(climatHome, '.bash_aliases');
+const join = path.posix.join;
+const bashrcPath = join(home, '.bashrc');
+const climatHome = join(home, CLIMAT_HOME_DIR_NAME);
+const bashAliasesPath = join(climatHome, '.bash_aliases');
 
 function aliasExists(name: string): boolean {
   return (
@@ -39,7 +41,7 @@ function getAliasCommand(name: string): string {
   return `alias ${name}='climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}/${MAIN_JSON_NAME}"'${EOL}`;
 }
 
-export default function unix(json: string, name: string): void {
+export function unixInstall(json: string, name: string): void {
   moveJsonToClimatHome(json, name, path.posix);
 
   if (!aliasExists(name)) {
@@ -49,4 +51,12 @@ export default function unix(json: string, name: string): void {
   if (!aliasesInitializedInBashRc()) {
     fs.appendFileSync(bashrcPath, getAliasesInitializationBashSnippet());
   }
+}
+
+export function unixUninstall(name: string): void {
+  removeJsonFromClimatHome(name, path.posix);
+  const newData = fs
+    .readFileSync(bashAliasesPath, 'utf8')
+    .replace(new RegExp(`^alias ${name}.*${EOL}`), '');
+  fs.writeFileSync(bashAliasesPath, newData);
 }

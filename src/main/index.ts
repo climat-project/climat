@@ -5,8 +5,9 @@ import fs from 'fs-extra';
 import child_process from 'child_process';
 import process from 'process';
 import manifest from './manifest.climat.json';
-import install from './install/install';
+import install from './management/install';
 import untildify from 'untildify';
+import uninstall from './management/uninstall';
 
 function getExec(skipValidation: boolean) {
   return function (pathToJson: string, command: string): void {
@@ -32,10 +33,7 @@ const climat = {
     ToolchainProcessor.Companion.parse(pathToJson);
   },
 
-  uninstall: (name: string): void => {
-    throw new Error('Not implemented');
-  },
-
+  uninstall,
   install,
 };
 ToolchainProcessor.createFromJsonString(JSON.stringify(manifest), (js) =>
