@@ -1,11 +1,11 @@
 import { error } from './theme';
 
-export function prettifyAsync(
-  fn: (js: string) => Promise<void>,
-): (js: string) => Promise<void> {
-  return async (js: string) => {
+export function prettifyAsync<T extends unknown[]>(
+  fn: (...args: T) => Promise<void>,
+): (...args: T) => Promise<void> {
+  return async (...args: T) => {
     try {
-      await fn(js);
+      await fn(...args);
     } catch (e: unknown) {
       console.error(error('Fatal:'));
       if (e instanceof Error) {

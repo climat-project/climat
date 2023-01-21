@@ -31,6 +31,7 @@
     "climat-lib": "file:../climat-lib/build/developmentLibrary",
     "colors": "^1.4.0",
     "fs-extra": "11.1.0",
+    "lodash": "^4.17.21",
     "lowdb": "^5.0.5",
     "ndoe": "^0.0.0",
     "node-fetch": "^2.6.8",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.18",
     "@types/fs-extra": "^9.0.13",
+    "@types/lodash": "^4.14.191",
     "@types/mocha": "^8.2.2",
     "@types/node": "^16.11.0",
     "@types/node-fetch": "^2.6.2",
