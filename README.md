@@ -1,5 +1,6 @@
-# Climat
-
+<p align="center">
+<img alt="Climat logo" src="https://raw.githubusercontent.com/climat-project/doc-and-design/master/static/img/logo-name.svg" width="500px"/>
+</p><br/><br/>
 Simple and smart way to generate complex aliases to Command Line Interface tools.
 
 - ✍️ Write complex CLI interfaces in a declarative style.
