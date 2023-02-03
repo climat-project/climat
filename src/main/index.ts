@@ -1,16 +1,19 @@
 #!/usr/bin/env node
 
-import { ToolchainProcessor, validation } from 'climat-lib';
-import process from 'process';
-import manifest from './manifest.climat.json';
-import install from './management/install';
-import uninstall from './management/uninstall';
-import { getExec, run } from './run';
-import { prettifyAsync } from './output/prettify';
-import { warn } from './output/theme';
-import { EOL } from 'os';
-import _ from 'lodash';
+import { domain, ToolchainProcessor, validation } from "climat-lib";
+import process from "process";
+import install from "./management/install";
+import uninstall from "./management/uninstall";
+import { getExec, run } from "./run";
+import { prettifyAsync } from "./output/prettify";
+import { warn } from "./output/theme";
+import { EOL } from "os";
+import _ from "lodash";
+// ES6 imports don't work with raw-loader for some reason
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const cli = require("./manifest.cli") as string;
 import ValidationEntryType = validation.ValidationResult.ValidationEntryType;
+import TemplateActionValue = domain.action.TemplateActionValue;
 
 const climat = {
   exec: getExec(false),
@@ -23,9 +26,10 @@ const climat = {
   install,
 };
 
-prettifyAsync(async () => {
+void prettifyAsync(async () => {
   const toolchain = ToolchainProcessor.Companion.parse(
-    JSON.stringify(manifest),
+    // TODO extract in file
+    cli
   );
   const validations = ToolchainProcessor.Companion.validate(toolchain);
 
@@ -48,7 +52,15 @@ prettifyAsync(async () => {
 
   ToolchainProcessor.create(
     toolchain,
-    prettifyAsync((js) => eval(js)),
+    prettifyAsync((command) => {
+      console.log(command);
+      if (command instanceof TemplateActionValue) {
+        return eval(command.template);
+      }
+      else {
+        throw new Error(`${command.type} not supported`);
+      }
+    }),
     true,
   ).execute(process.argv.slice(2));
-});
+})();

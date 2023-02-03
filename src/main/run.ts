@@ -1,9 +1,10 @@
-import { cwd } from 'process';
-import fs from 'fs-extra';
-import path from 'path';
-import untildify from 'untildify';
-import { ToolchainProcessor } from '../../../climat-lib/build/developmentLibrary';
-import child_process from 'child_process';
+import { cwd } from "process";
+import fs from "fs-extra";
+import path from "path";
+import untildify from "untildify";
+import { domain, ToolchainProcessor } from "climat-lib";
+import child_process from "child_process";
+import TemplateActionValue = domain.action.TemplateActionValue;
 
 const CLIMAT_JSON_FILE = 'climat.json';
 
@@ -14,9 +15,14 @@ export function getExec(skipValidation: boolean) {
     ToolchainProcessor.createFromJsonString(
       json,
       (command) => {
-        child_process.execSync(command, {
-          stdio: 'inherit',
-        });
+        if (command instanceof TemplateActionValue) {
+          child_process.execSync(command.template, {
+            stdio: 'inherit',
+          });
+        }
+        else {
+          throw new Error(`${command.type} not supported`)
+        }
       },
       skipValidation,
     ).executeFromString(command);

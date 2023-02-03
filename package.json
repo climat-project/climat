@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "test": "npm run build && mocha --inspect --require source-map-support/register --bail ./build/test/",
-    "build": "rimraf build && tsc && tsc-alias",
+    "build": "rimraf build && webpack --mode development",
     "build-prod": "rimraf build && webpack --mode production",
     "preversion": "npm run lint && npm run build && npm test",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && npm run format && git add -A",
@@ -28,7 +28,7 @@
     "build-live": "tsc -w && tsc-alias -w"
   },
   "dependencies": {
-    "climat-lib": "file:../climat-lib/build/developmentLibrary",
+    "climat-lib": "file:../climat-lib/build/productionLibrary",
     "colors": "^1.4.0",
     "fs-extra": "11.1.0",
     "lodash": "^4.17.21",
@@ -54,6 +54,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "mocha": "^10.2.0",
     "prettier": "^2.3.0",
+    "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.19",
     "ts-loader": "^9.4.2",
@@ -65,6 +66,6 @@
   },
   "bin": {
     "climat": "./build/main.js",
-    "climat-dev": "./build/main/index.js"
+    "climat-dev": "./build/main.js"
   }
 }
