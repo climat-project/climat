@@ -6,17 +6,17 @@ import { domain, ToolchainProcessor } from "climat-lib";
 import child_process from "child_process";
 import TemplateActionValue = domain.action.TemplateActionValue;
 
-const CLIMAT_JSON_FILE = 'climat.json';
+const CLIMAT_JSON_FILE = 'climat.cli';
 
 export function getExec(skipValidation: boolean) {
-  return function (pathToJson: string, command: string): void {
-    const json = fs.readFileSync(untildify(pathToJson), 'utf8');
+  return function (pathToManifest: string, command: string): void {
+    const json = fs.readFileSync(untildify(pathToManifest), 'utf8');
 
     ToolchainProcessor.createFromJsonString(
       json,
       (command) => {
         if (command instanceof TemplateActionValue) {
-          child_process.execSync(command.template, {
+          child_process.execSync(command.value!, {
             stdio: 'inherit',
           });
         }
@@ -35,9 +35,9 @@ export function run(command: string): void {
     fs.existsSync(wd) && i < 50;
     wd = path.join(wd, '..'), ++i
   ) {
-    const pathToJson = path.join(wd, CLIMAT_JSON_FILE);
-    if (fs.existsSync(pathToJson)) {
-      getExec(false)(pathToJson, command);
+    const pathToManifest = path.join(wd, CLIMAT_JSON_FILE);
+    if (fs.existsSync(pathToManifest)) {
+      getExec(false)(pathToManifest, command);
       return;
     }
   }

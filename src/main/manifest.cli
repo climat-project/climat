@@ -2,26 +2,27 @@ climat {
   children [
     """
     Executes the climat command using the toolchain present at the provided path
-    @param pathToJson the path to the toolchain
+    @param pathToManifest the path to the toolchain
     @param command the command
     """
-    exec(pathToJson p: arg, command c: arg) {
-      action "climat.exec('$(pathToJson)', '$(command)')"
+    exec(pathToManifest p: arg, command c: arg) {
+      action < climat.exec(params.get("pathToManifest"), params.get("command")) >
     },
     run(command c: arg) {
-      action "climat.run('$(command)')"
+      action < climat.run(params.get("command")) >
     },
-    execNoValidation(pathToJson p: arg, command c: arg) {
-      action "climat.execNoValidation('$(pathToJson)', '$(command)')"
+    execNoValidation(pathToManifest p: arg, command c: arg) {
+      action < climat.execNoValidation(params.get("pathToManifest"), params.get("command")) >
     },
-    validate(pathToJson p: arg) {
-      action "climat.validate('$(pathToJson)')"
+    validate(pathToManifest p: arg) {
+      action < climat.validate(params.get("pathToManifest")) >
     },
     uninstall(name n: arg) {
-      action "climat.uninstall('$(name)')"
+      action < climat.uninstall(params.get("name")) >
     },
-    install(pathToJson p: arg) {
-      action "climat.install('$(pathToJson)')"
+    install(pathToManifest p: arg) {
+      action < climat.install(params.get("pathToManifest")) >
     }
   ]
+  action ""
 }

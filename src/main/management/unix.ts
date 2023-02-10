@@ -1,62 +1,62 @@
-import { EOL, homedir } from 'os';
-import path from 'path';
+import { EOL, homedir } from "os";
+import path from "path";
 import {
   CLIMAT_HOME_DIR_NAME,
-  MAIN_JSON_NAME,
-  moveJsonToClimatHome,
-  removeToolchainFromClimatHome,
-} from './utils';
-import fs from 'fs-extra';
+  MAIN_MANIFEST_NAME,
+  moveManifestToClimatHome,
+  removeToolchainFromClimatHome
+} from "./utils";
+import fs from "fs-extra";
 
 const CLIMAT_STAPLE = '#CLIMAT INIT';
 const home = homedir();
 const join = path.posix.join;
 const bashrcPath = join(home, '.bashrc');
 const climatHome = join(home, CLIMAT_HOME_DIR_NAME);
-const bashAliasesPath = join(climatHome, '.bash_aliases');
+const bashFunctionsPath = join(climatHome, '.bash_functions');
 
-function aliasExists(name: string): boolean {
+function functionExists(name: string): boolean {
   return (
-    fs.pathExistsSync(bashAliasesPath) &&
-    fs.readFileSync(bashAliasesPath, 'utf8').includes(`alias ${name}`)
+    fs.pathExistsSync(bashFunctionsPath) &&
+    fs.readFileSync(bashFunctionsPath, 'utf8').includes(`function ${name}`)
   );
 }
 
-function aliasesInitializedInBashRc(): boolean {
+function functionsInitializedInBashRc(): boolean {
   return fs.readFileSync(bashrcPath, 'utf8').includes(CLIMAT_STAPLE);
 }
 
-function getAliasesInitializationBashSnippet(): string {
+function getFunctionsInitializationBashSnippet(): string {
   return [
     EOL,
     CLIMAT_STAPLE,
-    `if [ -f ${bashAliasesPath} ]; then`,
-    `  . ${bashAliasesPath}`,
+    `if [ -f ${bashFunctionsPath} ]; then`,
+    `  . ${bashFunctionsPath}`,
     'fi',
     EOL,
   ].join(EOL);
 }
 
-function getAliasCommand(name: string): string {
-  return `alias ${name}='climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}/${MAIN_JSON_NAME}"'${EOL}`;
+function getFunctionCommand(name: string): string {
+  return `function ${name} { climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}/${MAIN_MANIFEST_NAME}" "$*"; }${EOL}`;
 }
 
-export function unixInstall(json: string, name: string): void {
-  moveJsonToClimatHome(json, name, path.posix);
+export function unixInstall(manifest: string, name: string): void {
+  moveManifestToClimatHome(manifest, name, path.posix);
 
-  if (!aliasExists(name)) {
-    fs.appendFileSync(bashAliasesPath, getAliasCommand(name));
+  if (!functionExists(name)) {
+    fs.appendFileSync(bashFunctionsPath, getFunctionCommand(name));
   }
 
-  if (!aliasesInitializedInBashRc()) {
-    fs.appendFileSync(bashrcPath, getAliasesInitializationBashSnippet());
+  if (!functionsInitializedInBashRc()) {
+    fs.appendFileSync(bashrcPath, getFunctionsInitializationBashSnippet());
   }
 }
 
 export function unixUninstall(name: string): void {
   removeToolchainFromClimatHome(name, path.posix);
   const newData = fs
-    .readFileSync(bashAliasesPath, 'utf8')
-    .replace(new RegExp(`^alias ${name}.*${EOL}`), '');
-  fs.writeFileSync(bashAliasesPath, newData);
+    .readFileSync(bashFunctionsPath, 'utf8')
+    .replace(new RegExp(`^function ${name}.*${EOL}`), '');
+  fs.writeFileSync(bashFunctionsPath, newData);
 }

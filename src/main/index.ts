@@ -13,13 +13,13 @@ import _ from "lodash";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cli = require("./manifest.cli") as string;
 import ValidationEntryType = validation.ValidationResult.ValidationEntryType;
-import TemplateActionValue = domain.action.TemplateActionValue;
+import CustomScriptActionValue = domain.action.CustomScriptActionValue;
 
 const climat = {
   exec: getExec(false),
   execNoValidation: getExec(true),
-  validate: (pathToJson: string): void => {
-    ToolchainProcessor.Companion.parse(pathToJson);
+  validate: (pathToManifest: string): void => {
+    ToolchainProcessor.Companion.parse(pathToManifest);
   },
   run,
   uninstall,
@@ -53,12 +53,12 @@ void prettifyAsync(async () => {
   ToolchainProcessor.create(
     toolchain,
     prettifyAsync((command) => {
-      console.log(command);
-      if (command instanceof TemplateActionValue) {
-        return eval(command.template);
+      if (command instanceof CustomScriptActionValue) {
+        const params = command.valueForJs;
+        return eval(command.customScript);
       }
       else {
-        throw new Error(`${command.type} not supported`);
+        throw new Error(`\`${command.type}\` command type not supported`);
       }
     }),
     true,
