@@ -1,14 +1,14 @@
-import path from "path";
-import { homedir } from "os";
+import path from 'path';
+import { homedir } from 'os';
 import {
   CLIMAT_HOME_DIR_NAME,
   MAIN_MANIFEST_NAME,
   moveManifestToClimatHome,
-  removeToolchainFromClimatHome
-} from "./utils";
-import fs from "fs-extra";
-import upath from "upath";
-import { promisified as regedit } from "regedit";
+  removeToolchainFromClimatHome,
+} from './utils';
+import fs from 'fs-extra';
+import upath from 'upath';
+import { promisified as regedit } from 'regedit';
 
 const HKCU_ENVIRONMENT = 'HKCU\\Environment';
 const join = path.win32.join;
@@ -18,7 +18,7 @@ const climatBinPath = join(climatHome, 'bin');
 function getBatchScript(name: string): string {
   return `climat execNoValidation "${upath.toUnix(
     join(climatHome, name, MAIN_MANIFEST_NAME),
-  )}"`;
+  )}" --command`;
 }
 
 function getBatchFilePath(name: string): string {

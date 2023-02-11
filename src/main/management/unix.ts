@@ -1,12 +1,12 @@
-import { EOL, homedir } from "os";
-import path from "path";
+import { EOL, homedir } from 'os';
+import path from 'path';
 import {
   CLIMAT_HOME_DIR_NAME,
   MAIN_MANIFEST_NAME,
   moveManifestToClimatHome,
-  removeToolchainFromClimatHome
-} from "./utils";
-import fs from "fs-extra";
+  removeToolchainFromClimatHome,
+} from './utils';
+import fs from 'fs-extra';
 
 const CLIMAT_STAPLE = '#CLIMAT INIT';
 const home = homedir();
@@ -38,7 +38,7 @@ function getFunctionsInitializationBashSnippet(): string {
 }
 
 function getFunctionCommand(name: string): string {
-  return `function ${name} { climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}/${MAIN_MANIFEST_NAME}" "$*"; }${EOL}`;
+  return `function ${name} { climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}/${MAIN_MANIFEST_NAME}" --command "$*"; }${EOL}`;
 }
 
 export function unixInstall(manifest: string, name: string): void {

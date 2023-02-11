@@ -1,7 +1,7 @@
-import { homedir } from "os";
-import fs from "fs-extra";
-import path from "path";
-import { isError } from "../exceptions";
+import { homedir } from 'os';
+import fs from 'fs-extra';
+import path from 'path';
+import { isError } from '../exceptions';
 
 export const CLIMAT_HOME_DIR_NAME = '.climat';
 export const MAIN_MANIFEST_NAME = 'climat.cli';
@@ -15,7 +15,10 @@ export function moveManifestToClimatHome(
 ): void {
   fs.ensureDirSync(climatHome);
   fs.ensureDirSync(path.join(climatHome, name));
-  fs.writeFileSync(path.join(climatHome, name, MAIN_MANIFEST_NAME), pathToManifest);
+  fs.writeFileSync(
+    path.join(climatHome, name, MAIN_MANIFEST_NAME),
+    pathToManifest,
+  );
 }
 
 export function removeToolchainFromClimatHome(

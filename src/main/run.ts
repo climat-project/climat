@@ -1,9 +1,9 @@
-import { cwd } from "process";
-import fs from "fs-extra";
-import path from "path";
-import untildify from "untildify";
-import { domain, ToolchainProcessor } from "climat-lib";
-import child_process from "child_process";
+import { cwd } from 'process';
+import fs from 'fs-extra';
+import path from 'path';
+import untildify from 'untildify';
+import { domain, ToolchainProcessor } from 'climat-lib';
+import child_process from 'child_process';
 import TemplateActionValue = domain.action.TemplateActionValue;
 
 const CLIMAT_JSON_FILE = 'climat.cli';
@@ -19,9 +19,8 @@ export function getExec(skipValidation: boolean) {
           child_process.execSync(command.value!, {
             stdio: 'inherit',
           });
-        }
-        else {
-          throw new Error(`${command.type} not supported`)
+        } else {
+          throw new Error(`${command.type} not supported`);
         }
       },
       skipValidation,

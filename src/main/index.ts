@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
-import { domain, ToolchainProcessor, validation } from "climat-lib";
-import process from "process";
-import install from "./management/install";
-import uninstall from "./management/uninstall";
-import { getExec, run } from "./run";
-import { prettifyAsync } from "./output/prettify";
-import { warn } from "./output/theme";
-import { EOL } from "os";
-import _ from "lodash";
+import { domain, ToolchainProcessor, validation } from 'climat-lib';
+import process from 'process';
+import install from './management/install';
+import uninstall from './management/uninstall';
+import { getExec, run } from './run';
+import { prettifyAsync } from './output/prettify';
+import { warn } from './output/theme';
+import { EOL } from 'os';
+import _ from 'lodash';
 // ES6 imports don't work with raw-loader for some reason
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const cli = require("./manifest.cli") as string;
+const cli = require('./manifest.cli') as string;
 import ValidationEntryType = validation.ValidationResult.ValidationEntryType;
 import CustomScriptActionValue = domain.action.CustomScriptActionValue;
 
@@ -29,7 +29,7 @@ const climat = {
 void prettifyAsync(async () => {
   const toolchain = ToolchainProcessor.Companion.parse(
     // TODO extract in file
-    cli
+    cli,
   );
   const validations = ToolchainProcessor.Companion.validate(toolchain);
 
@@ -56,8 +56,7 @@ void prettifyAsync(async () => {
       if (command instanceof CustomScriptActionValue) {
         const params = command.valueForJs;
         return eval(command.customScript);
-      }
-      else {
+      } else {
         throw new Error(`\`${command.type}\` command type not supported`);
       }
     }),
