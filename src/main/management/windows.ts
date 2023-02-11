@@ -51,10 +51,10 @@ async function augmentPathWithClimatBin(): Promise<void> {
 }
 
 export async function windowsInstall(
-  json: string,
+  manifest: string,
   name: string,
 ): Promise<void> {
-  moveManifestToClimatHome(json, name, path.win32);
+  moveManifestToClimatHome(manifest, name, path.win32);
 
   fs.ensureDirSync(climatBinPath);
   fs.writeFileSync(getBatchFilePath(name), getBatchScript(name));

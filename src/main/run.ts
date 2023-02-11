@@ -7,14 +7,14 @@ import child_process from 'child_process';
 import TemplateActionValue = com.climat.library.domain.action.TemplateActionValue;
 import ToolchainProcessor = com.climat.library.toolchain.ToolchainProcessor;
 
-const CLIMAT_JSON_FILE = 'climat.cli';
+const CLIMAT_MANIFEST_FILE = 'climat.cli';
 
 export function getExec(skipValidation: boolean) {
   return function (pathToManifest: string, command: string): void {
-    const json = fs.readFileSync(untildify(pathToManifest), 'utf8');
+    const manifest = fs.readFileSync(untildify(pathToManifest), 'utf8');
 
     ToolchainProcessor.createFromJsonString(
-      json,
+      manifest,
       (command) => {
         if (command instanceof TemplateActionValue) {
           child_process.execSync(command.value!, {
@@ -35,12 +35,12 @@ export function run(command: string): void {
     fs.existsSync(wd) && i < 50;
     wd = path.join(wd, '..'), ++i
   ) {
-    const pathToManifest = path.join(wd, CLIMAT_JSON_FILE);
+    const pathToManifest = path.join(wd, CLIMAT_MANIFEST_FILE);
     if (fs.existsSync(pathToManifest)) {
       getExec(false)(pathToManifest, command);
       return;
     }
   }
 
-  console.log(`No ${CLIMAT_JSON_FILE} found up the directory hierarchy`);
+  console.log(`No ${CLIMAT_MANIFEST_FILE} found up the directory hierarchy`);
 }
