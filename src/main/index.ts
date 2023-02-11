@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { toolchain, validation, domain } from 'climat-lib';
+import { com } from 'climat-lib';
 import process from 'process';
 import install from './management/install';
 import uninstall from './management/uninstall';
@@ -12,9 +12,9 @@ import _ from 'lodash';
 // ES6 imports don't work with raw-loader for some reason
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cli = require('./manifest.cli') as string;
-import ValidationEntryType = validation.ValidationResult.ValidationEntryType;
-import CustomScriptActionValue = domain.action.CustomScriptActionValue;
-import ToolchainProcessor = toolchain.ToolchainProcessor;
+import ValidationEntryType = com.climat.library.validation.ValidationResult.ValidationEntryType;
+import CustomScriptActionValue = com.climat.library.domain.action.CustomScriptActionValue;
+import ToolchainProcessor = com.climat.library.toolchain.ToolchainProcessor;
 
 const climat = {
   exec: getExec(false),

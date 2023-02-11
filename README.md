@@ -15,30 +15,22 @@ npm i climat
 
 ## Usage
 
-Write your alias json in ```toolchain.json```
-```json
-{
-  "name": "sgit",
-  "children": [
-    {
-      "name": "acp",
-      "parameters": [
-        "opt:flag:ammend:a"
-      ],
-      "action": "git add . ; git commit $(ammend:--ammend) ; git push $(ammend:--force)"
-    },
-    {
-      "name": "cf",
-      "parameters": [
-        "req:arg:branch",
-        "opt:flag:force:f"
-      ],
-      "action": "git checkout feature/$(branch) $(force:--force)"
-    }
-  ]
+Write your alias in `sgit.cli`
+
+```cli
+sgit {
+    children [
+        acp(ammend a?: flag) {
+            action "git add . ; git commit $(ammend:--ammend) ; git push $(ammend:--force)"
+        },
+        cf(branch: arg, force f: flag) {
+            action "git checkout feature/$(branch) $(force:--force)"
+        }
+    ]
 }
 ```
-Installing this via ```climat install toolchain.json``` will generate
+
+Installing this via `climat install sgit.cli`, then restarting bash will generate
 
 ```shell
 sgit acp             # Will add all files to index, commit and push

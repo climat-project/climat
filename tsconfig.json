@@ -6,8 +6,6 @@
     "module": "commonjs",
     "lib": ["es2020"],
     "outDir": "./build",
-    "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,

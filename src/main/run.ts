@@ -2,10 +2,10 @@ import { cwd } from 'process';
 import fs from 'fs-extra';
 import path from 'path';
 import untildify from 'untildify';
-import { domain, toolchain } from 'climat-lib';
+import { com } from 'climat-lib';
 import child_process from 'child_process';
-import TemplateActionValue = domain.action.TemplateActionValue;
-import ToolchainProcessor = toolchain.ToolchainProcessor;
+import TemplateActionValue = com.climat.library.domain.action.TemplateActionValue;
+import ToolchainProcessor = com.climat.library.toolchain.ToolchainProcessor;
 
 const CLIMAT_JSON_FILE = 'climat.cli';
 

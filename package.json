@@ -28,7 +28,7 @@
     "build-live": "tsc -w && tsc-alias -w"
   },
   "dependencies": {
-    "climat-lib": "file:../climat-lib/build/productionLibrary",
+    "climat-lib": ">= 0.0.2",
     "colors": "^1.4.0",
     "fs-extra": "11.1.0",
     "lodash": "^4.17.21",
