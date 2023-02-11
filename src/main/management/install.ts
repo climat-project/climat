@@ -1,10 +1,11 @@
 import fs from 'fs-extra';
-import { ToolchainProcessor } from 'climat-lib';
+import { toolchain } from 'climat-lib';
 import { windowsInstall } from './windows';
 import { unixInstall } from './unix';
 import untildify from 'untildify';
 import fetch from 'node-fetch';
 import { EOL } from 'os';
+import ToolchainProcessor = toolchain.ToolchainProcessor;
 
 async function getJson(uriToJson: string): Promise<string> {
   const isHttpUri =

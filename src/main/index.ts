@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { domain, ToolchainProcessor, validation } from 'climat-lib';
+import { toolchain, validation, domain } from 'climat-lib';
 import process from 'process';
 import install from './management/install';
 import uninstall from './management/uninstall';
@@ -14,6 +14,7 @@ import _ from 'lodash';
 const cli = require('./manifest.cli') as string;
 import ValidationEntryType = validation.ValidationResult.ValidationEntryType;
 import CustomScriptActionValue = domain.action.CustomScriptActionValue;
+import ToolchainProcessor = toolchain.ToolchainProcessor;
 
 const climat = {
   exec: getExec(false),
