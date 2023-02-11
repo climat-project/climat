@@ -1,7 +1,7 @@
 sgit {
     children [
         acp(amend a?: flag) {
-            action "git add . ; git commit $(amend:--amend) ; git push $(amend:--force)"
+            action "git add . && git commit $(amend:--amend) && git push $(amend:--force)"
         },
         cf(branch: arg, force f: flag) {
             action "git checkout feature/$(branch) $(force:--force)"

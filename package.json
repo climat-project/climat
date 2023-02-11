@@ -6,6 +6,7 @@
   "author": "",
   "keywords": [],
   "version": "0.0.1",
+  "license": "LGPL-2.1-only",
   "engines": {
     "node": ">=13.2.0"
   },

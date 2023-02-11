@@ -3,25 +3,27 @@ import fs from 'fs-extra';
 import path from 'path';
 import { isError } from '../exceptions';
 
-export const CLIMAT_HOME_DIR_NAME = '.climat';
+export const CLIMAT_HOME_DIR_NAME = 'climat';
 export const MAIN_MANIFEST_NAME = 'climat.cli';
 
-const climatHome = path.join(homedir(), CLIMAT_HOME_DIR_NAME);
-
 export function moveManifestToClimatHome(
+  climatHome: string,
   pathToManifest: string,
   name: string,
   path: path.PlatformPath,
 ): void {
+  const toolchainDir = path.join(climatHome, name);
   fs.ensureDirSync(climatHome);
-  fs.ensureDirSync(path.join(climatHome, name));
+  fs.ensureDirSync(toolchainDir);
   fs.writeFileSync(
     path.join(climatHome, name, MAIN_MANIFEST_NAME),
     pathToManifest,
   );
+  fs.chmodSync(toolchainDir, 0o755);
 }
 
-export function removeToolchainFromClimatHome(
+export function removeToolchain(
+  climatHome: string,
   name: string,
   path: path.PlatformPath,
 ): void {

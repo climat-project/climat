@@ -1,62 +1,37 @@
-import { EOL, homedir } from 'os';
+import { EOL } from 'os';
 import path from 'path';
 import {
   CLIMAT_HOME_DIR_NAME,
   MAIN_MANIFEST_NAME,
   moveManifestToClimatHome,
-  removeToolchainFromClimatHome,
+  removeToolchain,
 } from './utils';
 import fs from 'fs-extra';
 
-const CLIMAT_STAPLE = '#CLIMAT INIT';
-const home = homedir();
 const join = path.posix.join;
-const bashrcPath = join(home, '.bashrc');
-const climatHome = join(home, CLIMAT_HOME_DIR_NAME);
-const bashFunctionsPath = join(climatHome, '.bash_functions');
+const climatHome = join('/', 'usr', 'local', 'lib', CLIMAT_HOME_DIR_NAME);
+const climatScriptBin = join('/', 'usr', 'local', 'bin');
 
-function functionExists(name: string): boolean {
+function getScriptContent(name: string): string {
   return (
-    fs.pathExistsSync(bashFunctionsPath) &&
-    fs.readFileSync(bashFunctionsPath, 'utf8').includes(`function ${name}`)
+    '#' + // Need to do this because of the SheBang webpack plugin. TODO: Check if we can remove it
+    `!/bin/bash${EOL}${EOL}climat execNoValidation "${climatHome}/${name}/${MAIN_MANIFEST_NAME}" --command "$*"${EOL}`
   );
 }
 
-function functionsInitializedInBashRc(): boolean {
-  return fs.readFileSync(bashrcPath, 'utf8').includes(CLIMAT_STAPLE);
-}
+export function unixInstall(pathToManifest: string, name: string): void {
+  const binPath = join(climatScriptBin, name);
+  moveManifestToClimatHome(climatHome, pathToManifest, name, path.posix);
 
-function getFunctionsInitializationBashSnippet(): string {
-  return [
-    EOL,
-    CLIMAT_STAPLE,
-    `if [ -f ${bashFunctionsPath} ]; then`,
-    `  . ${bashFunctionsPath}`,
-    'fi',
-    EOL,
-  ].join(EOL);
-}
-
-function getFunctionCommand(name: string): string {
-  return `function ${name} { climat execNoValidation "~/${CLIMAT_HOME_DIR_NAME}/${name}/${MAIN_MANIFEST_NAME}" --command "$*"; }${EOL}`;
-}
-
-export function unixInstall(manifest: string, name: string): void {
-  moveManifestToClimatHome(manifest, name, path.posix);
-
-  if (!functionExists(name)) {
-    fs.appendFileSync(bashFunctionsPath, getFunctionCommand(name));
-  }
-
-  if (!functionsInitializedInBashRc()) {
-    fs.appendFileSync(bashrcPath, getFunctionsInitializationBashSnippet());
+  if (!fs.pathExistsSync(binPath)) {
+    fs.writeFileSync(binPath, getScriptContent(name), {
+      flag: 'wx',
+    });
+    fs.chmodSync(binPath, 0o755);
   }
 }
 
 export function unixUninstall(name: string): void {
-  removeToolchainFromClimatHome(name, path.posix);
-  const newData = fs
-    .readFileSync(bashFunctionsPath, 'utf8')
-    .replace(new RegExp(`^function ${name}.*${EOL}`), '');
-  fs.writeFileSync(bashFunctionsPath, newData);
+  removeToolchain(climatHome, name, path.posix);
+  fs.rmSync(path.join(climatScriptBin, name));
 }

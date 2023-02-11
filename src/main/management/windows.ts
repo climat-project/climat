@@ -4,7 +4,7 @@ import {
   CLIMAT_HOME_DIR_NAME,
   MAIN_MANIFEST_NAME,
   moveManifestToClimatHome,
-  removeToolchainFromClimatHome,
+  removeToolchain,
 } from './utils';
 import fs from 'fs-extra';
 import upath from 'upath';
@@ -54,7 +54,7 @@ export async function windowsInstall(
   manifest: string,
   name: string,
 ): Promise<void> {
-  moveManifestToClimatHome(manifest, name, path.win32);
+  moveManifestToClimatHome(climatHome, manifest, name, path.win32);
 
   fs.ensureDirSync(climatBinPath);
   fs.writeFileSync(getBatchFilePath(name), getBatchScript(name));
@@ -63,6 +63,6 @@ export async function windowsInstall(
 }
 
 export function windowsUninstall(name: string): void {
-  removeToolchainFromClimatHome(name, path.win32);
+  removeToolchain(climatHome, name, path.win32);
   fs.unlinkSync(getBatchFilePath(name));
 }
