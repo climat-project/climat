@@ -1,6 +1,9 @@
 <p align="center">
+
 <img alt="Climat logo" src="https://raw.githubusercontent.com/climat-project/doc-and-design/master/static/img/logo-name.svg" width="500px"/>
 </p><br/><br/>
+
+# ⚠️ PRE-RELEASE ⚠️ (Some features might not work)
 Simple and smart way to generate complex aliases to Command Line Interface tools.
 
 - ✍️ Write complex CLI interfaces in a declarative style.
@@ -20,8 +23,8 @@ Write your alias in `sgit.cli`
 ```cli
 sgit {
     children [
-        acp(ammend a?: flag) {
-            action "git add . ; git commit $(ammend:--ammend) ; git push $(ammend:--force)"
+        acp(amend a?: flag) {
+            action "git add . ; git commit $(amend:--amend) ; git push $(amend:--force)"
         },
         cf(branch: arg, force f: flag) {
             action "git checkout feature/$(branch) $(force:--force)"
