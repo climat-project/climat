@@ -9,6 +9,7 @@ import {
 import fs from 'fs-extra';
 import upath from 'upath';
 import { promisified as regedit } from 'regedit';
+import { warn } from '../output/theme';
 
 const HKCU_ENVIRONMENT = 'HKCU\\Environment';
 const join = path.win32.join;
@@ -25,30 +26,30 @@ function getBatchFilePath(name: string): string {
   return join(climatBinPath, `${name}.bat`);
 }
 
-async function getUserPath(): Promise<string> {
-  const results = await regedit.list([HKCU_ENVIRONMENT]);
-  const env = results[HKCU_ENVIRONMENT];
-  if (!env.exists) {
-    throw new Error(`Nonexistent registry key ${HKCU_ENVIRONMENT}`);
-  }
+// async function getUserPath(): Promise<string> {
+//   const results = await regedit.list([HKCU_ENVIRONMENT]);
+//   const env = results[HKCU_ENVIRONMENT];
+//   if (!env.exists) {
+//     throw new Error(`Nonexistent registry key ${HKCU_ENVIRONMENT}`);
+//   }
 
-  return env.values['Path'].value as string;
-}
+//   return env.values['Path'].value as string;
+// }
 
-async function augmentPathWithClimatBin(): Promise<void> {
-  const envPath = await getUserPath();
-  if (envPath.includes(climatBinPath)) {
-    return;
-  }
-  await regedit.putValue({
-    [HKCU_ENVIRONMENT]: {
-      Path: {
-        value: `${envPath}${climatBinPath};`,
-        type: 'REG_SZ',
-      },
-    },
-  });
-}
+// async function augmentPathWithClimatBin(): Promise<void> {
+//   const envPath = await getUserPath();
+//   if (envPath.includes(climatBinPath)) {
+//     return;
+//   }
+//   await regedit.putValue({
+//     [HKCU_ENVIRONMENT]: {
+//       Path: {
+//         value: `${envPath}${climatBinPath};`,
+//         type: 'REG_SZ',
+//       },
+//     },
+//   });
+// }
 
 export async function windowsInstall(
   manifest: string,
@@ -59,7 +60,11 @@ export async function windowsInstall(
   fs.ensureDirSync(climatBinPath);
   fs.writeFileSync(getBatchFilePath(name), getBatchScript(name));
 
-  await augmentPathWithClimatBin();
+  // TODO: add path automatically
+  // This requires writing to the Windows registry
+  if (!process.env.PATH?.includes(climatBinPath)) {
+    console.warn(warn(`Please add '${climatBinPath}' to system PATH`));
+  }
 }
 
 export function windowsUninstall(name: string): void {
