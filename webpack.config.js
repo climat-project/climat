@@ -19,13 +19,11 @@ module.exports = {
             esModule: false,
           },
         },
-      }
+      },
     ],
   },
   target: 'node',
-  plugins: [
-    new ShebangPlugin(),
-  ],
+  plugins: [new ShebangPlugin()],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },

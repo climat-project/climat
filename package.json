@@ -35,7 +35,6 @@
     "lowdb": "^5.0.5",
     "ndoe": "^0.0.0",
     "node-fetch": "^2.6.8",
-    "regedit": "^5.1.1",
     "untildify": "^4.0.0",
     "upath": "^2.0.1"
   },
@@ -65,7 +64,6 @@
     "webpack-shebang-plugin": "^1.1.8"
   },
   "bin": {
-    "climat": "./build/main.js",
-    "climat-dev": "./build/main.js"
+    "climat": "./build/main.js"
   }
 }

@@ -14,7 +14,7 @@ const climatScriptBin = join('/', 'usr', 'local', 'bin');
 
 function getScriptContent(name: string): string {
   return (
-    '#' + // Need to do this because of the SheBang webpack plugin. TODO: Check if we can remove it
+    '#' + // Need to do this because of the SheBang webpack plugin.
     `!/bin/bash${EOL}${EOL}climat execNoValidation "${climatHome}/${name}/${MAIN_MANIFEST_NAME}" --command "$*"${EOL}`
   );
 }
