@@ -5,16 +5,16 @@ climat {
     @param pathToManifest the path to the toolchain manifest
     @param command the command
     """
-    exec(pathToManifest p: arg, command c: arg) {
-      action < climat.exec(params.get("pathToManifest"), params.get("command")) >
+    exec(pathToManifest p: arg, command c: arg, skipValidation: flag) {
+      action < climat.exec(params.get("pathToManifest"), params.get("command"), params.get("skipValidation")) >
     },
 
     run(command c: arg) {
       action < climat.run(params.get("command")) >
     },
 
-    execNoValidation(pathToManifest p: arg, command c?: arg = "") {
-      action < climat.execNoValidation(params.get("pathToManifest"), params.get("command")) >
+    runGlobal(name n: arg, command c?: arg = "") {
+      action < climat.runGlobal(params.get("name"), params.get("command")) >
     },
 
     validate(pathToManifest p: arg) {
@@ -27,6 +27,14 @@ climat {
 
     install(pathToManifest p: arg) {
       action < climat.install(params.get("pathToManifest")) >
+    },
+
+    list {
+      action < climat.list() >
+    },
+
+    purge {
+      action < climat.purge() >
     }
   ]
   action ""

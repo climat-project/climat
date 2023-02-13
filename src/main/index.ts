@@ -4,7 +4,7 @@ import { com } from 'climat-lib';
 import process from 'process';
 import install from './management/install';
 import uninstall from './management/uninstall';
-import { getExec, run } from './run';
+import { exec, run, runGlobal } from './run';
 import { prettifyAsync } from './output/prettify';
 import { warn } from './output/theme';
 import { EOL } from 'os';
@@ -15,16 +15,20 @@ const cli = require('./manifest.cli') as string;
 import ValidationEntryType = com.climat.library.validation.ValidationResult.ValidationEntryType;
 import CustomScriptActionValue = com.climat.library.domain.action.CustomScriptActionValue;
 import ToolchainProcessor = com.climat.library.toolchain.ToolchainProcessor;
+import { list } from './management/list';
+import { purge } from './management/purge';
 
 const climat = {
-  exec: getExec(false),
-  execNoValidation: getExec(true),
+  exec,
   validate: (pathToManifest: string): void => {
     ToolchainProcessor.Companion.parse(pathToManifest);
   },
   run,
+  runGlobal,
   uninstall,
   install,
+  list,
+  purge,
 };
 
 void prettifyAsync(async () => {

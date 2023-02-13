@@ -1,4 +1,3 @@
-import { homedir } from 'os';
 import fs from 'fs-extra';
 import path from 'path';
 import { isError } from '../exceptions';
@@ -6,29 +5,28 @@ import { isError } from '../exceptions';
 export const CLIMAT_HOME_DIR_NAME = 'climat';
 export const MAIN_MANIFEST_NAME = 'climat.cli';
 
-export function moveManifestToClimatHome(
-  climatHome: string,
+export async function moveManifestToClimatHome(
+  toolchainHome: string,
   pathToManifest: string,
   name: string,
-  path: path.PlatformPath,
-): void {
-  const toolchainDir = path.join(climatHome, name);
-  fs.ensureDirSync(climatHome);
-  fs.ensureDirSync(toolchainDir);
-  fs.writeFileSync(
-    path.join(climatHome, name, MAIN_MANIFEST_NAME),
+): Promise<void> {
+  const path = platformPath();
+  const toolchainDir = path.join(toolchainHome, name);
+  await fs.ensureDir(toolchainHome);
+  await fs.ensureDir(toolchainDir);
+  await fs.writeFile(
+    path.join(toolchainHome, name, MAIN_MANIFEST_NAME),
     pathToManifest,
   );
-  fs.chmodSync(toolchainDir, 0o755);
+  await fs.chmod(toolchainDir, 0o755);
 }
 
-export function removeToolchain(
-  climatHome: string,
+export async function removeToolchain(
+  toolchainHome: string,
   name: string,
-  path: path.PlatformPath,
-): void {
+): Promise<void> {
   try {
-    fs.rmSync(path.join(climatHome, name), {
+    await fs.rm(platformPath().join(toolchainHome, name), {
       recursive: true,
     });
   } catch (e) {
@@ -38,5 +36,23 @@ export function removeToolchain(
       }
     }
     throw e;
+  }
+}
+
+export function platformPath(): path.PlatformPath {
+  return handlePlatforms(
+    () => path.posix,
+    () => path.win32,
+  );
+}
+
+export function handlePlatforms<T>(unix: () => T, windows: () => T): T {
+  switch (process.platform) {
+    case 'linux': // TODO check if other unix like systems are supported by the current unix implementation
+      return unix();
+    case 'win32':
+      return windows();
+    default:
+      throw new Error(`${process.platform} OS is not supported`);
   }
 }

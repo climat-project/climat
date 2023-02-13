@@ -7,31 +7,53 @@ import {
   removeToolchain,
 } from './utils';
 import fs from 'fs-extra';
+import { getInstalledToolchains } from './list';
 
 const join = path.posix.join;
-const climatHome = join('/', 'usr', 'local', 'lib', CLIMAT_HOME_DIR_NAME);
+export const CLIMAT_HOME = join(
+  '/',
+  'usr',
+  'local',
+  'lib',
+  CLIMAT_HOME_DIR_NAME,
+);
+export const TOOLCHAIN_HOME = join(CLIMAT_HOME, 'toolchains');
 const climatScriptBin = join('/', 'usr', 'local', 'bin');
 
 function getScriptContent(name: string): string {
   return (
     '#' + // Need to do this because of the SheBang webpack plugin.
-    `!/bin/bash${EOL}${EOL}climat execNoValidation "${climatHome}/${name}/${MAIN_MANIFEST_NAME}" --command "$*"${EOL}`
+    `!/bin/bash${EOL}${EOL}climat runGlobal "${name}" --command "$*"${EOL}`
   );
 }
 
-export function unixInstall(pathToManifest: string, name: string): void {
+export async function unixInstall(
+  pathToManifest: string,
+  name: string,
+): Promise<void> {
   const binPath = join(climatScriptBin, name);
-  moveManifestToClimatHome(climatHome, pathToManifest, name, path.posix);
+  moveManifestToClimatHome(TOOLCHAIN_HOME, pathToManifest, name);
 
-  if (!fs.pathExistsSync(binPath)) {
-    fs.writeFileSync(binPath, getScriptContent(name), {
+  if (!(await fs.pathExists(binPath))) {
+    await fs.writeFile(binPath, getScriptContent(name), {
       flag: 'wx',
     });
-    fs.chmodSync(binPath, 0o755);
+    await fs.chmod(binPath, 0o755);
   }
 }
 
-export function unixUninstall(name: string): void {
-  removeToolchain(climatHome, name, path.posix);
-  fs.rmSync(path.join(climatScriptBin, name));
+export async function unixUninstall(name: string): Promise<void> {
+  await removeToolchain(TOOLCHAIN_HOME, name);
+  await fs.rm(path.join(climatScriptBin, name));
+}
+
+export async function unixPurge(): Promise<void> {
+  await Promise.all(
+    (
+      await getInstalledToolchains()
+    ).map((tc) => fs.rm(join(climatScriptBin, tc))),
+  );
+  await fs.rm(CLIMAT_HOME, {
+    recursive: true,
+  });
 }

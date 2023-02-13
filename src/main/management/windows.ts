@@ -1,23 +1,24 @@
 import path from 'path';
-import { homedir } from 'os';
+import { homedir, EOL } from 'os';
 import {
   CLIMAT_HOME_DIR_NAME,
-  MAIN_MANIFEST_NAME,
   moveManifestToClimatHome,
   removeToolchain,
 } from './utils';
 import fs from 'fs-extra';
-import upath from 'upath';
 import { warn } from '../output/theme';
 
 const join = path.win32.join;
-const climatHome = join(homedir(), CLIMAT_HOME_DIR_NAME);
-const climatBinPath = join(climatHome, 'bin');
+export const CLIMAT_HOME = join(homedir(), CLIMAT_HOME_DIR_NAME);
+export const TOOLCHAIN_HOME = join(CLIMAT_HOME, 'toolchains');
+const climatBinPath = join(CLIMAT_HOME, 'bin');
 
 function getBatchScript(name: string): string {
-  return `climat execNoValidation "${upath.toUnix(
-    join(climatHome, name, MAIN_MANIFEST_NAME),
-  )}" --command`;
+  return (
+    //`@echo off${EOL}` +
+    // `for /f "tokens=1,* delims= " %%a in ("%*") do set SCRIPT_PARAMS=%%b${EOL}` +
+    `climat runGlobal "${name}" --command "%*"`
+  );
 }
 
 function getBatchFilePath(name: string): string {
@@ -28,10 +29,10 @@ export async function windowsInstall(
   manifest: string,
   name: string,
 ): Promise<void> {
-  moveManifestToClimatHome(climatHome, manifest, name, path.win32);
+  await moveManifestToClimatHome(TOOLCHAIN_HOME, manifest, name);
 
-  fs.ensureDirSync(climatBinPath);
-  fs.writeFileSync(getBatchFilePath(name), getBatchScript(name));
+  await fs.ensureDir(climatBinPath);
+  await fs.writeFile(getBatchFilePath(name), getBatchScript(name));
 
   // TODO: add path automatically
   // This requires writing to the Windows registry
@@ -41,7 +42,13 @@ export async function windowsInstall(
   }
 }
 
-export function windowsUninstall(name: string): void {
-  removeToolchain(climatHome, name, path.win32);
-  fs.unlinkSync(getBatchFilePath(name));
+export async function windowsUninstall(name: string): Promise<void> {
+  await removeToolchain(TOOLCHAIN_HOME, name);
+  await fs.unlink(getBatchFilePath(name));
+}
+
+export async function windowsPurge(): Promise<void> {
+  await fs.rm(CLIMAT_HOME, {
+    recursive: true,
+  });
 }

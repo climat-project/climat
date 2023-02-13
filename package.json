@@ -36,7 +36,8 @@
     "ndoe": "^0.0.0",
     "node-fetch": "^2.6.8",
     "untildify": "^4.0.0",
-    "upath": "^2.0.1"
+    "upath": "^2.0.1",
+    "yesno": "^0.4.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.18",
