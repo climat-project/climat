@@ -5,21 +5,21 @@
 
 # ⚠️ PRE-RELEASE ⚠️ (Some features might not work)
 
-Simple and smart way to generate complex aliases to Command Line Interface tools.
+Generate powerful macros for your CLI tools with a simple and smart approach.
 
 - ✍️ Write complex CLI interfaces in a declarative style.
 - 🗄️ Combine many inconsistent CLI tools under a single consistent one.
-- 🥷 Or just rewrite the CLI interface of a tool for a faster and more user-tailored use.
+- 🥷 Or just rewrite the CLI interface of a tool for a faster and more user-tailored experience.
 
 ## Installation
 
-```shell
+```sh
 npm i climat
 ```
 
 ## Usage
 
-Write your alias in `sgit.cli`
+Write your macro in `sgit.cli`
 
 ```cli
 sgit {
@@ -42,3 +42,7 @@ sgit acp --ammend    # Will add all files to index, ammend last commit and push 
 sgit acp -a          # Can use shorthands for parameters
 sgit cf myFeature    # git checkout feature/myFeature
 ```
+
+## What does it stand for?
+
+**CLi** **MA**cro **T**ree
