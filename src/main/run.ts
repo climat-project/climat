@@ -12,6 +12,7 @@ import { TOOLCHAIN_HOME as WINDOWS_TOOLCHAIN_HOME } from './management/windows';
 import { TOOLCHAIN_HOME as UNIX_TOOLCHAIN_HOME } from './management/unix';
 import child_process from 'child_process';
 import TemplateActionValue = com.climat.library.domain.action.TemplateActionValue;
+import CustomScriptActionValue = com.climat.library.domain.action.CustomScriptActionValue;
 import ToolchainProcessor = com.climat.library.toolchain.ToolchainProcessor;
 
 export async function exec(
@@ -52,6 +53,10 @@ export async function run(command: string): Promise<void> {
   console.log(`No ${MAIN_MANIFEST_NAME} found up the directory hierarchy`);
 }
 
+type CustomScriptJsScope = {
+  params: { [key: string]: any };
+};
+
 function _exec(cliDsl: string, command: string, skipValidation: boolean) {
   ToolchainProcessor.createFromCliDslString(
     cliDsl,
@@ -60,10 +65,29 @@ function _exec(cliDsl: string, command: string, skipValidation: boolean) {
         child_process.execSync(command.value!, {
           stdio: 'inherit',
         });
+      } else if (command instanceof CustomScriptActionValue) {
+        if (command.name === 'js') {
+          const $scope: CustomScriptJsScope = { params: {} };
+          command.valueForJs?.entries.map((param) => {
+            $scope.params[camelise(param.key)] = param.value;
+          });
+
+          (function ({ params }: CustomScriptJsScope) {
+            eval(command.customScript);
+          }.call({}, $scope));
+        } else {
+          throw new Error(
+            `${command.name || 'default'} custom script not supported`,
+          );
+        }
       } else {
         throw new Error(`${command.type} not supported`);
       }
     },
     skipValidation,
   ).executeFromString(command);
+}
+
+function camelise(s: string) {
+  return s.replace(/-./g, (x) => x[1].toUpperCase());
 }
