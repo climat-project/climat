@@ -14,6 +14,7 @@ import child_process from 'child_process';
 import TemplateActionValue = com.climat.library.domain.action.TemplateActionValue;
 import CustomScriptActionValue = com.climat.library.domain.action.CustomScriptActionValue;
 import ToolchainProcessor = com.climat.library.toolchain.ToolchainProcessor;
+import Toolchain = com.climat.library.domain.toolchain.Toolchain;
 
 export async function exec(
   pathToManifest: string,
@@ -55,31 +56,20 @@ export async function run(command: string): Promise<void> {
 
 type CustomScriptJsScope = {
   params: { [key: string]: any };
+  command: CustomScriptActionValue;
+  toolchain: Toolchain;
 };
 
 function _exec(cliDsl: string, command: string, skipValidation: boolean) {
   ToolchainProcessor.createFromCliDslString(
     cliDsl,
-    (command) => {
+    (command, toolchain) => {
       if (command instanceof TemplateActionValue) {
         child_process.execSync(command.value!, {
           stdio: 'inherit',
         });
       } else if (command instanceof CustomScriptActionValue) {
-        if (command.name === 'js') {
-          const $scope: CustomScriptJsScope = { params: {} };
-          command.valueForJs?.entries.map((param) => {
-            $scope.params[camelise(param.key)] = param.value;
-          });
-
-          (function ({ params }: CustomScriptJsScope) {
-            eval(command.customScript);
-          }.call({}, $scope));
-        } else {
-          throw new Error(
-            `${command.name || 'default'} custom script not supported`,
-          );
-        }
+        handleCustomScript(command, toolchain);
       } else {
         throw new Error(`${command.type} not supported`);
       }
@@ -88,6 +78,29 @@ function _exec(cliDsl: string, command: string, skipValidation: boolean) {
   ).executeFromString(command);
 }
 
+function handleCustomScript(
+  command: CustomScriptActionValue,
+  toolchain: Toolchain,
+) {
+  if (command.name === 'js') {
+    const $scope: CustomScriptJsScope = {
+      params: {},
+      command,
+      toolchain,
+    };
+    command.valueForJs?.entries.forEach((param) => {
+      $scope.params[camelise(param.key)] = param.value;
+    });
+    evalCustomScript.call({}, $scope);
+  } else {
+    throw new Error(`${command.name || 'default'} custom script not supported`);
+  }
+}
+
 function camelise(s: string) {
   return s.replace(/-./g, (x) => x[1].toUpperCase());
+}
+
+function evalCustomScript({ params, command, toolchain }: CustomScriptJsScope) {
+  eval(command.customScript);
 }

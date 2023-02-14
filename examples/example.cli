@@ -7,7 +7,7 @@ example {
           action "echo 'Hello from the other side' '$(arg1) $(arg2)'"
         },
         cde(param1: arg) {
-          action js < console.log($scope) >
+          action js < console.log(command.customScript) >
         }
       ]
     }
