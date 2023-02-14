@@ -53,7 +53,7 @@ export async function run(command: string): Promise<void> {
 }
 
 function _exec(cliDsl: string, command: string, skipValidation: boolean) {
-  ToolchainProcessor.createFromJsonString(
+  ToolchainProcessor.createFromCliDslString(
     cliDsl,
     (command) => {
       if (command instanceof TemplateActionValue) {

@@ -64,5 +64,4 @@ climat {
       action < climat.purge() >
     }
   ]
-  action ""
 }
