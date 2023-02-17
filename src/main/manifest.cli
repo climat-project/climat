@@ -1,4 +1,15 @@
-climat {
+climat(version v?: flag) {
+
+  action <
+    if (JSON.parse(params.get("version"))) {
+      console.log(
+        require(
+          `${require('child_process').execSync('npm root -g').toString().trim()}/climat/package.json`
+        ).version
+      )
+    }
+  >
+
   children [
     """
     Executes the command using the toolchain present at the provided path
