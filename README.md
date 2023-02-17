@@ -1,9 +1,9 @@
 <p align="center">
 
-<img alt="Climat logo" src="https://raw.githubusercontent.com/climat-project/doc-and-design/master/static/img/logo-name.svg" width="500px"/>
+<img alt="Climat logo" src="https://raw.githubusercontent.com/climat-project/doc-and-design/master/static/img/logo-name-prerelease-tag.svg" width="500px"/>
 </p><br/><br/>
 
-# ⚠️ PRE-RELEASE ⚠️ (Some features might not work)
+# ⚠️ PRE-RELEASE: Some features might not work and everything is subject to change ⚠️
 
 Generate powerful macros for your CLI tools with a simple and smart approach.
 
