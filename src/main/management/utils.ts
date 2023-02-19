@@ -13,12 +13,15 @@ export async function moveManifestToClimatHome(
   const path = platformPath();
   const toolchainDir = path.join(toolchainHome, name);
   await fs.ensureDir(toolchainHome);
+  await fs.chmod(toolchainHome, 0o755);
+
   await fs.ensureDir(toolchainDir);
+  await fs.chmod(toolchainDir, 0o755);
+
   await fs.writeFile(
-    path.join(toolchainHome, name, MAIN_MANIFEST_NAME),
+    path.join(toolchainDir, MAIN_MANIFEST_NAME),
     pathToManifest,
   );
-  await fs.chmod(toolchainDir, 0o755);
 }
 
 export async function removeToolchain(
