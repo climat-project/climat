@@ -14,7 +14,7 @@ Generate powerful macros for your CLI tools with a simple and smart approach.
 ## Installation
 
 ```sh
-npm i climat
+npm i -g climat
 ```
 
 ## Usage

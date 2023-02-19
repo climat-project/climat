@@ -5,7 +5,7 @@
   "homepage": "",
   "author": "",
   "keywords": [],
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "LGPL-2.1-only",
   "engines": {
     "node": ">=13.2.0"
@@ -28,7 +28,7 @@
     "build-live": "tsc -w && tsc-alias -w"
   },
   "dependencies": {
-    "climat-lib": "0.0.4",
+    "climat-lib": "0.0.5",
     "colors": "^1.4.0",
     "fs-extra": "11.1.0",
     "lodash": "^4.17.21",

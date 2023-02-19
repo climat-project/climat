@@ -10,69 +10,69 @@ climat(version v?: flag) {
     }
   >
 
-  children [
-    """
-    Executes the command using the toolchain present at the provided path
-    @param pathToManifest the path to the toolchain manifest
-    @param command the command
-    """
-    exec(pathToManifest p: arg, command c: arg, skipValidation: flag) {
-      action < climat.exec(params.get("pathToManifest"), params.get("command"), params.get("skipValidation")) >
-    },
+  """
+  Executes the command using the toolchain present at the provided path
+  @param pathToManifest the path to the toolchain manifest
+  @param command the command
+  """
+  sub exec(pathToManifest p: arg, command c: arg, skipValidation: flag) {
+    action < climat.exec(params.get("pathToManifest"), params.get("command"), params.get("skipValidation")) >
+  }
 
-    """
-    Executes the command using the toolchain from somewhere up the directory hierarchy
-    @param command the command
-    """
-    run(command c: arg) {
-      action < climat.run(params.get("command")) >
-    },
+  """
+  Executes the command using the toolchain from somewhere up the directory hierarchy
+  @param command the command
+  """
+  sub run(command c: arg) {
+    action < climat.run(params.get("command")) >
+  }
 
-    """
-    Executes the command using the globally installed toolchain
-    @param name the name of the globally installed toolchain
-    @param command the command
-    """
-    runGlobal(name n: arg, command c?: arg = "") {
-      action < climat.runGlobal(params.get("name"), params.get("command")) >
-    },
+  """
+  Executes the command using the globally installed toolchain
+  @param name the name of the globally installed toolchain
+  @param command the command
+  """
+  sub runGlobal(name n: arg, command c?: arg = "") {
+    action < climat.runGlobal(params.get("name"), params.get("command")) >
+  }
 
-    """
-    Validates the toolchain present at the provided path
-    @param pathToManifest the path to toolchain manifest
-    """
-    validate(pathToManifest p: arg) {
-      action < climat.validate(params.get("pathToManifest")) >
-    },
+  """
+  Validates the toolchain present at the provided path
+  @param pathToManifest the path to toolchain manifest
+  """
+  sub validate(pathToManifest p: arg) {
+    action < climat.validate(params.get("pathToManifest")) >
+  }
 
-    """
-    Uninstalls the globally installed toolchain
-    @param name the name of the toolchain to uninstall
-    """
-    uninstall(name n: arg) {
-      action < climat.uninstall(params.get("name")) >
-    },
+  """
+  Uninstalls the globally installed toolchain
+  @param name the name of the toolchain to uninstall
+  """
+  sub uninstall(name n: arg) {
+    action < climat.uninstall(params.get("name")) >
+  }
 
-    """
-    Globally installs the toolchain present at the provided path
-    @param pathToManifest the path to toolchain manifest
-    """
-    install(pathToManifest p: arg) {
-      action < climat.install(params.get("pathToManifest")) >
-    },
+  """
+  Globally installs the toolchain present at the provided path
+  @param pathToManifest the path to toolchain manifest
+  """
+  @alias(i)
+  sub install(pathToManifest p: arg) {
+    action < climat.install(params.get("pathToManifest")) >
+  }
 
-    """
-    Outputs a list of the globally installed toolchains
-    """
-    list {
-      action < climat.list() >
-    },
+  """
+  Outputs a list of the globally installed toolchains
+  """
+  @aliases(ls l)
+  sub list {
+    action < climat.list() >
+  }
 
-    """
-    Cleans all the installed toolchains and all the clutter left behid by Climat
-    """
-    purge {
-      action < climat.purge() >
-    }
-  ]
+  """
+  Cleans all the installed toolchains and all the clutter left behid by Climat
+  """
+  sub purge {
+    action < climat.purge() >
+  }
 }
