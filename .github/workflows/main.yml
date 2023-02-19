@@ -1,0 +1,18 @@
+on:
+  push:
+    branches:
+    - master
+  workflow_dispatch:
+  
+jobs:
+  Run-npm-on-Ubuntu:
+    name: Run tests on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '13.2.0'
+      - run: npm run build-prod
+      - run: npm link
+      - run: npm run test
