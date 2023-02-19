@@ -51,7 +51,8 @@ export function platformPath(): path.PlatformPath {
 
 export function handlePlatforms<T>(unix: () => T, windows: () => T): T {
   switch (process.platform) {
-    case 'linux': // TODO check if other unix like systems are supported by the current unix implementation
+    case 'linux':
+    case 'darwin':
       return unix();
     case 'win32':
       return windows();
