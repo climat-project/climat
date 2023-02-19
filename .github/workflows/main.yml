@@ -16,4 +16,4 @@ jobs:
       - run: npm install
       - run: npm run build-prod
       - run: npm link
-      - run: npm run test
+      - run: sudo npm run test
