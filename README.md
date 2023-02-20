@@ -1,7 +1,11 @@
-<p align="center">
-
 <img alt="Climat logo" src="https://raw.githubusercontent.com/climat-project/doc-and-design/master/static/img/logo-name-prerelease-tag.svg" width="500px"/>
-</p><br/><br/>
+<br/><br/>
+
+![LastCommitOnMaster](https://img.shields.io/github/last-commit/climat-project/climat/master?label=last%20commit%20on%20master)
+![Build](https://img.shields.io/github/checks-status/climat-project/climat/master)
+[![Version](https://img.shields.io/npm/v/climat)](https://www.npmjs.com/package/climat)
+![NodeVersion](https://img.shields.io/node/v/climat)
+[![GitHub license](https://img.shields.io/npm/l/climat)](https://github.com/climat-project/climat/blob/master/LICENSE.md)
 
 # ⚠️ PRE-RELEASE: Some features might not work and everything is subject to change ⚠️
 
