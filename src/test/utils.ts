@@ -5,5 +5,5 @@ export function runClimat(args: string): string {
 }
 
 export function run(args: string): string {
-  return execSync(args).toString();
+  return execSync(args).toString().trim();
 }
