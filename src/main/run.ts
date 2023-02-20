@@ -19,8 +19,8 @@ import Toolchain = com.climat.library.domain.toolchain.Toolchain;
 export async function exec(
   pathToManifest: string,
   command: string,
-  skipValidation: boolean = false,
-) {
+  skipValidation = false,
+): Promise<void> {
   const manifest = await fs.readFile(untildify(pathToManifest), 'utf8');
   _exec(manifest, command, skipValidation);
 }
@@ -46,7 +46,7 @@ export async function run(command: string): Promise<void> {
   ) {
     const pathToManifest = path.join(wd, MAIN_MANIFEST_NAME);
     if (await fs.pathExists(pathToManifest)) {
-      exec(pathToManifest, command);
+      await exec(pathToManifest, command);
       return;
     }
   }
@@ -55,12 +55,12 @@ export async function run(command: string): Promise<void> {
 }
 
 type CustomScriptJsScope = {
-  params: { [key: string]: any };
+  params: { [key: string]: string };
   command: CustomScriptActionValue;
   toolchain: Toolchain;
 };
 
-function _exec(cliDsl: string, command: string, skipValidation: boolean) {
+function _exec(cliDsl: string, command: string, skipValidation: boolean): void {
   ToolchainProcessor.createFromCliDslString(
     cliDsl,
     (command, toolchain) => {
@@ -81,7 +81,7 @@ function _exec(cliDsl: string, command: string, skipValidation: boolean) {
 function handleCustomScript(
   command: CustomScriptActionValue,
   toolchain: Toolchain,
-) {
+): void {
   if (command.name === 'js') {
     const $scope: CustomScriptJsScope = {
       params: {},
@@ -97,10 +97,14 @@ function handleCustomScript(
   }
 }
 
-function camelise(s: string) {
+function camelise(s: string): string {
   return s.replace(/-./g, (x) => x[1].toUpperCase());
 }
 
-function evalCustomScript({ params, command, toolchain }: CustomScriptJsScope) {
+function evalCustomScript({
+  params,
+  command,
+  toolchain,
+}: CustomScriptJsScope): void {
   eval(command.customScript);
 }

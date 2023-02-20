@@ -1,4 +1,3 @@
-import readline from 'readline';
 import { EOL } from 'os';
 import { getInstalledToolchains } from './list';
 import yesno from 'yesno';
