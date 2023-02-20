@@ -2,7 +2,6 @@ import { EOL } from 'os';
 import path from 'path';
 import {
   CLIMAT_HOME_DIR_NAME,
-  MAIN_MANIFEST_NAME,
   moveManifestToClimatHome,
   removeToolchain,
 } from './utils';
@@ -32,7 +31,7 @@ export async function unixInstall(
   name: string,
 ): Promise<void> {
   const binPath = join(climatScriptBin, name);
-  moveManifestToClimatHome(TOOLCHAIN_HOME, pathToManifest, name);
+  await moveManifestToClimatHome(TOOLCHAIN_HOME, pathToManifest, name);
 
   if (!(await fs.pathExists(binPath))) {
     await fs.writeFile(binPath, getScriptContent(name), {

@@ -59,6 +59,8 @@ void prettifyAsync(async () => {
     toolchain,
     prettifyAsync((command) => {
       if (command instanceof CustomScriptActionValue) {
+        // Params used inside `eval`
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const params = command.valueForJs;
         return eval(command.customScript);
       } else {
