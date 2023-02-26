@@ -1,10 +1,13 @@
 {
   "name": "climat",
-  "description": "",
-  "repository": "",
-  "homepage": "",
-  "author": "",
-  "keywords": [],
+  "description": "Powerful CLI Macros",
+  "repository": "github:climat-project/climat",
+  "homepage": "https://climat-project.github.io",
+  "author": "Marius Aiordăchioaei",
+  "keywords": [
+    "cli",
+    "macros"
+  ],
   "version": "0.0.6",
   "license": "LGPL-2.1-only",
   "engines": {
