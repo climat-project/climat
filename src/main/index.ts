@@ -14,14 +14,14 @@ import _ from 'lodash';
 const cli = require('./manifest.cli') as string;
 import ValidationEntryType = com.climat.library.validation.ValidationResult.ValidationEntryType;
 import CustomScriptActionValue = com.climat.library.domain.action.CustomScriptActionValue;
-import ToolchainProcessor = com.climat.library.toolchain.ToolchainProcessor;
+const { parse, getValidations, execute } = com.climat.library.commandParser;
 import { list } from './management/list';
 import { purge } from './management/purge';
 
 const climat = {
   exec,
   validate: (pathToManifest: string): void => {
-    ToolchainProcessor.Companion.parse(pathToManifest);
+    parse(pathToManifest);
   },
   run,
   runGlobal,
@@ -32,11 +32,11 @@ const climat = {
 };
 
 void prettifyAsync(async () => {
-  const toolchain = ToolchainProcessor.Companion.parse(
+  const toolchain = parse(
     // TODO extract in file
     cli,
   );
-  const validations = ToolchainProcessor.Companion.validate(toolchain);
+  const validations = getValidations(toolchain);
 
   const warnings = _(validations)
     .filter((x) => x.type === ValidationEntryType.Warning)
@@ -55,7 +55,8 @@ void prettifyAsync(async () => {
     throw new Error(errors);
   }
 
-  ToolchainProcessor.create(
+  execute(
+    process.argv.slice(2),
     toolchain,
     prettifyAsync((command) => {
       if (command instanceof CustomScriptActionValue) {
@@ -68,5 +69,5 @@ void prettifyAsync(async () => {
       }
     }),
     true,
-  ).execute(process.argv.slice(2));
+  );
 })();

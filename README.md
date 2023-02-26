@@ -28,7 +28,7 @@ Write your macro in `sgit.cli`
 ```cli
 sgit {
     children [
-        acp(amend a?: flag) {
+        acp(amend a: flag) {
             action "git add . && git commit $(amend:--amend) && git push $(amend:--force)"
         },
         cf(branch: arg, force f: flag) {

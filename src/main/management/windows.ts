@@ -14,7 +14,7 @@ export const TOOLCHAIN_HOME = join(CLIMAT_HOME, 'toolchains');
 const climatBinPath = join(CLIMAT_HOME, 'bin');
 
 function getBatchScript(name: string): string {
-  return `@echo off${EOL}` + `climat runGlobal "${name}" --command "%*"`;
+  return `@echo off${EOL}` + `climat runGlobal "${name}" %*`;
 }
 
 function getBatchFilePath(name: string): string {

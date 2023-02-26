@@ -1,4 +1,4 @@
-climat(version v?: flag) {
+climat(version v: flag) {
 
   action <
     if (JSON.parse(params.get("version"))) {
@@ -13,18 +13,18 @@ climat(version v?: flag) {
   """
   Executes the command using the toolchain present at the provided path
   @param pathToManifest the path to the toolchain manifest
-  @param command the command
   """
-  sub exec(pathToManifest p: arg, command c: arg, skipValidation: flag) {
-    action < climat.exec(params.get("pathToManifest"), params.get("command"), params.get("skipValidation")) >
+  @allow-unmatched
+  sub exec(pathToManifest p: arg, skipValidation: flag) {
+    action < climat.exec(params.get("pathToManifest"), params.get("__UNMATCHED"), params.get("skipValidation")) >
   }
 
   """
   Executes the command using the toolchain from somewhere up the directory hierarchy
-  @param command the command
   """
-  sub run(command c: arg) {
-    action < climat.run(params.get("command")) >
+  @allow-unmatched
+  sub run {
+    action < climat.run(params.get("__UNMATCHED")) >
   }
 
   """
@@ -32,8 +32,9 @@ climat(version v?: flag) {
   @param name the name of the globally installed toolchain
   @param command the command
   """
-  sub runGlobal(name n: arg, command c?: arg = "") {
-    action < climat.runGlobal(params.get("name"), params.get("command")) >
+  @allow-unmatched
+  sub runGlobal(name n: arg) {
+    action < climat.runGlobal(params.get("name"), params.get("__UNMATCHED")) >
   }
 
   """

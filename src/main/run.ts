@@ -1,4 +1,4 @@
-import { cwd } from 'process';
+import { argv, cwd } from 'process';
 import fs from 'fs-extra';
 import path from 'path';
 import untildify from 'untildify';
@@ -13,19 +13,22 @@ import { TOOLCHAIN_HOME as UNIX_TOOLCHAIN_HOME } from './management/unix';
 import child_process from 'child_process';
 import TemplateActionValue = com.climat.library.domain.action.TemplateActionValue;
 import CustomScriptActionValue = com.climat.library.domain.action.CustomScriptActionValue;
-import ToolchainProcessor = com.climat.library.toolchain.ToolchainProcessor;
 import Toolchain = com.climat.library.domain.toolchain.Toolchain;
+const { executeFromCliDsl } = com.climat.library.commandParser;
 
 export async function exec(
   pathToManifest: string,
-  command: string,
+  command: string[],
   skipValidation = false,
 ): Promise<void> {
   const manifest = await fs.readFile(untildify(pathToManifest), 'utf8');
   _exec(manifest, command, skipValidation);
 }
 
-export async function runGlobal(name: string, command: string): Promise<void> {
+export async function runGlobal(
+  name: string,
+  command: string[],
+): Promise<void> {
   const { join } = platformPath();
   const toolchainHome = await handlePlatforms(
     () => UNIX_TOOLCHAIN_HOME,
@@ -38,7 +41,7 @@ export async function runGlobal(name: string, command: string): Promise<void> {
   _exec(manifest, command, true);
 }
 
-export async function run(command: string): Promise<void> {
+export async function run(command: string[]): Promise<void> {
   for (
     let wd = cwd(), i = 0;
     (await fs.pathExists(wd)) && i < 50;
@@ -60,8 +63,13 @@ type CustomScriptJsScope = {
   toolchain: Toolchain;
 };
 
-function _exec(cliDsl: string, command: string, skipValidation: boolean): void {
-  ToolchainProcessor.createFromCliDslString(
+function _exec(
+  cliDsl: string,
+  command: string[],
+  skipValidation: boolean,
+): void {
+  executeFromCliDsl(
+    command,
     cliDsl,
     (command, toolchain) => {
       if (command instanceof TemplateActionValue) {
@@ -75,7 +83,7 @@ function _exec(cliDsl: string, command: string, skipValidation: boolean): void {
       }
     },
     skipValidation,
-  ).executeFromString(command);
+  );
 }
 
 function handleCustomScript(

@@ -17,9 +17,13 @@ describe('smoke', () => {
       expect(
         run('test-toolchain child --arg1 val1 --arg2 val2 grandchild2 val3'),
       ).toEqual('Hello from JS! val3 val1 val2');
+
+      expect(run('test-toolchain child --arg1 "val 1" --arg2 "val 2"')).toEqual(
+        'Hello! I was executed with arg1 = val 1 and arg2 = val 2',
+      );
     });
 
-    it('list', () => {
+    it('lists', () => {
       expect(runClimat('list')).toContain('test-toolchain');
     });
 

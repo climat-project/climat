@@ -5,7 +5,7 @@ import { unixInstall } from './unix';
 import untildify from 'untildify';
 import fetch from 'node-fetch';
 import { EOL } from 'os';
-import ToolchainProcessor = com.climat.library.toolchain.ToolchainProcessor;
+const { parse } = com.climat.library.commandParser;
 import { handlePlatforms } from './utils';
 
 async function getJson(uriToJson: string): Promise<string> {
@@ -28,7 +28,7 @@ async function getJson(uriToJson: string): Promise<string> {
 
 export default async function install(uriToJson: string): Promise<void> {
   const json = await getJson(uriToJson);
-  const { name } = ToolchainProcessor.Companion.parse(json);
+  const { name } = parse(json);
 
   await handlePlatforms(
     () => unixInstall(json, name),

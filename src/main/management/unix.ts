@@ -22,7 +22,7 @@ const climatScriptBin = join('/', 'usr', 'local', 'bin');
 function getScriptContent(name: string): string {
   return (
     '#' + // Need to do this because of the SheBang webpack plugin.
-    `!/bin/bash${EOL}${EOL}climat runGlobal "${name}" --command "$*"${EOL}`
+    `!/bin/bash${EOL}${EOL}climat runGlobal "${name}" "$@"${EOL}`
   );
 }
 
