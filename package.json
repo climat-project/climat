@@ -8,7 +8,7 @@
     "cli",
     "macros"
   ],
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "LGPL-2.1-only",
   "engines": {
     "node": ">=14.14",
