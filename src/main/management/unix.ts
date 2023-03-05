@@ -3,6 +3,7 @@ import path from 'path';
 import {
   CLIMAT_HOME_DIR_NAME,
   moveManifestToClimatHome,
+  removeAliasSymlinks,
   removeToolchain,
 } from './utils';
 import fs from 'fs-extra';
@@ -29,6 +30,7 @@ function getScriptContent(name: string): string {
 export async function unixInstall(
   pathToManifest: string,
   name: string,
+  aliases: string[],
 ): Promise<void> {
   const binPath = join(climatScriptBin, name);
   await moveManifestToClimatHome(TOOLCHAIN_HOME, pathToManifest, name);
@@ -38,12 +40,20 @@ export async function unixInstall(
       flag: 'wx',
     });
     await fs.chmod(binPath, 0o755);
+
+    await Promise.all(
+      aliases.map(async (alias) => {
+        await fs.symlink(binPath, join(climatScriptBin, alias));
+        await fs.chmod(binPath, 0o755);
+      }),
+    );
   }
 }
 
 export async function unixUninstall(name: string): Promise<void> {
+  await removeAliasSymlinks(name, climatScriptBin, TOOLCHAIN_HOME);
   await removeToolchain(TOOLCHAIN_HOME, name);
-  await fs.rm(path.join(climatScriptBin, name));
+  await fs.rm(join(climatScriptBin, name));
 }
 
 export async function unixPurge(): Promise<void> {

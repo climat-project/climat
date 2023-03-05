@@ -28,10 +28,11 @@ async function getJson(uriToJson: string): Promise<string> {
 
 export default async function install(uriToJson: string): Promise<void> {
   const json = await getJson(uriToJson);
-  const { name } = parse(json);
+  const { name, aliases } = parse(json);
+  const aliasStrings = aliases.map((alias) => alias.name);
 
   await handlePlatforms(
-    () => unixInstall(json, name),
-    () => windowsInstall(json, name),
+    () => unixInstall(json, name, aliasStrings),
+    () => windowsInstall(json, name, aliasStrings),
   );
 }

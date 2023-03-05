@@ -29,7 +29,7 @@
     "build-live": "tsc -w && tsc-alias -w"
   },
   "dependencies": {
-    "climat-lib": "0.0.8",
+    "climat-lib": "0.0.9",
     "colors": "^1.4.0",
     "fs-extra": "11.1.0",
     "lodash": "^4.17.21",

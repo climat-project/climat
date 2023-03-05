@@ -3,6 +3,7 @@ import { homedir, EOL } from 'os';
 import {
   CLIMAT_HOME_DIR_NAME,
   moveManifestToClimatHome,
+  removeAliasSymlinks,
   removeToolchain,
 } from './utils';
 import fs from 'fs-extra';
@@ -16,6 +17,9 @@ const climatBinPath = join(CLIMAT_HOME, 'bin');
 function getBatchScript(name: string): string {
   return `@echo off${EOL}` + `climat runGlobal "${name}" %*`;
 }
+function getAliasScript(name: string): string {
+  return `@echo off${EOL}` + `%~dp0${name} %*`;
+}
 
 function getBatchFilePath(name: string): string {
   return join(climatBinPath, `${name}.bat`);
@@ -24,11 +28,18 @@ function getBatchFilePath(name: string): string {
 export async function windowsInstall(
   manifest: string,
   name: string,
+  aliases: string[],
 ): Promise<void> {
   await moveManifestToClimatHome(TOOLCHAIN_HOME, manifest, name);
 
+  const batchFilePath = getBatchFilePath(name);
   await fs.ensureDir(climatBinPath);
-  await fs.writeFile(getBatchFilePath(name), getBatchScript(name));
+  await fs.writeFile(batchFilePath, getBatchScript(name));
+
+  const aliasScript = getAliasScript(name);
+  await Promise.all(
+    aliases.map((alias) => fs.writeFile(getBatchFilePath(alias), aliasScript)),
+  );
 
   // TODO: add path automatically
   // This requires writing to the Windows registry
@@ -39,8 +50,9 @@ export async function windowsInstall(
 }
 
 export async function windowsUninstall(name: string): Promise<void> {
+  await removeAliasSymlinks(name, climatBinPath, TOOLCHAIN_HOME, '.bat');
   await removeToolchain(TOOLCHAIN_HOME, name);
-  await fs.unlink(getBatchFilePath(name));
+  await fs.rm(getBatchFilePath(name));
 }
 
 export async function windowsPurge(): Promise<void> {

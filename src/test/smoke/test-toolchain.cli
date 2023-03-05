@@ -1,3 +1,6 @@
+
+@alias(test2)
+@alias(test3)
 test-toolchain {
   sub child(arg1 p: arg? = "(no value for arg1!)", arg2 c: arg? = "(no value for arg2!)") {
     action "echo Hello! I was executed with arg1 = $(arg1) and arg2 = $(arg2)"

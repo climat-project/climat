@@ -1,9 +1,14 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { isError } from '../exceptions';
+import { com } from 'climat-lib';
+import parse = com.climat.library.commandParser.parse;
+import RootToolchain = com.climat.library.domain.toolchain.RootToolchain;
 
 export const CLIMAT_HOME_DIR_NAME = 'climat';
 export const MAIN_MANIFEST_NAME = 'climat.cli';
+
+const join = platformPath().join;
 
 export async function moveManifestToClimatHome(
   toolchainHome: string,
@@ -40,6 +45,23 @@ export async function removeToolchain(
     }
     throw e;
   }
+}
+
+export async function removeAliasSymlinks(
+  name: string,
+  scriptBin: string,
+  toolchainHome: string,
+  nameSuffix = '',
+): Promise<void> {
+  const toolchain = parse(
+    (
+      await fs.readFile(join(toolchainHome, name, MAIN_MANIFEST_NAME))
+    ).toString(),
+  );
+  const aliases = toolchain.aliases.map((alias) => alias.name);
+  await Promise.all(
+    aliases.map((alias) => fs.unlink(join(scriptBin, alias + nameSuffix))),
+  );
 }
 
 export function platformPath(): path.PlatformPath {

@@ -10,9 +10,11 @@ describe('smoke', () => {
         'Hello! I was executed with arg1 = abc and arg2 = bcd',
       );
 
-      expect(
-        run('test-toolchain child --arg1 value1 --arg2 value2 grandchild1'),
-      ).toEqual('Hello from the other side value1 value2');
+      ['test-toolchain', 'test2', 'test3'].forEach((exec) => {
+        expect(
+          run(`${exec} child --arg1 value1 --arg2 value2 grandchild1`),
+        ).toEqual('Hello from the other side value1 value2');
+      });
 
       expect(
         run('test-toolchain child --arg1 val1 --arg2 val2 grandchild2 val3'),
@@ -29,7 +31,9 @@ describe('smoke', () => {
 
     it('uninstalls', () => {
       runClimat('uninstall test-toolchain');
-      expect(() => run('test-toolchain')).toThrowError();
+      ['test-toolchain', 'test2', 'test3'].forEach((exec) => {
+        expect(() => run(exec)).toThrowError();
+      });
     });
   });
 });
