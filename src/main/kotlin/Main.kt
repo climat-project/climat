@@ -1,0 +1,52 @@
+package com.climat
+
+import com.climat.library.commandParser.execute
+import com.climat.library.commandParser.getValidations
+import com.climat.library.commandParser.parse
+import com.climat.library.domain.action.CustomScriptActionValue
+import com.climat.library.validation.ValidationResult.ValidationEntryType.Error
+import com.climat.library.validation.ValidationResult.ValidationEntryType.Warning
+import com.climat.output.prettify
+import com.climat.output.warn
+import os.EOL
+import process
+
+// Used dynamically by `eval`
+val climat = AsyncClimatCli()
+
+fun main() =
+    prettify {
+        val toolchain = parse(MANIFEST_TEXT)
+        val validations = getValidations(toolchain)
+        val warnings =
+            validations.filter { it.type == Warning }
+                .joinToString(EOL) { "${it.code}: ${it.message}" }
+
+        if (warnings.isNotEmpty()) {
+            console.warn(warn("Warnings:"))
+            console.warn(warn(warnings))
+        }
+
+        val errors =
+            validations.filter { it.type == Error }
+                .joinToString(EOL) { "${it.code}: ${it.message}" }
+
+        if (errors.isNotEmpty()) {
+            throw Exception(errors)
+        }
+
+        execute(
+            process.argv.drop(2).toTypedArray(),
+            toolchain,
+            prettify { command, _ ->
+                if (command is CustomScriptActionValue) {
+                    // Params used inside `eval`
+                    val params = command.valueForJs
+                    eval(command.customScript)
+                } else {
+                    throw Exception("`${command.type}` command type not supported")
+                }
+            },
+            true,
+        )
+    }.invoke()
