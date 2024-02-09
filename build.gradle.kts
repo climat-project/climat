@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin.Companion.kotlinNodeJsExtension
+
 plugins {
     kotlin("multiplatform") version "1.9.22"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
@@ -17,6 +20,9 @@ allprojects {
 }
 
 kotlin {
+
+    jvmToolchain(21)
+
     js {
         compilations["main"].packageJson {
             description = getProp("description")
@@ -67,4 +73,8 @@ kotlin {
     ktlint.filter {
         exclude { it.file.path.contains("generated") }
     }
+}
+
+plugins.withType<NodeJsRootPlugin> {
+    rootProject.kotlinNodeJsExtension.download = false
 }

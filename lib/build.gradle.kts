@@ -57,5 +57,4 @@ tasks.register<com.strumenta.antlrkotlin.gradleplugin.AntlrKotlinTask>("generate
     outputDirectory = File("build/generated-src/commonAntlr/kotlin")
 }
 
-// Doesn't work: https://github.com/gradle/gradle/issues/9331
-// tasks.getByName("compileCommonMainKotlinMetadata").dependsOn("generateKotlinCommonGrammarSource")
+tasks.getByName("compileKotlinJs").dependsOn("generateKotlinCommonGrammarSource")
