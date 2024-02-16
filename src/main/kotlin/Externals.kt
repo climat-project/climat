@@ -38,7 +38,7 @@ external object Fs {
     fun writeFile(
         a: String,
         b: String,
-        options: String,
+        options: dynamic,
     ): Promise<Unit>
 
     fun chmod(

@@ -25,7 +25,11 @@ suspend fun unixInstall(
     val permissions = 0b111101101 // 755 in octa
 
     if (!Fs.pathExists(binPath).await()) {
-        Fs.writeFile(binPath, getScriptContent(name), "wx").await()
+        Fs.writeFile(
+            binPath,
+            getScriptContent(name),
+            jsObjectOf("flag" to "wx"),
+        ).await()
         Fs.chmod(binPath, permissions).await()
 
         aliases.forEach {
