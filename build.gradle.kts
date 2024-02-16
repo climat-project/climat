@@ -45,16 +45,22 @@ kotlin {
                 ),
             )
         }
-        nodejs {
+        browser { // Not really for browser, but it is the only way to use webpack
+            webpackTask {
+                mainOutputFileName.set("kotlin/climat.js")
+                output.libraryTarget = "commonjs2"
+            }
             useCommonJs()
         }
-        binaries.library()
+        binaries.executable()
     }
 
     sourceSets {
         val jsMain by getting {
             kotlin.srcDirs("src/main/kotlin")
             dependencies {
+                implementation(devNpm("copy-webpack-plugin", "^11.0.0"))
+
                 implementation(npm("colors", "^1.4.0"))
                 implementation(npm("fs-extra", "11.1.0"))
                 implementation(npm("node-fetch", "^2.6.8"))
