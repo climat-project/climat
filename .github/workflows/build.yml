@@ -27,7 +27,7 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew build -x integrationTests:jsNodeTest
       - name: Install climat
-        run: npm install -g build\dist\js\productionExecutable
+        run: npm install -g build/dist/js/productionExecutable
       - name: Run integration tests
         run: ./gradlew integrationTests:jsNodeTest
 
@@ -52,6 +52,6 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew build -x integrationTests:jsNodeTest
       - name: Install climat
-        run: npm install -g build\dist\js\productionExecutable
+        run: npm install -g build/dist/js/productionExecutable
       - name: Run integration tests
         run: ./gradlew integrationTests:jsNodeTest
