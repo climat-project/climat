@@ -30,7 +30,11 @@ jobs:
         run: npm install -g build/dist/js/productionExecutable
       - name: Run integration tests
         run: ./gradlew integrationTests:jsNodeTest
-
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-tests-reports
+          path: integrationTests/build/reports
 
   test-windows:
     strategy:
@@ -55,3 +59,8 @@ jobs:
         run: npm install -g build/dist/js/productionExecutable
       - name: Run integration tests
         run: ./gradlew integrationTests:jsNodeTest
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-tests-reports
+          path: integrationTests/build/reports
