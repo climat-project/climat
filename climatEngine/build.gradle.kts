@@ -33,7 +33,7 @@ kotlin {
 
     js(IR) {
         binaries.library()
-        browser {
+        nodejs {
             testTask {
                 useMocha()
             }
@@ -57,4 +57,4 @@ tasks.register<com.strumenta.antlrkotlin.gradleplugin.AntlrKotlinTask>("generate
     outputDirectory = File("build/generated-src/commonAntlr/kotlin")
 }
 
-tasks.getByName("compileKotlinJs").dependsOn("generateKotlinCommonGrammarSource")
+project.tasks.getByName("compileKotlinJs").dependsOn("generateKotlinCommonGrammarSource")

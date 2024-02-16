@@ -1,7 +1,6 @@
 package com.climat
 
 import com.climat.output.handle
-import com.climat.output.success
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.startCoroutine
@@ -36,12 +35,11 @@ class AsyncClimatCli {
                 object : Continuation<Unit> {
                     override val context = EmptyCoroutineContext
 
-                    override fun resumeWith(result: Result<Unit>) =
-                        if (result.isSuccess) {
-                            console.log(success("Done !"))
-                        } else {
+                    override fun resumeWith(result: Result<Unit>) {
+                        if (!result.isSuccess) {
                             result.exceptionOrNull()!!.handle()
                         }
+                    }
                 },
             )
         }

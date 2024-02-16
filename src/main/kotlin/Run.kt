@@ -27,13 +27,9 @@ fun doExec(
         cliDsl,
         { command, toolchain ->
             when (command) {
-                is TemplateActionValue ->
-                    child_process.execSync(
-                        command.value!!,
-                        object : ExecSyncOptions {
-                            override var stdio = "inherit"
-                        },
-                    )
+                is TemplateActionValue -> {
+                    child_process.execSync(command.value!!, jsObjectOf("stdio" to "inherit") as ExecSyncOptions)
+                }
                 is CustomScriptActionValue -> handleCustomScript(command, toolchain)
                 else -> throw Exception("${command.type} not supported")
             }

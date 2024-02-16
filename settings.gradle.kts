@@ -1,2 +1,3 @@
 rootProject.name = "climat"
-include("lib")
+include("climatEngine")
+include("integrationTests")

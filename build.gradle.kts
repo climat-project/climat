@@ -62,7 +62,7 @@ kotlin {
                 implementation(npm("fs-extra", "11.1.0"))
                 implementation(npm("yesno", "^0.4.0"))
 
-                implementation(project("lib"))
+                implementation(project("climatEngine"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
                 implementation("org.jetbrains.kotlinx:kotlinx-nodejs:0.0.7")
