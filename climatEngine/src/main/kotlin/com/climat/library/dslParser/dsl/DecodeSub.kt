@@ -6,10 +6,10 @@ import com.climat.library.dslParser.docstring.decodeDocstring
 import com.climat.library.dslParser.exception.assertRequire
 
 internal fun decodeSub(cliDsl: String, sub: DslParser.SubContext): DescendantToolchain {
-    val statements = sub.assertRequire(cliDsl) { findSubBody() }.findSubStatements()
-    val params = sub.findParams()?.findParam().orEmpty()
-    val docstring = decodeDocstring(cliDsl, sub.findDocstring())
-    val rootModifiers = sub.findSubModifiers().mapNotNull { it.findRootModifiers() }
+    val statements = sub.assertRequire(cliDsl) { subBody() }.subStatements()
+    val params = sub.params()?.param().orEmpty()
+    val docstring = decodeDocstring(cliDsl, sub.docstring())
+    val rootModifiers = sub.subModifiers().mapNotNull { it.rootModifiers() }
 
     val name = sub.assertRequire(cliDsl) { IDENTIFIER() }
     val allowUnmatchedMod = rootModifiers.firstNotNullOfOrNull { it.MOD_ALLOW_UNMATCHED() }

@@ -12,10 +12,10 @@ import org.antlr.v4.kotlinruntime.CommonTokenStream
 internal fun decodeCliDsl(cliDsl: String): RootToolchain {
     val root = getRoot(cliDsl)
 
-    val statements = root.assertRequire(cliDsl) { findRootBody() }.findRootStatements()
-    val params = root.findParams()?.findParam().orEmpty()
-    val docstring = decodeDocstring(cliDsl, root.findDocstring())
-    val modifiers = root.findRootModifiers()
+    val statements = root.assertRequire(cliDsl) { rootBody() }.rootStatements()
+    val params = root.params()?.param().orEmpty()
+    val docstring = decodeDocstring(cliDsl, root.docstring())
+    val modifiers = root.rootModifiers()
 
     val identifier = root.assertRequire(cliDsl) { IDENTIFIER() }
     val allowUnmatchedMod = modifiers.firstNotNullOfOrNull { it.MOD_ALLOW_UNMATCHED() }

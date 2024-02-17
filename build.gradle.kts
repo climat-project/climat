@@ -15,13 +15,12 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
-        maven("https://jitpack.io")
     }
 }
 
 kotlin {
 
-    jvmToolchain(17)
+    jvmToolchain(21)
 
     js {
         compilations["main"].packageJson {
@@ -70,7 +69,7 @@ kotlin {
 
                 implementation(project("climatEngine"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-nodejs:0.0.7")
             }
         }

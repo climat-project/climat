@@ -9,7 +9,7 @@ internal fun decodeDocstring(cliDsl: String, docstring: DslParser.DocstringConte
         return Docstring.empty
     }
 
-    val entries = docstring.findDocstringEntry()
+    val entries = docstring.docstringEntry()
     if (entries.isEmpty()) {
         return Docstring.empty
     }
@@ -29,5 +29,5 @@ internal fun decodeDocstring(cliDsl: String, docstring: DslParser.DocstringConte
 
 private fun pair(cliDsl: String, docs: List<DslParser.DocstringEntryContext>) =
     docs.chunked(2)
-        .map { (tag, doc) -> tag.assertRequire(cliDsl) { findParamTag() } to doc.assertRequire(cliDsl) { Docstring_CONTENT() } }
+        .map { (tag, doc) -> tag.assertRequire(cliDsl) { paramTag() } to doc.assertRequire(cliDsl) { Docstring_CONTENT() } }
         .associate { (tag, doc) -> tag.assertRequire(cliDsl) { Docstring_IDENTIFIER() }.text.trim() to doc.text.trim() }

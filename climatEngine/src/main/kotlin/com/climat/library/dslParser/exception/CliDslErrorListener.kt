@@ -1,7 +1,7 @@
 package com.climat.library.dslParser.exception
 
 import com.climat.library.utils.newLine
-import com.strumenta.kotlinmultiplatform.BitSet
+import com.strumenta.antlrkotlin.runtime.BitSet
 import org.antlr.v4.kotlinruntime.ANTLRErrorListener
 import org.antlr.v4.kotlinruntime.Parser
 import org.antlr.v4.kotlinruntime.RecognitionException

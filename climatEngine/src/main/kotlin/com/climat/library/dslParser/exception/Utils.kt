@@ -2,9 +2,10 @@ package com.climat.library.dslParser.exception
 
 import com.climat.library.utils.crossPlatformLineSplit
 import com.climat.library.utils.newLine
-import com.strumenta.kotlinmultiplatform.Math
 import org.antlr.v4.kotlinruntime.ParserRuleContext
 import org.antlr.v4.kotlinruntime.ast.Position
+import kotlin.math.max
+import kotlin.math.min
 
 internal fun <T : ParserRuleContext, R> T.assertRequire(sourceCode: String, getter: T.() -> R?): R =
     getter(this) ?: throw UnexpectedParsingError("Failed to parse", this, sourceCode)
@@ -64,8 +65,8 @@ internal fun getSourceCodeErrorCaretIndicator(code: String, position: Position):
     val endLine = end.line - 1
     val endColumn = end.column
 
-    val lineViewPortBegin = Math.max(startLine - 2, 0)
-    val lineViewPortEnd = Math.min(endLine + 2, codeLines.size - 1) + endLine - startLine + 1
+    val lineViewPortBegin = max(startLine - 2, 0)
+    val lineViewPortEnd = min(endLine + 2, codeLines.size - 1) + endLine - startLine + 1
 
     val len = codeLines[startLine].length
 
