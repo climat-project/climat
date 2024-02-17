@@ -27,14 +27,16 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew build -x integrationTests:jsNodeTest
       - name: Install climat
-        run: npm install -g build/dist/js/productionExecutable
+        run: sudo npm install -g build/dist/js/productionExecutable
       - name: Run integration tests
-        run: ./gradlew integrationTests:jsNodeTest
+        run: sudo ./gradlew integrationTests:jsNodeTest
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: integration-tests-reports
           path: integrationTests/build/reports
+          retention-days: 10
 
   test-windows:
     strategy:
@@ -61,6 +63,8 @@ jobs:
         run: ./gradlew integrationTests:jsNodeTest
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: integration-tests-reports
           path: integrationTests/build/reports
+          retention-days: 10
