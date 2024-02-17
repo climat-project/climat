@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin.Companion.
 plugins {
     kotlin("multiplatform") version "1.9.22"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
+    // id("com.dorongold.task-tree") version "2.1.1"
 }
 
 fun getProp(name: String) = project.properties[name].toString()
@@ -31,7 +32,7 @@ kotlin {
                     "climat" to "./kotlin/climat.js",
                 ),
             )
-            arrayOf("repository", "homepage", "author", "license")
+            arrayOf("repository", "homepage", "author", "license", "description")
                 .forEach {
                     customField(it, getProp(it))
                 }
@@ -80,6 +81,18 @@ kotlin {
     }
 }
 
+tasks {
+    register<Copy>("copyLicenceAndReadme") {
+        from("LICENSE.md", "README.md")
+        into("build/js/packages/${project.name}")
+        dependsOn("kotlinNpmInstall")
+    }
+    named("jsBrowserProductionWebpack") {
+        dependsOn("copyLicenceAndReadme")
+    }
+}
+
 plugins.withType<NodeJsRootPlugin> {
     rootProject.kotlinNodeJsExtension.download = false
 }
+

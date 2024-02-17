@@ -11,7 +11,7 @@ import com.climat.library.dslParser.template.decodeTemplate
 import com.climat.library.utils.noopAction
 
 internal fun decodeSubAction(cliDsl: String, statements: List<DslParser.SubStatementsContext>): ActionValueBase<*> =
-    decodeRootAction(cliDsl, statements.mapNotNull { it.rootStatements() })
+    decodeRootAction(cliDsl, statements.map { it.rootStatements() })
 
 internal fun decodeRootAction(cliDsl: String, statements: List<DslParser.RootStatementsContext>): ActionValueBase<*> {
     val actions = statements.mapNotNull { it.action() }

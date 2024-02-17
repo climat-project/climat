@@ -5,7 +5,7 @@ import com.climat.library.domain.ref.Constant
 import com.climat.library.dslParser.exception.assertRequire
 
 internal fun decodeSubConstants(cliDsl: String, statements: List<DslParser.SubStatementsContext>): Array<Constant> =
-    decodeRootConstants(cliDsl, statements.mapNotNull { it.rootStatements() })
+    decodeRootConstants(cliDsl, statements.map { it.rootStatements() })
 
 internal fun decodeRootConstants(cliDsl: String, statements: List<DslParser.RootStatementsContext>): Array<Constant> =
     statements.mapNotNull { it.constDef() }

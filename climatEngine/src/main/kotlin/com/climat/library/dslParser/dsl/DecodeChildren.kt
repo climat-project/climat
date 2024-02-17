@@ -7,7 +7,7 @@ internal fun decodeSubChildren(
     cliDsl: String,
     statements: List<DslParser.SubStatementsContext>
 ): Array<DescendantToolchain> =
-    decodeRootChildren(cliDsl, statements.mapNotNull { it.rootStatements() })
+    decodeRootChildren(cliDsl, statements.map { it.rootStatements() })
 
 internal fun decodeRootChildren(
     cliDsl: String,

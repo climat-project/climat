@@ -7,10 +7,7 @@ config.target = 'node'
 
 config.plugins.push(
     new CopyPlugin({
-        patterns: [{
-            from: "package.json",
-            to: "."
-        }],
+        patterns: ["package.json", "LICENSE.md", "README.md"]
     }),
 
     new BannerPlugin({
