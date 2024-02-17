@@ -7,11 +7,11 @@ config.target = 'node'
 
 config.plugins.push(
     new CopyPlugin({
-                patterns: [{
-                    from: "package.json",
-                    to: "."
-                }],
-            }),
+        patterns: [{
+            from: "package.json",
+            to: "."
+        }],
+    }),
 
     new BannerPlugin({
         banner: "#!/usr/bin/env node",

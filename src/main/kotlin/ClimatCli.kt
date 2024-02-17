@@ -2,51 +2,39 @@ package com.climat
 
 import com.climat.Path.join
 import com.climat.library.commandParser.parse
-import com.climat.management.MAIN_MANIFEST_NAME
-import com.climat.management.UNIX_TOOLCHAIN_HOME
-import com.climat.management.WINDOWS_TOOLCHAIN_HOME
-import com.climat.management.choosePlatform
-import com.climat.management.getDslText
-import com.climat.management.getInstalledToolchains
-import com.climat.management.platformPath
-import com.climat.management.unixInstall
-import com.climat.management.unixPurge
-import com.climat.management.unixUninstall
-import com.climat.management.windowsInstall
-import com.climat.management.windowsPurge
-import com.climat.management.windowsUninstall
+import com.climat.platform.MAIN_MANIFEST_NAME
+import com.climat.platform.Platform
+import com.climat.platform.Unix
+import com.climat.platform.Windows
 import kotlinx.coroutines.await
 import os.EOL
 import process
 
 class ClimatCli {
+    private var platform: Platform =
+        when (process.platform) {
+            "linux", "darwin" -> Unix()
+            "win32" -> Windows()
+            else -> throw Exception("${process.platform} OS is not supported")
+        }
+
     suspend fun install(uriToDsl: String) {
         val dslText = getDslText(uriToDsl)
         val toolchain = parse(dslText)
-
         val aliasStrings = toolchain.aliases.map { it.name }.toTypedArray()
 
-        choosePlatform(
-            suspend { unixInstall(dslText, toolchain.name, aliasStrings) },
-            suspend { windowsInstall(dslText, toolchain.name, aliasStrings) },
-        ).invoke()
+        platform.install(dslText, toolchain.name, aliasStrings)
     }
 
     suspend fun runGlobal(
         name: String,
         command: Array<String>,
     ) {
-        val toolchainHome = choosePlatform(UNIX_TOOLCHAIN_HOME, WINDOWS_TOOLCHAIN_HOME)
-        val manifest = Fs.readFile(platformPath().join(toolchainHome, name, MAIN_MANIFEST_NAME), "utf8").await()
+        val manifest = Fs.readFile(platform.platformPath.join(platform.toolchainHome, name, MAIN_MANIFEST_NAME), "utf8").await()
         doExec(manifest, command, true)
     }
 
-    suspend fun uninstall(name: String) {
-        choosePlatform(
-            suspend { unixUninstall(name) },
-            suspend { windowsUninstall(name) },
-        ).invoke()
-    }
+    suspend fun uninstall(name: String) = platform.uninstall(name)
 
     suspend fun run(command: Array<String>) {
         var wd = process.cwd()
@@ -66,7 +54,7 @@ class ClimatCli {
     }
 
     suspend fun list() {
-        getInstalledToolchains().forEach { console.log(it) }
+        platform.getInstalledToolchains().forEach { console.log(it) }
     }
 
     suspend fun purge() {
@@ -74,16 +62,30 @@ class ClimatCli {
             yesno(
                 jsObjectOf(
                     "question" to "Are you sure you want to delete these toolchains? (y/n)$EOL${
-                        getInstalledToolchains().joinToString(EOL)
+                        platform.getInstalledToolchains().joinToString(EOL)
                     }$EOL>",
                     "defaultValue" to null,
                 ),
             ).await()
         if (ok) {
-            choosePlatform(
-                suspend { unixPurge() },
-                suspend { windowsPurge() },
-            ).invoke()
+            platform.purge()
+        }
+    }
+
+    private companion object {
+        suspend fun getDslText(uriToDsl: String): String {
+            val isHttpUri = uriToDsl.startsWith("https://") || uriToDsl.startsWith("http://")
+
+            return if (isHttpUri) {
+                val response = fetch(uriToDsl).await()
+                if (response.ok) {
+                    response.text().await()
+                } else {
+                    throw Exception("Server response ${response.status}: ${response.statusText}")
+                }
+            } else {
+                Fs.readFile(untildify(uriToDsl), "utf8").await()
+            }
         }
     }
 }
