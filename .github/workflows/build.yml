@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: integration-tests-reports
+          name: integration-tests-reports-${{ matrix.os }}-node${{ matrix.node-version }}
           path: integrationTests/build/reports
           retention-days: 10
 
@@ -65,6 +65,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: integration-tests-reports
+          name: integration-tests-reports-windows-latest-node-${{ matrix.node-version }}
           path: integrationTests/build/reports
           retention-days: 10
