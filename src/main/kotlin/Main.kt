@@ -41,6 +41,7 @@ fun main() =
             prettify { command, _ ->
                 if (command is CustomScriptActionValue) {
                     // Params used inside `eval`
+                    @Suppress("UNUSED_VARIABLE")
                     val params = command.valueForJs
                     eval(command.customScript)
                 } else {

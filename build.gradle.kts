@@ -95,4 +95,3 @@ tasks {
 plugins.withType<NodeJsRootPlugin> {
     rootProject.kotlinNodeJsExtension.download = false
 }
-

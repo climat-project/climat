@@ -13,49 +13,66 @@ import com.climat.library.utils.emptyString
 // TODO: make those configurable
 const val ARG_PREFIX = "--"
 const val SHORTHAND_ARG_PREFIX = "-"
+
 internal fun processRefs(
     toolchain: Toolchain,
     passedParams: MutableList<String>
 ): Map<String, RefWithAnyValue> {
     val (optionals, required) = toolchain.parameters.partition { it.optional }
-    val nameToOptionals = optionals.associateBy { it.name }
-    val shortHandToOptionals = optionals.associateBy { it.shorthand }
+
+    val refAccumulator = consumeRequired(passedParams, required)
+    val unsetOptionals = consumeOptionals(refAccumulator, passedParams, optionals)
+    processPredefined(refAccumulator, toolchain, passedParams)
+
+    refAccumulator += getDefaultValuesFor(unsetOptionals)
+    refAccumulator += getConstantsOf(toolchain)
+
+    return refAccumulator
+}
+
+private fun getConstantsOf(toolchain: Toolchain) =
+    toolchain.constants.fold(emptyList<RefWithValue<String>>()) { acc, it ->
+        acc + listOf(RefWithValue(it, it.value.str(acc)))
+    }.associateBy { it.ref.name }
+
+private fun getDefaultValuesFor(unsetOptionals: Set<ParamDefinition>) =
+    unsetOptionals.associate {
+        it.name to RefWithValue(
+            it,
+            when (it) {
+                is ArgDefinition -> it.default ?: emptyString()
+                is FlagDefinition -> false.toString()
+                else -> throw Exception("Type `${it::class.simpleName}` is not supported")
+            }
+        )
+    }
+
+private fun consumeOptionals(
+    refAccumulator: MutableMap<String, RefWithValue<*>>,
+    passedParams: MutableList<String>,
+    optionals: List<ParamDefinition>
+): Set<ParamDefinition> {
     val optionalsSet = optionals.toMutableSet()
-
-    val ans = required.associate { paramDef ->
-        paramDef.name to RefWithValue(paramDef, getNextValue(paramDef, passedParams)) as RefWithAnyValue
-    }.toMutableMap()
-
     while (optionalsSet.isNotEmpty() && passedParams.isNotEmpty()) {
         val first = passedParams.first()
         val newParams = when {
-            first.startsWith(ARG_PREFIX) -> getParamsFromNamePrefixed(passedParams, nameToOptionals)
-            first.startsWith(SHORTHAND_ARG_PREFIX) -> getParamsFromShorthandPrefixed(passedParams, shortHandToOptionals)
+            first.startsWith(ARG_PREFIX) -> getParamsFromNamePrefixed(passedParams, optionals)
+            first.startsWith(SHORTHAND_ARG_PREFIX) -> getParamsFromShorthandPrefixed(passedParams, optionals)
             else -> break
         }
-        ans += newParams
+        refAccumulator += newParams
         optionalsSet.removeAll(newParams.values.map { it.ref }.toSet())
     }
-
-    processPredefined(toolchain, ans, passedParams)
-
-    ans +=
-        optionalsSet
-            .associate {
-                it.name to RefWithValue(
-                    it,
-                    when (it) {
-                        is ArgDefinition -> it.default ?: emptyString()
-                        is FlagDefinition -> false.toString()
-                        else -> throw Exception("Type `${it::class.simpleName}` is not supported")
-                    }
-                )
-            }
-
-    return ans + toolchain.constants.fold(emptyList<RefWithValue<String>>()) { acc, it ->
-        acc + listOf(RefWithValue(it, it.value.str(acc)))
-    }.associateBy { it.ref.name }
+    return optionalsSet
 }
+
+private fun consumeRequired(
+    passedParams: MutableList<String>,
+    required: List<ParamDefinition>
+): MutableMap<String, RefWithValue<*>> =
+    required.associate { paramDef ->
+        paramDef.name to RefWithValue(paramDef, getNextValue(paramDef, passedParams)) as RefWithAnyValue
+    }.toMutableMap()
 
 fun getNextValue(paramDef: ParamDefinition, params: MutableList<String>): String {
     val paramValue =
@@ -73,22 +90,22 @@ fun getNextValue(paramDef: ParamDefinition, params: MutableList<String>): String
 }
 
 private fun processPredefined(
+    refAccumulator: MutableMap<String, RefWithAnyValue>,
     toolchain: Toolchain,
-    ans: MutableMap<String, RefWithAnyValue>,
     passedParams: MutableList<String>
 ) {
     // Process unmatched
     val unmatchedPredefined = toolchain.predefinedParameters.find { it.name == "__UNMATCHED" } ?: return
-    ans[unmatchedPredefined.name] = RefWithValue(unmatchedPredefined, passedParams.toTypedArray())
+    refAccumulator[unmatchedPredefined.name] = RefWithValue(unmatchedPredefined, passedParams.toTypedArray())
     passedParams.clear()
 }
 
 private fun getParamsFromShorthandPrefixed(
     passedParams: MutableList<String>,
-    shortHandToOptionals: Map<String?, ParamDefinition>
+    optionals: List<ParamDefinition>
 ): Map<String, RefWithValue<String>> {
     val next = passedParams.removeFirst().drop(SHORTHAND_ARG_PREFIX.length)
-
+    val shortHandToOptionals = optionals.associateBy { it.shorthand }
     return when {
         next.length > 1 -> getFlagsFromManyShorthands(shortHandToOptionals, next)
         next.length == 1 -> getParamsFromSingleShorthand(shortHandToOptionals, next, passedParams)
@@ -118,7 +135,7 @@ private fun getFlagsFromManyShorthands(
     shortHandToOptionals: Map<String?, ParamDefinition>,
     next: String
 ) = next.map {
-    shortHandToOptionals[it.toString()] ?: throw ParameterNotDefinedException(next)
+    shortHandToOptionals[it.toString()] ?: throw ParameterNotDefinedException(it.toString())
 }.onEach {
     if (it is FlagDefinition) {
         throw Exception("Parameter ${it.name} cannot be used as a flag")
@@ -133,13 +150,13 @@ private fun getFlagsFromManyShorthands(
 
 private fun getParamsFromNamePrefixed(
     passedParams: MutableList<String>,
-    nameToOptionals: Map<String, ParamDefinition>
+    optionals: List<ParamDefinition>
 ): Map<String, RefWithValue<String>> {
     val name = passedParams.removeFirst().drop(ARG_PREFIX.length)
     if (name.isEmpty()) {
         throw Exception("Cannot pass empty arg name") // TODO proper error
     }
-    val paramDef = nameToOptionals[name] ?: throw ParameterNotDefinedException(name)
+    val paramDef = optionals.firstOrNull { it.name == name } ?: throw ParameterNotDefinedException(name)
     return mapOf(
         name to RefWithValue(
             paramDef,
