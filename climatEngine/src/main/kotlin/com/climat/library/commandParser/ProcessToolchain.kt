@@ -10,6 +10,9 @@ import com.climat.library.domain.isLeaf
 import com.climat.library.domain.ref.RefWithAnyValue
 import com.climat.library.domain.toolchain.Toolchain
 import com.climat.library.utils.newLine
+import org.lighthousegames.logging.logging
+
+private val log = logging("ToolchainProcessor")
 
 internal fun processToolchain(
     toolchain: Toolchain,
@@ -55,14 +58,12 @@ private fun processToolchain(
     upperPathToRoot: List<Toolchain>,
     handler: (parsedAction: ActionValueBase<*>, context: Toolchain) -> Unit
 ) {
+    log.debug { "Processing toolchain: <${toolchain.name}>" }
+
     val pathToRoot = upperPathToRoot + toolchain
     val scopeRefs = upperScopeRefs + processRefs(toolchain, passedParams, pathToRoot)
     if (passedParams.isEmpty()) {
-        val act = toolchain.action
-        if (act.type != ActionValueBase.Type.Noop) {
-            setActualCommand(act, scopeRefs.values)
-            handler(act, toolchain)
-        }
+        handleMatch(toolchain, scopeRefs, handler)
     } else if (toolchain.isLeaf) {
         throw Exception("Could not match $passedParams with any definition") // TODO: proper error
     } else {
@@ -74,6 +75,22 @@ private fun processToolchain(
             handler = handler
         )
     }
+}
+
+private fun handleMatch(
+    toolchain: Toolchain,
+    scopeRefs: Map<String, RefWithAnyValue>,
+    handler: (parsedAction: ActionValueBase<*>, context: Toolchain) -> Unit
+) {
+    log.debug { "Matched <${toolchain.name}>" }
+
+    val act = toolchain.action
+
+    if (act.type == ActionValueBase.Type.Noop) return
+
+    setActualCommand(act, scopeRefs.values)
+    log.debug { "Handling action.." }
+    handler(act, toolchain)
 }
 
 private fun processRefs(

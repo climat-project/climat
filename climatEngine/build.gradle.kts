@@ -11,6 +11,7 @@ kotlin {
             dependencies {
                 api(kotlin("stdlib-common"))
                 api("com.strumenta:antlr-kotlin-runtime:1.0.0-RC1")
+                api("org.lighthousegames:logging:1.3.0")
             }
             kotlin.srcDir("build/generated-src/commonAntlr/kotlin")
             kotlin.srcDir("src/main/kotlin")

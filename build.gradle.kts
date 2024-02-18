@@ -72,6 +72,7 @@ kotlin {
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-nodejs:0.0.7")
+                implementation("org.lighthousegames:logging-js:1.3.0")
             }
         }
     }
