@@ -6,10 +6,11 @@ import com.climat.library.validation.ValidationBase
 import com.climat.library.validation.ValidationContext
 import com.climat.library.validation.ValidationEntry
 import com.climat.library.validation.ValidationResult
+import com.climat.library.validation.ValidationResult.ValidationEntryType.Error
 
 internal class UndefinedParams : ValidationBase() {
-    override val type get() = ValidationResult.ValidationEntryType.Error
-    override val code get() = ValidationCode.UndefinedParams
+    override val type = Error
+    override val code = ValidationCode.UndefinedParams
 
     override fun validate(ctx: ValidationContext): Sequence<ValidationEntry> =
         getScopeRefs(ctx).let { scopeParams ->

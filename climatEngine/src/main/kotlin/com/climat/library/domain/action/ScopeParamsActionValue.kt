@@ -9,6 +9,5 @@ import kotlin.js.JsExport
 @JsExport
 class ScopeParamsActionValue internal constructor() : ActionValueBase<Map<String, Any>>() {
     val valueForJs: JsExportableMap<String, Any>? = value?.let(::JsExportableMap)
-    override val sourceMap: Position?
-        get() = null
+    override val sourceMap: Position? = null
 }

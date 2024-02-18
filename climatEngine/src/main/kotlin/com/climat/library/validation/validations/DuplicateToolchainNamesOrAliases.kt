@@ -5,10 +5,11 @@ import com.climat.library.validation.ValidationBase
 import com.climat.library.validation.ValidationContext
 import com.climat.library.validation.ValidationEntry
 import com.climat.library.validation.ValidationResult
+import com.climat.library.validation.ValidationResult.ValidationEntryType.Error
 
 internal class DuplicateToolchainNamesOrAliases : ValidationBase() {
-    override val type get() = ValidationResult.ValidationEntryType.Error
-    override val code get() = ValidationCode.DuplicateToolchainNamesOrAliases
+    override val type = Error
+    override val code = ValidationCode.DuplicateToolchainNamesOrAliases
 
     override fun validate(ctx: ValidationContext): Sequence<ValidationEntry> =
         ctx.toolchain.children

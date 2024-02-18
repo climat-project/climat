@@ -13,14 +13,13 @@ abstract class ActionValueBase<VType> internal constructor() : SourceTraceable()
 
     var value: VType? = null
 
-    val type: Type
-        get() = when (this) {
-            is TemplateActionValue -> Type.Template
-            is CustomScriptActionValue -> Type.CustomScript
-            is ScopeParamsActionValue -> Type.ScopeParams
-            is NoopActionValue -> Type.Noop
-            else -> throw Exception("${this::class} is not supported")
-        }
+    val type: Type = when (this) {
+        is TemplateActionValue -> Type.Template
+        is CustomScriptActionValue -> Type.CustomScript
+        is ScopeParamsActionValue -> Type.ScopeParams
+        is NoopActionValue -> Type.Noop
+        else -> throw Exception("${this::class} is not supported")
+    }
 
     enum class Type {
         Template,

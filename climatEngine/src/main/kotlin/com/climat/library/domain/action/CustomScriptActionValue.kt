@@ -12,6 +12,6 @@ class CustomScriptActionValue internal constructor(
     val customScript: String,
     override val sourceMap: Position?
 ) : ActionValueBase<Map<String, Any>>() {
-    val valueForJs: JsExportableMap<String, Any>?
-        get() = value?.let(::JsExportableMap)
+    val valueForJs: JsExportableMap<String, Any>? =
+        value?.let(::JsExportableMap)
 }

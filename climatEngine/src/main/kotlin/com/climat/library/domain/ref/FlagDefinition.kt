@@ -12,8 +12,6 @@ class FlagDefinition internal constructor(
     override val description: String,
     override val name: String,
 ) : ParamDefinition() {
-    override val optional: Boolean
-        get() = true
-    override val default: String?
-        get() = null
+    override val optional = true
+    override val default = null
 }
