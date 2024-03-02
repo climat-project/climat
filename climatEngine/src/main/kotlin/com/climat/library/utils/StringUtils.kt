@@ -1,8 +1,8 @@
 package com.climat.library.utils
 
+internal operator fun Int.times(str: String) = (1..this).joinToString(emptyString()) { newLine() }
 internal fun emptyString(): String = ""
 internal fun newLine(): String = unixNewLine()
-internal fun newLines(number: Int) = (1..number).joinToString(emptyString()) { newLine() }
 internal fun String?.tpl(template: (String) -> String): String =
     if (this != null) {
         template(this)
@@ -39,3 +39,5 @@ internal fun <T> Iterable<T>.joinToStringIfNotEmpty(
     if (this.any()) {
         this.joinToString(separator, prefix, postfix, limit, truncated, transform)
     } else emptyString()
+
+internal fun String?.emptyStringIfNull(): String = this ?: emptyString()
