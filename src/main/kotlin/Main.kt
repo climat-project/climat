@@ -9,7 +9,6 @@ import com.climat.library.validation.ValidationResult.ValidationEntryType.Warnin
 import com.climat.output.prettify
 import com.climat.output.warn
 import org.lighthousegames.logging.KmLogging
-import org.lighthousegames.logging.LogLevel
 import os.EOL
 import process
 
@@ -18,7 +17,8 @@ val climat = AsyncClimatCli()
 
 fun main() =
     prettify {
-        KmLogging.setLogLevel(LogLevel.Off)
+        KmLogging.setLogLevel(getLogLevel())
+
         val toolchain = parse(MANIFEST_TEXT)
         val validations = getValidations(toolchain)
         val warnings =

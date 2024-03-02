@@ -64,6 +64,7 @@ private fun processToolchain(
     val scopeRefs = upperScopeRefs + processRefs(toolchain, passedParams, pathToRoot)
     if (passedParams.isEmpty()) {
         handleMatch(toolchain, scopeRefs, handler)
+        log.debug { "Execution summary\nChain: ${pathToRoot.map { it.name }.joinToString(" -> " )}" }
     } else if (toolchain.isLeaf) {
         throw Exception("Could not match $passedParams with any definition") // TODO: proper error
     } else {

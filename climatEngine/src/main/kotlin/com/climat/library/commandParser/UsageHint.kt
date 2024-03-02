@@ -9,12 +9,11 @@ import com.climat.library.utils.newLine
 import com.climat.library.utils.newLines
 import com.climat.library.utils.tpl
 
-internal fun getParameterUsageHint(pathToRoot: List<Toolchain>): String {
-    return getRequiredPlaceholders(pathToRoot) +
-        newLines(2) +
-        getParameterDescriptions(pathToRoot.last().parameters) +
-        newLine()
-}
+internal fun getParameterUsageHint(pathToRoot: List<Toolchain>): String =
+    getRequiredPlaceholders(pathToRoot) +
+    newLines(2) +
+    getParameterDescriptions(pathToRoot.last().parameters) +
+    newLine()
 
 internal fun getSubcommandUsageHint(pathToRoot: List<Toolchain>): String =
     pathToRoot.last().children.let { children ->
@@ -55,7 +54,8 @@ fun getParameterDescriptions(params: Array<ParamDefinition>) =
             ) { paramDefWithDescription(it) }
     }
 
-private fun paramDefWithDescription(it: ParamDefinition) = ARG_PREFIX +
+private fun paramDefWithDescription(it: ParamDefinition) =
+    ARG_PREFIX +
     it.name +
     "," +
     it.shorthand.tpl { "${SHORTHAND_ARG_PREFIX}$it" } +
