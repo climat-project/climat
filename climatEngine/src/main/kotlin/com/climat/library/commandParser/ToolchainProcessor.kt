@@ -28,7 +28,7 @@ fun execute(
         validate(toolchain)
     val mutableArgs = args.toMutableList()
     mutableArgs.add(0, toolchain.name)
-    processRootToolchain(toolchain, mutableArgs, actionHandler)
+    processToolchain(toolchain, mutableArgs, actionHandler)
 }
 
 @JsName("executeFromCliDsl")

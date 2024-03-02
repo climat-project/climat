@@ -5,12 +5,11 @@ import com.climat.library.validation.ValidationBase
 import com.climat.library.validation.ValidationContext
 import com.climat.library.validation.ValidationEntry
 import com.climat.library.validation.ValidationResult
+import com.climat.library.validation.ValidationResult.ValidationEntryType.Error
 
 internal class AllowUnmatchedOnNonLeaf : ValidationBase() {
-    override val type: ValidationResult.ValidationEntryType
-        get() = ValidationResult.ValidationEntryType.Error
-    override val code: ValidationCode
-        get() = ValidationCode.AllowUnmatchedOnNonLeaf
+    override val type = Error
+    override val code = ValidationCode.AllowUnmatchedOnNonLeaf
 
     override fun validate(ctx: ValidationContext): Sequence<ValidationEntry> =
         if (ctx.toolchain.allowUnmatched && !ctx.toolchain.isLeaf) {

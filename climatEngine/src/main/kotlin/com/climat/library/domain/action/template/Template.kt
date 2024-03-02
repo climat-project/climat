@@ -13,6 +13,5 @@ internal class Template(
             // Remove duplicate whitespaces
             .replace("\\s+".toRegex(), " ")
 
-    val refReferences: List<Interpolation>
-        get() = pieces.filterIsInstance<Interpolation>()
+    val refReferences: List<Interpolation> = pieces.filterIsInstance<Interpolation>()
 }

@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: zulu
-          java-version: 17
+          java-version: 21
       - name: Execute Gradle build
         run: ./gradlew build -x integrationTests:jsNodeTest
       - name: Install climat
@@ -54,7 +54,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: zulu
-          java-version: 17
+          java-version: 21
       - name: Execute Gradle build
         run: ./gradlew build -x integrationTests:jsNodeTest
       - name: Install climat

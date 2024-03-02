@@ -4,10 +4,11 @@ import com.climat.library.validation.ValidationBase
 import com.climat.library.validation.ValidationContext
 import com.climat.library.validation.ValidationEntry
 import com.climat.library.validation.ValidationResult
+import com.climat.library.validation.ValidationResult.ValidationEntryType.Warning
 
 internal class AncestorSubcommandWithSameName : ValidationBase() {
-    override val type get() = ValidationResult.ValidationEntryType.Warning
-    override val code get() = ValidationCode.AncestorSubcommandWithSameName
+    override val type = Warning
+    override val code = ValidationCode.AncestorSubcommandWithSameName
 
     override fun validate(ctx: ValidationContext): Sequence<ValidationEntry> =
         ctx.pathToRoot
@@ -16,6 +17,5 @@ internal class AncestorSubcommandWithSameName : ValidationBase() {
                 sequenceOf(
                     it.validationEntry("There is already an ancestor with name ${it.name}")
                 )
-            }
-            ?: emptySequence()
+            }.orEmpty()
 }

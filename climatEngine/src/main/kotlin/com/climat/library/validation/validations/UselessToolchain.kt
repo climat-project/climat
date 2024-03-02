@@ -5,10 +5,11 @@ import com.climat.library.validation.ValidationBase
 import com.climat.library.validation.ValidationContext
 import com.climat.library.validation.ValidationEntry
 import com.climat.library.validation.ValidationResult
+import com.climat.library.validation.ValidationResult.ValidationEntryType.Warning
 
 internal class UselessToolchain : ValidationBase() {
-    override val type get() = ValidationResult.ValidationEntryType.Warning
-    override val code get() = ValidationCode.UselessToolchain
+    override val type = Warning
+    override val code = ValidationCode.UselessToolchain
 
     override fun validate(ctx: ValidationContext): Sequence<ValidationEntry> =
         ctx.toolchain.let {

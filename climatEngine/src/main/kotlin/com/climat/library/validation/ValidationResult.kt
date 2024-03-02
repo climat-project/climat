@@ -20,12 +20,10 @@ class ValidationResult internal constructor(
     private var repr: String
 
     init {
-        repr = "${
-        when (type) {
+        repr = when (type) {
             ValidationEntryType.Error -> "Error"
             ValidationEntryType.Warning -> "Warning"
-        }
-        }: $message ${
+        } + ": $message ${
         sourceMap?.let {
             newLine() + getSourceCodeErrorCaretIndicator(
                 sourceCode,

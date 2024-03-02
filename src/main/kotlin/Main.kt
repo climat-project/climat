@@ -8,6 +8,7 @@ import com.climat.library.validation.ValidationResult.ValidationEntryType.Error
 import com.climat.library.validation.ValidationResult.ValidationEntryType.Warning
 import com.climat.output.prettify
 import com.climat.output.warn
+import org.lighthousegames.logging.KmLogging
 import os.EOL
 import process
 
@@ -16,6 +17,8 @@ val climat = AsyncClimatCli()
 
 fun main() =
     prettify {
+        KmLogging.setLogLevel(getLogLevel())
+
         val toolchain = parse(MANIFEST_TEXT)
         val validations = getValidations(toolchain)
         val warnings =
@@ -41,6 +44,7 @@ fun main() =
             prettify { command, _ ->
                 if (command is CustomScriptActionValue) {
                     // Params used inside `eval`
+                    @Suppress("UNUSED_VARIABLE")
                     val params = command.valueForJs
                     eval(command.customScript)
                 } else {

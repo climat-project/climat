@@ -7,6 +7,9 @@ import com.climat.library.domain.ref.PredefinedParamDefinition
 import com.climat.library.domain.ref.RefWithAnyValue
 import com.climat.library.domain.ref.RefWithValue
 import com.climat.library.utils.emptyString
+import org.lighthousegames.logging.logging
+
+var log = logging("Interpolation")
 
 internal class Interpolation(
     val name: String,
@@ -19,8 +22,10 @@ internal class Interpolation(
 
         val value = getStringValueFrom(refWithValue.value)
         return if (mapping != null) {
+            log.debug { "Mapping <$mapping> to value <$value>" }
             mapValue(refWithValue, value, mapping)
         } else {
+            log.debug { "No mapping found for $name, therefore interpolating bare value <$value>" }
             value
         }
     }

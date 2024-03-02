@@ -6,8 +6,8 @@ import com.climat.library.dslParser.exception.assertRequire
 
 internal fun decodeAliases(cliDsl: String, statements: List<DslParser.RootModifiersContext>): Array<Alias> {
     val aliases =
-        statements.mapNotNull { it.findAliasesModifier() }.flatMap { it.IDENTIFIER() }.map { Alias(it.text) } +
-            statements.mapNotNull { it.findAliasModifier() }
+        statements.mapNotNull { it.aliasesModifier() }.flatMap { it.IDENTIFIER() }.map { Alias(it.text) } +
+            statements.mapNotNull { it.aliasModifier() }
                 .map { Alias(it.assertRequire(cliDsl) { IDENTIFIER() }.text) }
     return aliases.toTypedArray()
 }

@@ -8,15 +8,17 @@ import com.climat.library.domain.action.ScopeParamsActionValue
 import com.climat.library.domain.action.TemplateActionValue
 import com.climat.library.domain.isLeaf
 import com.climat.library.domain.ref.RefWithAnyValue
-import com.climat.library.domain.toolchain.RootToolchain
 import com.climat.library.domain.toolchain.Toolchain
 import com.climat.library.utils.newLine
+import org.lighthousegames.logging.logging
 
-internal fun processRootToolchain(
-    toolchain: RootToolchain,
+private val log = logging("ToolchainProcessor")
+
+internal fun processToolchain(
+    toolchain: Toolchain,
     passedParams: MutableList<String>,
     handler: (parsedAction: ActionValueBase<*>, context: Toolchain) -> Unit
-) = processToolchainDescendants(
+) = processToolchains(
     children = listOf(toolchain),
     passedParams = passedParams,
     upperScopeRefs = emptyMap(),
@@ -24,14 +26,14 @@ internal fun processRootToolchain(
     handler = handler
 )
 
-private fun processToolchainDescendants(
+private fun processToolchains(
     children: List<Toolchain>,
     passedParams: MutableList<String>,
     upperScopeRefs: Map<String, RefWithAnyValue>,
     upperPathToRoot: List<Toolchain>,
     handler: (parsedAction: ActionValueBase<*>, context: Toolchain) -> Unit,
 ) {
-    require(passedParams.any()) {
+    require(passedParams.isNotEmpty()) {
         "`params` must have at least one element"
     }
 
@@ -56,18 +58,17 @@ private fun processToolchain(
     upperPathToRoot: List<Toolchain>,
     handler: (parsedAction: ActionValueBase<*>, context: Toolchain) -> Unit
 ) {
+    log.debug { "Processing toolchain: <${toolchain.name}>" }
+
     val pathToRoot = upperPathToRoot + toolchain
     val scopeRefs = upperScopeRefs + processRefs(toolchain, passedParams, pathToRoot)
     if (passedParams.isEmpty()) {
-        val act = toolchain.action
-        if (act.type != ActionValueBase.Type.Noop) {
-            setActualCommand(act, scopeRefs.values)
-            handler(act, toolchain)
-        }
+        handleMatch(toolchain, scopeRefs, handler)
+        log.debug { "Execution summary\nChain: ${pathToRoot.map { it.name }.joinToString(" -> " )}" }
     } else if (toolchain.isLeaf) {
         throw Exception("Could not match $passedParams with any definition") // TODO: proper error
     } else {
-        processToolchainDescendants(
+        processToolchains(
             children = toolchain.children.toList(),
             passedParams = passedParams,
             upperScopeRefs = scopeRefs,
@@ -77,6 +78,22 @@ private fun processToolchain(
     }
 }
 
+private fun handleMatch(
+    toolchain: Toolchain,
+    scopeRefs: Map<String, RefWithAnyValue>,
+    handler: (parsedAction: ActionValueBase<*>, context: Toolchain) -> Unit
+) {
+    log.debug { "Matched <${toolchain.name}>" }
+
+    val act = toolchain.action
+
+    if (act.type == ActionValueBase.Type.Noop) return
+
+    setActualCommand(act, scopeRefs.values)
+    log.debug { "Handling action.." }
+    handler(act, toolchain)
+}
+
 private fun processRefs(
     toolchain: Toolchain,
     passedParams: MutableList<String>,
@@ -84,10 +101,7 @@ private fun processRefs(
 ): Map<String, RefWithAnyValue> = try {
     processRefs(toolchain, passedParams)
 } catch (ex: ParameterException) {
-    throw Exception(
-        ex.message + newLine() + getParameterUsageHint(pathToRoot),
-        ex
-    )
+    throw Exception(ex.message + newLine() + getParameterUsageHint(pathToRoot), ex)
 }
 
 private fun setActualCommand(
@@ -95,22 +109,10 @@ private fun setActualCommand(
     values: Collection<RefWithAnyValue>
 ) {
     when (action) {
-        is TemplateActionValue -> {
-            action.value = action.template.str(values)
-        }
-
-        is CustomScriptActionValue -> {
-            action.value = values.associate { it.ref.name to it.value }
-        }
-
-        is ScopeParamsActionValue -> {
-            action.value = values.associate { it.ref.name to it.value }
-        }
-
-        is NoopActionValue -> {
-            // By definition, do nothing
-        }
-
+        is TemplateActionValue -> action.value = action.template.str(values)
+        is CustomScriptActionValue -> action.value = values.associate { it.ref.name to it.value }
+        is ScopeParamsActionValue -> action.value = values.associate { it.ref.name to it.value }
+        is NoopActionValue -> { /* By definition, do nothing */ }
         else -> throw Exception("Type `${action::class}` not supported")
     }
 }

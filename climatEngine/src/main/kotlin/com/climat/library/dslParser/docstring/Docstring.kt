@@ -8,7 +8,6 @@ internal class Docstring(
 ) {
 
     companion object {
-        val empty: Docstring
-            get() = Docstring(emptyString(), emptyMap())
+        val empty = Docstring(emptyString(), emptyMap())
     }
 }

@@ -9,7 +9,7 @@ fun <T, U> prettify(fn: (arg1: T, arg2: U) -> Unit): (arg1: T, arg2: U) -> Unit 
         }
     }
 
-fun prettify(fn: () -> Unit): () -> Unit =
+fun prettify(fn: () -> Unit): (() -> Unit) =
     {
         try {
             fn()

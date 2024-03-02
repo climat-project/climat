@@ -17,8 +17,8 @@ internal fun decodeParams(
     params.map { parsedParam ->
         val paramName = parsedParam.assertRequire(cliDsl) { IDENTIFIER() }.text
         val description = paramDescriptions[paramName] ?: emptyString()
-        val shorthand = parsedParam.findParamShort()?.text
-        parsedParam.assertRequire(cliDsl) { findParamType() }.let {
+        val shorthand = parsedParam.paramShort()?.text
+        parsedParam.assertRequire(cliDsl) { paramType() }.let {
             when {
                 it.FLAG() != null -> {
                     FlagDefinition(
@@ -29,14 +29,14 @@ internal fun decodeParams(
                     )
                 }
 
-                it.findArgument() != null -> {
-                    val arg = it.findArgument()!!
+                it.argument() != null -> {
+                    val arg = it.argument()!!
                     ArgDefinition(
                         name = paramName,
                         shorthand = shorthand,
                         description = description,
                         optional = (arg.QMARK() != null),
-                        default = arg.findLiteral()?.let { decodeSimpleString(cliDsl, it) },
+                        default = arg.literal()?.let { decodeSimpleString(cliDsl, it) },
                         sourceMap = parsedParam.position!!,
                     )
                 }

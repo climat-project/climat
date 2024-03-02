@@ -13,6 +13,9 @@ import com.climat.library.validation.validations.FlagMappedTwice
 import com.climat.library.validation.validations.ShadowedParams
 import com.climat.library.validation.validations.UndefinedParams
 import com.climat.library.validation.validations.UselessToolchain
+import org.lighthousegames.logging.logging
+
+val log = logging("Validation")
 
 private val validators = listOf(
     AllowUnmatchedOnNonLeaf(),
@@ -54,6 +57,8 @@ private fun computeValidations(
 
 // TODO implement warning for unused variables
 internal fun validate(toolchain: RootToolchain) {
+    log.debug { "Starting validation of ${validators.map { it.code.name }}" }
+
     val validations = computeValidations(toolchain)
     val errors = validations.filter { it.type == ValidationResult.ValidationEntryType.Error }.toList()
     if (errors.any()) {

@@ -8,10 +8,10 @@ import com.climat.library.dslParser.template.decodeTemplate
 
 internal fun decodeLiteral(cliDsl: String, literal: DslParser.LiteralContext): Template =
     literal
-        .findStringTemplate()
+        .stringTemplate()
         ?.let { decodeTemplate(cliDsl, it) }
         ?: Template(
             listOf(
-                SimpleString.create(literal.assertRequire(cliDsl) { findBooleanLiteral() }.text)
+                SimpleString.create(literal.assertRequire(cliDsl) { booleanLiteral() }.text)
             )
         )

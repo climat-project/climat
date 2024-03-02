@@ -7,6 +7,5 @@ import kotlin.js.JsExport
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 class NoopActionValue internal constructor() : ActionValueBase<Nothing>() {
-    override val sourceMap: Position?
-        get() = null
+    override val sourceMap: Position? = null
 }

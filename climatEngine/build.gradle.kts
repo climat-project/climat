@@ -1,15 +1,8 @@
-
-buildscript {
-    repositories {
-        maven("https://jitpack.io")
-    }
-    dependencies {
-        classpath("com.strumenta.antlr-kotlin:antlr-kotlin-gradle-plugin:b5135079b8")
-    }
-}
+import com.strumenta.antlrkotlin.gradle.AntlrKotlinTask
 
 plugins {
     kotlin("multiplatform") version "1.9.22"
+    id("com.strumenta.antlr-kotlin") version "1.0.0-RC1"
 }
 
 kotlin {
@@ -17,7 +10,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(kotlin("stdlib-common"))
-                api("com.strumenta.antlr-kotlin:antlr-kotlin-runtime:b5135079b8")
+                api("com.strumenta:antlr-kotlin-runtime:1.0.0-RC1")
+                api("org.lighthousegames:logging:1.3.0")
             }
             kotlin.srcDir("build/generated-src/commonAntlr/kotlin")
             kotlin.srcDir("src/main/kotlin")
@@ -42,9 +36,9 @@ kotlin {
     }
 }
 
-tasks.register<com.strumenta.antlrkotlin.gradleplugin.AntlrKotlinTask>("generateKotlinCommonGrammarSource") {
+tasks.register<AntlrKotlinTask>("generateKotlinCommonGrammarSource") {
     antlrClasspath = configurations.detachedConfiguration(
-        project.dependencies.create("com.strumenta.antlr-kotlin:antlr-kotlin-target:b5135079b8")
+        project.dependencies.create("com.strumenta:antlr-kotlin-runtime:1.0.0-RC1")
     )
     maxHeapSize = "64m"
     packageName = "climat.lang"

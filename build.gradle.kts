@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin.Companion.
 plugins {
     kotlin("multiplatform") version "1.9.22"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
+    // id("com.dorongold.task-tree") version "2.1.1"
 }
 
 fun getProp(name: String) = project.properties[name].toString()
@@ -15,13 +16,12 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
-        maven("https://jitpack.io")
     }
 }
 
 kotlin {
 
-    jvmToolchain(17)
+    jvmToolchain(21)
 
     js {
         compilations["main"].packageJson {
@@ -32,7 +32,7 @@ kotlin {
                     "climat" to "./kotlin/climat.js",
                 ),
             )
-            arrayOf("repository", "homepage", "author", "license")
+            arrayOf("repository", "homepage", "author", "license", "description")
                 .forEach {
                     customField(it, getProp(it))
                 }
@@ -70,14 +70,26 @@ kotlin {
 
                 implementation(project("climatEngine"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-nodejs:0.0.7")
+                implementation("org.lighthousegames:logging-js:1.3.0")
             }
         }
     }
 
     ktlint.filter {
         exclude { it.file.path.contains("generated") }
+    }
+}
+
+tasks {
+    register<Copy>("copyLicenceAndReadme") {
+        from("LICENSE.md", "README.md")
+        into("build/js/packages/${project.name}")
+        dependsOn("kotlinNpmInstall")
+    }
+    named("jsBrowserProductionWebpack") {
+        dependsOn("copyLicenceAndReadme")
     }
 }
 
