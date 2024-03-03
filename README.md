@@ -1,6 +1,6 @@
 
 
-<div style="text-align: center">
+<div align="center">
 
 ![LastCommitOnMaster](https://img.shields.io/github/last-commit/climat-project/climat/master?label=last%20commit%20on%20master)
 ![Build](https://img.shields.io/github/actions/workflow/status/climat-project/climat/build.yml?branch=master)
