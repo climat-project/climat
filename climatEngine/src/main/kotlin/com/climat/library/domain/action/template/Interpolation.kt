@@ -22,10 +22,10 @@ internal class Interpolation(
 
         val value = getStringValueFrom(refWithValue.value)
         return if (mapping != null) {
-            log.debug { "Mapping <$mapping> to value <$value>" }
+            log.d { "Mapping <$mapping> to value <$value>" }
             mapValue(refWithValue, value, mapping)
         } else {
-            log.debug { "No mapping found for $name, therefore interpolating bare value <$value>" }
+            log.d { "No mapping found for $name, therefore interpolating bare value <$value>" }
             value
         }
     }

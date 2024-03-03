@@ -21,7 +21,7 @@ internal fun processRefs(
     toolchain: Toolchain,
     passedParams: MutableList<String>
 ): Map<String, RefWithAnyValue> {
-    log.debug { "Processing refs of toolchain <${toolchain.name}>" }
+    log.d { "Processing refs of toolchain <${toolchain.name}>" }
 
     val (optionals, required) = toolchain.parameters.partition { it.optional }
 
@@ -37,13 +37,13 @@ internal fun processRefs(
 }
 
 private fun getConstantsOf(toolchain: Toolchain): Map<String, RefWithValue<String>> {
-    log.debug { "Resolving constants" }
+    log.d { "Resolving constants" }
 
     val ans = toolchain.constants.fold(emptyList<RefWithValue<String>>()) { acc, it ->
         acc + listOf(RefWithValue(it, it.value.str(acc)))
     }.associateBy { it.ref.name }
 
-    log.debug {
+    log.d {
         if (ans.isEmpty()) "No resolved constants"
         else "Resolved constants: <$ans>"
     }
@@ -61,8 +61,9 @@ private fun getDefaultValuesFor(unsetOptionals: Set<ParamDefinition>): Map<Strin
             }
         )
     }
-
-    log.debug { if(ans.keys.isEmpty()) null else "Set default values for params: <${ans.keys}>" }
+    if(ans.keys.isNotEmpty()) {
+        log.d { "Set default values for params: <${ans.keys}>" }
+    }
     return ans
 }
 
@@ -71,7 +72,12 @@ private fun consumeOptionals(
     passedParams: MutableList<String>,
     optionals: List<ParamDefinition>
 ): Set<ParamDefinition> {
-    log.debug { "Trying to parse the optional params from $passedParams" }
+    if (optionals.isEmpty()) {
+        log.d { "No optional parameters to parse" }
+        return emptySet()
+    }
+
+    log.d { "Trying to parse the optional params from $passedParams" }
 
     val optionalsSet = optionals.toMutableSet()
     while (optionalsSet.isNotEmpty() && passedParams.isNotEmpty()) {
@@ -85,7 +91,7 @@ private fun consumeOptionals(
         optionalsSet.removeAll(newParams.values.map { it.ref }.toSet())
     }
 
-    log.debug { "Succesfully parsed optional params. ${
+    log.d { "Successfully parsed optional params. ${
         if (optionalsSet.isEmpty()) emptyString() else "Unset params <${optionalsSet.map { it.name }}>"
     } "  }
     return optionalsSet
@@ -95,13 +101,13 @@ private fun consumeRequired(
     passedParams: MutableList<String>,
     required: List<ParamDefinition>
 ): MutableMap<String, RefWithValue<*>> {
-    log.debug { "Trying to parse the required params from $passedParams" }
+    log.d { "Trying to parse the required params from $passedParams" }
 
     val ans = required.associate { paramDef ->
         paramDef.name to RefWithValue(paramDef, getNextValue(paramDef, passedParams)) as RefWithAnyValue
     }.toMutableMap()
 
-    log.debug { "Successfully resolved values for params <${ans.keys}>" }
+    log.d { "Successfully resolved values for params <${ans.keys}>" }
     return ans
 }
 
@@ -125,12 +131,12 @@ private fun processPredefined(
     toolchain: Toolchain,
     passedParams: MutableList<String>
 ) {
-    log.debug { "Processing unmatched parameters" }
+    log.d { "Processing unmatched parameters" }
     // Process unmatched
     val unmatchedPredefined = toolchain.predefinedParameters.find { it.name == "__UNMATCHED" } ?: return
     refAccumulator["__UNMATCHED"] = RefWithValue(unmatchedPredefined, passedParams.toTypedArray())
 
-    log.debug { "Unmatched parameters: $passedParams" }
+    log.d { "Unmatched parameters: $passedParams" }
 
     passedParams.clear()
 }
@@ -154,7 +160,7 @@ private fun getParamsFromSingleShorthand(
     name: String,
     passedParams: MutableList<String>
 ): Map<String, RefWithValue<String>> {
-    log.debug { "Trying to resolve shorthand param named <$name>" }
+    log.d { "Trying to resolve shorthand param named <$name>" }
 
     val paramDef = shortHandToOptionals[name] ?: throw ParameterNotDefinedException(name)
     val paramValue = when (paramDef) {
@@ -163,7 +169,7 @@ private fun getParamsFromSingleShorthand(
         else -> throw Exception("Type is not supported") // TODO proper error
     }
 
-    log.debug { "Resolved shorthand param <$name> to value <$paramValue>" }
+    log.d { "Resolved shorthand param <$name> to value <$paramValue>" }
     return mapOf(paramDef.name to RefWithValue(paramDef, paramValue))
 }
 
@@ -171,7 +177,7 @@ private fun getFlagsFromManyShorthands(
     shortHandToOptionals: Map<String?, ParamDefinition>,
     next: String
 ): Map<String, RefWithValue<String>> {
-    log.debug { "Trying to resolve shorthand flags: <$next>" }
+    log.d { "Trying to resolve shorthand flags: <$next>" }
 
     return next.map {
         shortHandToOptionals[it.toString()] ?: throw ParameterNotDefinedException(it.toString())
@@ -194,7 +200,7 @@ private fun getParamsFromNamePrefixed(
 ): Map<String, RefWithValue<String>> {
     val name = passedParams.removeFirst().drop(ARG_PREFIX.length)
 
-    log.debug { "Trying to resolve param named: <$name>" }
+    log.d { "Trying to resolve param named: <$name>" }
 
     if (name.isEmpty()) {
         throw Exception("Cannot pass empty arg name") // TODO proper error
@@ -206,6 +212,6 @@ private fun getParamsFromNamePrefixed(
         else -> throw Exception("Type is not supported") // TODO proper error
     }
 
-    log.debug { "Resolved param <$name> to value <$paramValue>" }
+    log.d { "Resolved param <$name> to value <$paramValue>" }
     return mapOf(name to RefWithValue(paramDef, paramValue))
 }
