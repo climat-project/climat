@@ -57,7 +57,7 @@ private fun computeValidations(
 
 // TODO implement warning for unused variables
 internal fun validate(toolchain: RootToolchain) {
-    log.debug { "Starting validation of ${validators.map { it.code.name }}" }
+    log.d { "Starting validation of ${validators.map { it.code.name }}" }
 
     val validations = computeValidations(toolchain)
     val errors = validations.filter { it.type == ValidationResult.ValidationEntryType.Error }.toList()

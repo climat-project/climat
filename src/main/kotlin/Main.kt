@@ -6,9 +6,11 @@ import com.climat.library.commandParser.parse
 import com.climat.library.domain.action.CustomScriptActionValue
 import com.climat.library.validation.ValidationResult.ValidationEntryType.Error
 import com.climat.library.validation.ValidationResult.ValidationEntryType.Warning
+import com.climat.output.ColoredLogger
 import com.climat.output.prettify
 import com.climat.output.warn
 import org.lighthousegames.logging.KmLogging
+import org.lighthousegames.logging.VariableLogLevel
 import os.EOL
 import process
 
@@ -17,7 +19,8 @@ val climat = AsyncClimatCli()
 
 fun main() =
     prettify {
-        KmLogging.setLogLevel(getLogLevel())
+        KmLogging.clear()
+        KmLogging.addLogger(ColoredLogger(VariableLogLevel(getLogLevel())))
 
         val toolchain = parse(MANIFEST_TEXT)
         val validations = getValidations(toolchain)

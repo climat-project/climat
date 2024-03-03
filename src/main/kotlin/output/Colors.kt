@@ -14,6 +14,6 @@ private external object Colors {
 
 val error = Colors.red
 val warn = Colors.yellow
-val debug = Colors.blue
+val debug = Colors.cyan
 val success = Colors.green
-val info = Colors.cyan
+val info = Colors.blue

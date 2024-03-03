@@ -58,13 +58,13 @@ private fun processToolchain(
     upperPathToRoot: List<Toolchain>,
     handler: (parsedAction: ActionValueBase<*>, context: Toolchain) -> Unit
 ) {
-    log.debug { "Processing toolchain: <${toolchain.name}>" }
+    log.d { "Processing toolchain: <${toolchain.name}>" }
 
     val pathToRoot = upperPathToRoot + toolchain
     val scopeRefs = upperScopeRefs + processRefs(toolchain, passedParams, pathToRoot)
     if (passedParams.isEmpty()) {
         handleMatch(toolchain, scopeRefs, handler)
-        log.debug { "Execution summary\nChain: ${pathToRoot.map { it.name }.joinToString(" -> " )}" }
+        log.d { "Execution summary\nPath: ${pathToRoot.map { it.name }.joinToString(" -> " )}" }
     } else if (toolchain.isLeaf) {
         throw Exception("Could not match $passedParams with any definition") // TODO: proper error
     } else {
@@ -83,14 +83,14 @@ private fun handleMatch(
     scopeRefs: Map<String, RefWithAnyValue>,
     handler: (parsedAction: ActionValueBase<*>, context: Toolchain) -> Unit
 ) {
-    log.debug { "Matched <${toolchain.name}>" }
+    log.d { "Matched <${toolchain.name}>" }
 
     val act = toolchain.action
 
     if (act.type == ActionValueBase.Type.Noop) return
 
     setActualCommand(act, scopeRefs.values)
-    log.debug { "Handling action.." }
+    log.d { "Handling action.." }
     handler(act, toolchain)
 }
 
