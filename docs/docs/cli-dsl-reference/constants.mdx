@@ -1,0 +1,39 @@
+---
+title: Constants
+---
+
+import Constants from '/common/examples/constants.cli.mdx'
+import Scope from '/common/examples/constants-scope.cli.mdx'
+import Templates from '/common/examples/constants-templates.cli.mdx'
+
+You can define constants for data that you want to use multiple times throughout your Toolchain.
+
+<Constants/>
+
+```sh title="Console"
+$ my-toolchain
+My Dear Constant Value
+```
+
+# Scope
+
+Constants are visible in both the defined scope and the child scopes.
+
+<Scope/>
+
+```sh title="Console"
+$ my-toolchain my-child
+Child My Dear Constant Value
+```
+
+# Templates
+
+You can use templates when assigning a value to a constant. Reference other
+constants or parameters.
+
+<Templates/>
+
+```sh title="Console"
+$ my-toolchain my-child
+Child My Dear Constant Value
+```

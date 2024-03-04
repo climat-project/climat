@@ -1,0 +1,16 @@
+---
+title: Documenting toolchains
+---
+
+import DocumentingToolchains from "/common/examples/documenting-toolchains.cli.mdx"
+
+You can write documentation for your toolchain in the DSL.
+This will then show up when passing `--help` argument, or when the command fails
+
+Use `@param <param-name>` to set the description for a specific parameter
+
+<DocumentingToolchains/>
+
+:::info
+Documentation works on both root and sub toolchains
+:::

@@ -1,0 +1,12 @@
+---
+climat_version: 0.0.5
+---
+```clidsl title="scope.cli"
+hello-world(location l: arg) {
+    action "echo Hello World from $(location)"
+
+    sub child {
+        action "echo Hello Child from $(location)"
+    }
+}
+```

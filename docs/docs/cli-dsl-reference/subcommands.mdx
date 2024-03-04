@@ -1,0 +1,41 @@
+---
+title: Subcommands
+---
+
+import Toolchain from '/common/examples/subcommands-toolchain.cli.mdx'
+import Aliases from '/common/examples/subcommands-aliases.cli.mdx'
+
+In a Toolchain, you can have as many nested subcommands as you want.
+Let's take the example from [earlier](/docs/cli-dsl-reference/toolchain) and add a subcommand to it:
+
+<Toolchain/>
+
+After reinstalling the script, we can do the following:
+```sh title="Console"
+$ my-toolchain
+Hello
+$ my-toolchain child-toolchain
+Child
+```
+
+# Aliases
+
+Sometimes you want one than more name for your subcommand. For example, the user may want 
+to execute install with a shorthand (like `npm` supports `i` for install, eg `npm i climat`)
+
+To achieve that, you can use the sub modifiers `@aliases` and `@alias`:
+
+<Aliases/>
+
+After reinstalling the script, we can do the following:
+
+```sh title=Console
+$ my-toolchain child-toolchain
+Child
+$ my-toolchain child
+Child
+$ my-toolchain ct
+Child
+$ my-toolchain cld
+Child
+```

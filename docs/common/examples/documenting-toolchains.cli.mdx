@@ -1,0 +1,15 @@
+---
+climat_version: 0.0.5
+---
+```clidsl title=documenting-toolchains.cli
+hello-world {
+
+    """
+    Does this very useful thing!
+    @param location - Location from where are you hello-world-in'.
+    @param dayOfWeek - Day of week when you are hello-world-in'.
+    """
+    sub from(location: arg, dayOfWeek: arg) {
+        action 'echo Hello World from $(location) on this fine $(dayOfWeek)'
+    }
+}
