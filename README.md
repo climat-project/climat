@@ -2,11 +2,11 @@
 
 <div align="center">
 
-![LastCommitOnMaster](https://img.shields.io/github/last-commit/climat-project/climat/master?label=last%20commit%20on%20master)
-![Build](https://img.shields.io/github/actions/workflow/status/climat-project/climat/build.yml?branch=master)
-[![Version](https://img.shields.io/npm/v/climat)](https://www.npmjs.com/package/climat)
-![NodeVersion](https://img.shields.io/node/v/climat)
-[![GitHub license](https://img.shields.io/npm/l/climat)](https://github.com/climat-project/climat/blob/master/LICENSE.md)
+![LastCommitOnMaster](https://img.shields.io/github/last-commit/climat-project/climat/master?label=last%20commit%20on%20master&style=for-the-badge)
+![Build](https://img.shields.io/github/actions/workflow/status/climat-project/climat/build.yml?branch=master&style=for-the-badge)
+[![Version](https://img.shields.io/npm/v/climat?style=for-the-badge)](https://www.npmjs.com/package/climat)
+![NodeVersion](https://img.shields.io/node/v/climat?style=for-the-badge)
+[![GitHub license](https://img.shields.io/npm/l/climat?style=for-the-badge)](https://github.com/climat-project/climat/blob/master/LICENSE.md)
 
 <br/>
 
@@ -27,7 +27,7 @@ Powerful CLI Macros
 [Contribute](https://github.com/climat-project/climat/blob/master/CONTRIBUTING.md)
 </div>
 
-# ⚠️ PRE-RELEASE: Some features might not work and everything is subject to change ⚠️
+# ⚠️ PRE-RELEASE: Everything is subject to change ⚠️
 
 Generate powerful macros for your CLI tools with a simple and smart approach.
 
