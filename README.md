@@ -10,7 +10,7 @@
 
 <br/>
 
-<img alt="Climat logo" src="https://raw.githubusercontent.com/climat-project/doc-and-design/master/static/img/logo-name-prerelease-tag.svg" width="500px"/>
+<img alt="Climat logo" src="https://raw.githubusercontent.com/climat-project/climat/master/docs/static/img/logo-name-prerelease-tag.svg" width="500px"/>
 <br/><br/>
 
 Powerful CLI Macros
