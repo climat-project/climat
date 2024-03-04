@@ -1,0 +1,24 @@
+---
+title: JavaScript
+---
+
+import JavaScript from "/common/examples/javascript.cli.mdx"
+
+Besides executing commands in the default shell, you can execute JavaScript
+that runs on the same engine that CLiMAT runs.
+
+<JavaScript/>
+
+```sh title=Console
+$ hello-world Cluj-Napoca
+Hello World from a JavaScript environment !
+It seems that you are situated in Cluj-Napoca
+Is that correct?
+```
+
+# Data in JS scope
+
+* `params`. An object containing all the scope-visible params
+* `toolchain`. An object containing metadata about the toolchain that
+the script was defined in
+* `command`. Information about the action

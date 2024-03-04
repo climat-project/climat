@@ -1,0 +1,58 @@
+---
+title: Command template
+---
+
+import MappingFlags from "/common/examples/command-template-mapping-flags.cli.mdx"
+import MappingArgs from "/common/examples/command-template-mapping-args.cli.mdx"
+
+Command templates are used to map the input to any desired command.
+
+# Mapping flags
+
+Can be done in two ways:
+* Interpolating the string value of flags (i.e. `false` or `true`) into the command string
+* Interpolating or not, a predefined identifier based on the truthness of the flag
+
+<MappingFlags/>
+
+When executing `foo`, the flag `goodDay`'s value will just be interpolated into the string
+
+When executing `bar`, the flag will decide whether the string `today-is-a-good-day`
+is interpolated, or not
+
+When executing `baz`, the effect will be the same as for `bar`, only the flag will be inverted
+```bash title=Console
+$ hello-world foo
+Hello World false
+
+$ hello-world --goodDay foo
+Hello World true
+
+$ hello-world bar
+Hello World
+
+$ hello-world --goodDay bar
+Hello World today-is-a-good-day
+
+$ hello-world baz
+Hello World today-is-NOT-a-good-day
+
+$ hello-world --goodDay baz
+Hello World
+```
+
+# Mapping args
+
+Similar to flags, mapping args can be done in two ways:
+ * Interpolating the value
+ * Interpolating with a key prefix
+ 
+<MappingArgs/>
+
+```bash title=Console
+$ hello-world Tuesday foo
+Hello World Tuesday
+
+$ hello-world Tuesday bar
+Hello World --today-is=Tuesday
+```

@@ -1,0 +1,33 @@
+---
+title: Your first toolchain
+---
+
+import Example from '/common/examples/hello-world.cli.mdx'
+import Install from '/common/examples/install.sh.mdx'
+
+# Your first toolchain
+
+Let's write a "hello world" toolchain.
+Start with creating a file named `hello-world.cli`
+<Example/>
+
+Install this via
+<Install/>
+
+:::caution
+On Linux or other \*NIX systems, you might need to run the installation command from above as super user (eg. `sudo climat install hello-world.cli`)
+
+On Windows systems, it might be necessary to add certain directory to system PATH.
+Follow the installation warnings for more information
+:::
+
+Your first toolchain is ready to use:
+
+```bash title=Console
+$ hello-world Cluj-Napoca
+Hello World from Cluj-Napoca
+```
+
+Now, the sky is the only limit!
+
+Check out the [Cli DSL reference](/docs/cli-dsl-reference/overview) to see what you can build with CLiMAT!
