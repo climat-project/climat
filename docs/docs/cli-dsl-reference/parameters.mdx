@@ -1,0 +1,107 @@
+---
+title: Parameters
+---
+
+import YourFirstToolchain from "/common/examples/hello-world.cli.mdx"
+
+import Scope from "/common/examples/parameters-scope.cli.mdx"
+import Optionals from "/common/examples/parameters-optionals.cli.mdx"
+import Defaults from "/common/examples/parameters-defaults.cli.mdx"
+import OverridingDefaults from "/common/examples/parameters-overriding-defaults.cli.mdx"
+
+# Parameters
+
+Parameters are defined with a function header like syntax. 
+Let's take a look at the "Hello World" example from [here](/docs/getting-started/your-first-toolchain.mdx).
+
+<YourFirstToolchain/>
+
+As you can see, our root toolchain supports a parameter, `location` that you can
+then reference in your action templates and even constants.
+
+We also defined a shorthand, `l` for our parameter.
+
+Declare more than one parameter by separating them with a comma (`,`)
+
+# Types
+
+Currently, 2 types are supported:
+* `arg` - a normal string value
+* `flag` - a boolean value that is set to true if passed and set to false if omitted
+
+# Scope
+
+The params that you define for a toolchain can be referenced in any
+descendant toolchain.
+
+<Scope/>
+
+```sh title=Console
+$ hello-world Cluj-Napoca
+Hello World from Cluj-Napoca
+
+$ hello-world Cluj-Napoca child
+Hello Child from Cluj-Napoca
+```
+
+# Optionals
+
+Optional parameters will not be mandatory when the toolchain is run. 
+
+If a value is not passed for an optional, it will default to: 
+* empty string in case of an `arg`
+* false in case of a `flag`
+
+They are marked with the question mark (`?`) character at the end of their name.
+When a parameter is optional, it is no longer passed in as a positional argument.
+You will need to specify its name before the value.
+
+<Optionals/>
+
+```sh title=Console
+$ hello-world 
+Hello World from
+
+$ hello-world --location Cluj-Napoca
+Hello World from Cluj-Napoca
+```
+
+# Defaults
+
+Defaults are only supported for optional params.
+
+<Defaults/>
+
+```sh title=Console
+$ hello-world 
+Hello World from the other side
+
+$ hello-world Cluj-Napoca
+Hello World from Cluj-Napoca
+```
+
+<!-- Overriding defaults is currently not supported by kotlinx.cli library -->
+<!-- # Overriding defaults
+
+Sometimes, when you call a child toolchain, you could need
+other defaults than what is defined in the parent toolchain.
+But you also can't modify the original default value, because they
+make sense for the parent, but not for the child.
+
+Thats when you should override the defaults:
+
+<OverridingDefaults/>
+
+```sh title=Console
+$ hello-world
+Hello World from the other side
+
+$ hello-world -l Cluj-Napoca
+Hello World from Cluj-Napoca
+
+$ hello-world child
+Hello Child from this side
+
+$ hello-world -l Cluj-Napoca child
+Hello Child from Cluj-Napoca
+``` -->

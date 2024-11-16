@@ -1,0 +1,18 @@
+---
+title: Toolchain
+---
+
+import Example from '/common/examples/toolchain.cli.mdx'
+
+A Toolchain is a CLI tool that has many functionalities and which is written in Cli DSL.
+We call it like that because often we aggregate different CLI tools under a single toolchain 
+
+Below we have a commented simple snippet of a toolchain writing "Hello" when called:
+<Example/>
+
+After [installing](/docs/getting-started/your-first-toolchain) the script, CLiMAT will 
+create a binary called "my-toolchain" that we can invoke from the console
+```bash title="Console"
+$ my-toolchain
+Hello
+```

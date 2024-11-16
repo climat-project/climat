@@ -1,13 +1,33 @@
-<img alt="Climat logo" src="https://raw.githubusercontent.com/climat-project/doc-and-design/master/static/img/logo-name-prerelease-tag.svg" width="500px"/>
+
+
+<div align="center">
+
+![LastCommitOnMaster](https://img.shields.io/github/last-commit/climat-project/climat/master?label=last%20commit%20on%20master&style=for-the-badge)
+![Build](https://img.shields.io/github/actions/workflow/status/climat-project/climat/build.yml?branch=master&style=for-the-badge)
+[![Version](https://img.shields.io/npm/v/climat?style=for-the-badge)](https://www.npmjs.com/package/climat)
+![NodeVersion](https://img.shields.io/node/v/climat?style=for-the-badge)
+[![GitHub license](https://img.shields.io/npm/l/climat?style=for-the-badge)](https://github.com/climat-project/climat/blob/master/LICENSE.md)
+
+<br/>
+
+<img alt="Climat logo" src="https://raw.githubusercontent.com/climat-project/climat/master/docs/static/img/logo-name-prerelease-tag.svg" width="500px"/>
 <br/><br/>
 
-![LastCommitOnMaster](https://img.shields.io/github/last-commit/climat-project/climat/master?label=last%20commit%20on%20master)
-![Build](https://img.shields.io/github/actions/workflow/status/climat-project/climat/build.yml?branch=master)
-[![Version](https://img.shields.io/npm/v/climat)](https://www.npmjs.com/package/climat)
-![NodeVersion](https://img.shields.io/node/v/climat)
-[![GitHub license](https://img.shields.io/npm/l/climat)](https://github.com/climat-project/climat/blob/master/LICENSE.md)
+Powerful CLI Macros
+<br />
+<a href="https://climat-project.github.io/"><strong>Explore the docs »</strong></a>
+<br />
+<br />
+[Report Bug](https://github.com/climat-project/climat/issues/new?labels=&projects=&template=bug_report.md&title=[BUG]) 
+·
+[Request Feature](https://github.com/climat-project/climat/issues/new?labels=&projects=&template=feature_request.md&title=[FEATURE])
+·
+[Ask Question](https://github.com/climat-project/climat/issues/new?labels=&projects=&template=question.md&title=[QUESTION])
+·
+[Contribute](https://github.com/climat-project/climat/blob/master/CONTRIBUTING.md)
+</div>
 
-# ⚠️ PRE-RELEASE: Some features might not work and everything is subject to change ⚠️
+# ⚠️ PRE-RELEASE: Everything is subject to change ⚠️
 
 Generate powerful macros for your CLI tools with a simple and smart approach.
 

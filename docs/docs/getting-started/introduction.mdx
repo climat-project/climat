@@ -1,0 +1,37 @@
+---
+title: Introduction
+---
+import Example from '/common/examples/sgit.cli.mdx'
+
+# Introduction
+
+CLiMAT, or **C**ommand **L**ine **I**nterface **Ma**cro **T**ree is a tool that streamlines working with command line interface tools. It can be used by both programmers and system administrators alike.
+
+The core concept revolves around using a declarative approach to implement intuitive CLI interfaces.
+
+Whether you want to create a new CLI tool, or you want a new CLI interface to an existing tool, CLiMAT can help you with that.
+
+### Example
+Here is a brief example of what CLiMAT can do:
+
+<Example/>
+
+This simple script will create a toolchain (a CLI tool that has many capabilities) named `sgit` with 2 subcommands:
+ * `acp` which will execute `git add`, `git commit` and `git push`. Takes an optional parameter `amend` which will be passed on to the `git commit` as an `--amend` flag, and to the `git push` as the `--force` flag.
+ * `cf` which will execute `git checkout`, but the passed-in branch is always prefixed with `feature/`.
+
+The generated tool can be used like this
+* `sgit acp`
+* `sgit acp --amend`
+* `sgit acp -a`
+* `sgit cf myFeature`
+
+
+This is it. Now you have a `git` macro that you can customize and tailor to your needs.
+
+:::info
+CLiMAT uses a special DSL ([Domain-specific language](https://en.wikipedia.org/wiki/Domain-specific_language)) for its scripts that has many more capabilities than what is showcased in the above example.
+Learn more [here](/docs/cli-dsl-reference/overview).
+:::
+
+ Next, we're going to explore how to generate your first toolchain

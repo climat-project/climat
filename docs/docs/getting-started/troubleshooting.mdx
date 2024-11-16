@@ -1,0 +1,49 @@
+---
+title: Troubleshooting
+---
+
+If you want to see in more detail what is happening with your toolchain, you can set the log level to DEBUG
+Use the `CLIMAT_LOG_LEVEL` environment variable and set it to `DEBUG`:
+
+```bash title=Console
+$ CLIMAT_LOG_LEVEL=DEBUG hello-world Cluj-Napoca
+3/3 12:05:06.408 D/ToolchainProcessor: Processing toolchain: <climat>
+3/3 12:05:06.409 D/RefProcessor: Processing refs of toolchain <climat>
+3/3 12:05:06.409 D/RefProcessor: Trying to parse the required params from [runGlobal, hello-world, Cluj-Napoca]
+3/3 12:05:06.410 D/RefProcessor: Successfully resolved values for params <[]>
+3/3 12:05:06.410 D/RefProcessor: Trying to parse the optional params from [runGlobal, hello-world, Cluj-Napoca]
+3/3 12:05:06.410 D/RefProcessor: Successfully parsed optional params. Unset params <[version]> 
+3/3 12:05:06.410 D/RefProcessor: Processing unmatched parameters
+3/3 12:05:06.411 D/RefProcessor: Set default values for params: <[version]>
+3/3 12:05:06.411 D/RefProcessor: Resolving constants
+3/3 12:05:06.411 D/RefProcessor: No resolved constants
+3/3 12:05:06.411 D/ToolchainProcessor: Processing toolchain: <runGlobal>
+3/3 12:05:06.411 D/RefProcessor: Processing refs of toolchain <runGlobal>
+3/3 12:05:06.412 D/RefProcessor: Trying to parse the required params from [hello-world, Cluj-Napoca]
+3/3 12:05:06.412 D/RefProcessor: Successfully resolved values for params <[name]>
+3/3 12:05:06.412 D/RefProcessor: Trying to parse the optional params from [Cluj-Napoca]
+3/3 12:05:06.412 D/RefProcessor: Successfully parsed optional params. Unset params <[shellPath]> 
+3/3 12:05:06.412 D/RefProcessor: Processing unmatched parameters
+3/3 12:05:06.412 D/RefProcessor: Unmatched parameters: [Cluj-Napoca]
+3/3 12:05:06.413 D/RefProcessor: Set default values for params: <[shellPath]>
+3/3 12:05:06.413 D/RefProcessor: Resolving constants
+3/3 12:05:06.413 D/RefProcessor: No resolved constants
+3/3 12:05:06.413 D/ToolchainProcessor: Matched <runGlobal>
+3/3 12:05:06.413 D/ToolchainProcessor: Handling action..
+3/3 12:05:06.415 D/ToolchainProcessor: Execution summary
+Chain: climat -> runGlobal
+3/3 12:05:06.419 D/ToolchainProcessor: Processing toolchain: <hello-world>
+3/3 12:05:06.419 D/RefProcessor: Processing refs of toolchain <hello-world>
+3/3 12:05:06.419 D/RefProcessor: Trying to parse the required params from [Cluj-Napoca]
+3/3 12:05:06.419 D/RefProcessor: Successfully resolved values for params <[location]>
+3/3 12:05:06.420 D/RefProcessor: No optional parameters to parse
+3/3 12:05:06.420 D/RefProcessor: Processing unmatched parameters
+3/3 12:05:06.420 D/RefProcessor: Resolving constants
+3/3 12:05:06.420 D/RefProcessor: No resolved constants
+3/3 12:05:06.420 D/ToolchainProcessor: Matched <hello-world>
+3/3 12:05:06.420 D/Interpolation: No mapping found for location, therefore interpolating bare value <Cluj-Napoca>
+3/3 12:05:06.421 D/ToolchainProcessor: Handling action..
+Hello World from Cluj-Napoca
+3/3 12:05:06.423 D/ToolchainProcessor: Execution summary
+Chain: hello-world
+```
