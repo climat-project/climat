@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin.Companion.kotlinNodeJsExtension
 
 plugins {
-    kotlin("multiplatform") version "1.9.22"
+    kotlin("multiplatform") version "2.0.21"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
     // id("com.dorongold.task-tree") version "2.1.1"
 }
@@ -15,7 +15,6 @@ version = getProp("version")
 allprojects {
     repositories {
         mavenCentral()
-        jcenter()
     }
 }
 
@@ -70,8 +69,11 @@ kotlin {
 
                 implementation(project("climatEngine"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-nodejs:0.0.7")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+
+                // https://github.com/Kotlin/kotlinx-nodejs/issues/16
+                implementation(files("./lib/kotlinx-nodejs-0.0.7.klib"))
+
                 implementation("org.lighthousegames:logging-js:1.3.0")
             }
         }

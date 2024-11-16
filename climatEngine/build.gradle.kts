@@ -1,8 +1,8 @@
 import com.strumenta.antlrkotlin.gradle.AntlrKotlinTask
 
 plugins {
-    kotlin("multiplatform") version "1.9.22"
-    id("com.strumenta.antlr-kotlin") version "1.0.0-RC1"
+    kotlin("multiplatform") version "2.0.21"
+    id("com.strumenta.antlr-kotlin") version "1.0.1"
 }
 
 kotlin {
@@ -10,7 +10,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(kotlin("stdlib-common"))
-                api("com.strumenta:antlr-kotlin-runtime:1.0.0-RC1")
+                api("com.strumenta:antlr-kotlin-runtime:1.0.1")
                 api("org.lighthousegames:logging:1.3.0")
             }
             kotlin.srcDir("build/generated-src/commonAntlr/kotlin")
