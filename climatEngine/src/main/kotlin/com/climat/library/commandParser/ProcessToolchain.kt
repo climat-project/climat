@@ -23,7 +23,8 @@ internal fun processToolchain(
     passedParams = passedParams,
     upperScopeRefs = emptyMap(),
     upperPathToRoot = emptyList(),
-    handler = handler
+    handler = handler,
+    allowUnmatched = toolchain.allowUnmatched
 )
 
 private fun processToolchains(
@@ -32,9 +33,13 @@ private fun processToolchains(
     upperScopeRefs: Map<String, RefWithAnyValue>,
     upperPathToRoot: List<Toolchain>,
     handler: (parsedAction: ActionValueBase<*>, context: Toolchain) -> Unit,
+    allowUnmatched: Boolean,
 ) {
     require(passedParams.isNotEmpty()) {
         "`params` must have at least one element"
+    }
+    if (children.isEmpty() && allowUnmatched) {
+        return
     }
 
     val next = passedParams.removeFirst()
@@ -43,8 +48,10 @@ private fun processToolchains(
     } ?: children.find { it.name == "_" }
         ?: throw Exception("Toolchain $next is not defined" + newLine() + getSubcommandUsageHint(upperPathToRoot))
     processToolchain(
-        passedParams = passedParams,
-        toolchain = toolchain,
+        context = RefProcessingContext(
+            toolchain = toolchain,
+            passedParams = passedParams
+        ),
         upperScopeRefs = upperScopeRefs,
         upperPathToRoot = upperPathToRoot,
         handler = handler,
@@ -52,19 +59,19 @@ private fun processToolchains(
 }
 
 private fun processToolchain(
-    passedParams: MutableList<String>,
-    toolchain: Toolchain,
+    context: RefProcessingContext,
     upperScopeRefs: Map<String, RefWithAnyValue>,
     upperPathToRoot: List<Toolchain>,
     handler: (parsedAction: ActionValueBase<*>, context: Toolchain) -> Unit
 ) {
+    val (toolchain, passedParams) = context
     log.d { "Processing toolchain: <${toolchain.name}>" }
 
     val pathToRoot = upperPathToRoot + toolchain
-    val scopeRefs = upperScopeRefs + processRefs(toolchain, passedParams, pathToRoot)
+    val scopeRefs = upperScopeRefs + processRefs(context, pathToRoot)
     if (passedParams.isEmpty()) {
         handleMatch(toolchain, scopeRefs, handler)
-        log.d { "Execution summary\nPath: ${pathToRoot.map { it.name }.joinToString(" -> " )}" }
+        log.d { "Execution summary\nPath: ${pathToRoot.joinToString(" -> ") { it.name }}" }
     } else if (toolchain.isLeaf) {
         throw Exception("Could not match $passedParams with any definition") // TODO: proper error
     } else {
@@ -73,7 +80,8 @@ private fun processToolchain(
             passedParams = passedParams,
             upperScopeRefs = scopeRefs,
             upperPathToRoot = pathToRoot,
-            handler = handler
+            handler = handler,
+            allowUnmatched = toolchain.allowUnmatched
         )
     }
 }
@@ -95,11 +103,10 @@ private fun handleMatch(
 }
 
 private fun processRefs(
-    toolchain: Toolchain,
-    passedParams: MutableList<String>,
+    context: RefProcessingContext,
     pathToRoot: List<Toolchain>
 ): Map<String, RefWithAnyValue> = try {
-    processRefs(toolchain, passedParams)
+    processRefs(context)
 } catch (ex: ParameterException) {
     throw Exception(ex.message + newLine() + getParameterUsageHint(pathToRoot), ex)
 }
