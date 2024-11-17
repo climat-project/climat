@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        node-version: [ '14.14', '18.7' ]
+        node-version: [ '13.14', '22.11' ]
 
     name: Build with Node ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -41,7 +41,7 @@ jobs:
   test-windows:
     strategy:
       matrix:
-        node-version: [ '14.14', '18.7' ]
+        node-version: [ '13.14', '22.11' ]
 
     name: Build with Node ${{ matrix.node-version }} on windows-latest
     runs-on: windows-latest
