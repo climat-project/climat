@@ -2,7 +2,7 @@
 climat_version: 0.0.5
 ---
 ```clidsl title="overriding-defaults.cli"
-hello-world(location l?: arg = "the other side") {
+hello-world(location l: arg? = "the other side") {
     action "echo Hello World from $(location)"
 
     sub child {
