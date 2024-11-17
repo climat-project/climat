@@ -40,10 +40,10 @@ kotlin {
                 "engines",
                 mapOf(
                     "node" to ">=13.14",
-                    "bun" to ">=0.5.6",
                 ),
             )
         }
+
         browser { // Not really for browser, but it is the only way to use webpack
             webpackTask {
                 mainOutputFileName.set("kotlin/climat.js")
@@ -58,7 +58,7 @@ kotlin {
         val jsMain by getting {
             kotlin.srcDirs("src/main/kotlin")
             dependencies {
-                implementation(devNpm("copy-webpack-plugin", "^11.0.0"))
+                implementation(devNpm("copy-webpack-plugin", "^12.0.2"))
 
                 implementation(npm("colors", "^1.4.0"))
                 implementation(npm("fs-extra", "11.1.0"))
