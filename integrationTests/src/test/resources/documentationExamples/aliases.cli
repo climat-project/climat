@@ -1,7 +1,3 @@
----
-climat_version: 0.0.5
----
-```clidsl title=toolchain.cli
 my-toolchain {
 
     @aliases(ct child) // Defines one or more aliases
@@ -11,4 +7,3 @@ my-toolchain {
     }
 
 }
-```
