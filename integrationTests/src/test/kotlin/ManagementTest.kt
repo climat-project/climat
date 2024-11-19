@@ -1,4 +1,3 @@
-import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -8,8 +7,8 @@ class ManagementTest {
 
     @Test
     fun installs() {
-        shouldNotThrowAny { runClimat("install kotlin/test-toolchain.cli") }
-        shouldNotThrowAny { run("test-toolchain") }
+        runClimat("install kotlin/test-toolchain.cli")
+        run("test-toolchain")
         run("test-toolchain child --arg1 abc --arg2 bcd") shouldBe "Hello! I was executed with arg1 = abc and arg2 = bcd"
         listOf("test-toolchain", "test2", "test3").forEach {
             run("$it child --arg1 value1 --arg2 value2 grandchild1") shouldBe "Hello from the other side value1 value2"
