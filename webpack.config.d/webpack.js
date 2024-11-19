@@ -11,7 +11,7 @@ config.plugins.push(
     }),
 
     new BannerPlugin({
-        banner: "#!/usr/bin/env node --no-warnings",
+        banner: "#!/usr/bin/env -S node --no-warnings",
         raw: true
     })
 )
