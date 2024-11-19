@@ -16,7 +16,7 @@ class ManagementTest {
         run("test-toolchain child --arg1 val1 --arg2 val2 grandchild2 val3") shouldBe "Hello from JS! val3 val1 val2"
         run("test-toolchain child --arg1 \"val 1\" --arg2 \"val 2\"") shouldBe "Hello! I was executed with arg1 = val 1 and arg2 = val 2"
 
-        run("test-toolchain") shouldBe "Hello! I was executed with arg0 = (no value for arg0)"
+        run("test-toolchain") shouldBe "Hello! I was executed with arg0 = [no value for arg0]"
         run("test-toolchain --arg0 \"val 0\"") shouldBe "Hello! I was executed with arg0 = val 0"
     }
 
