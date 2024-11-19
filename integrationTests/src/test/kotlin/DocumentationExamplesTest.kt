@@ -26,7 +26,7 @@ class DocumentationExamplesTest {
         run("my-toolchain my-child") shouldBe "Child My Dear Constant Value"
     }
     @Test fun templates() {
-        shouldNotThrowAny { runClimat("install $DOCUMENTATION_EXAMPLES/templates.cli") }
+        shouldNotThrowAny { runClimat("install $DOCUMENTATION_EXAMPLES/interpolation.cli") }
         run("my-toolchain my-child") shouldBe "Child My Dear Constant Value"
     }
     @Test fun parameters() {
