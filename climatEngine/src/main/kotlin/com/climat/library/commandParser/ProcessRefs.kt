@@ -18,17 +18,17 @@ const val SHORTHAND_ARG_PREFIX = "-"
 private val log = logging("RefProcessor")
 
 internal fun processRefs(
-    toolchain: Toolchain,
-    passedParams: MutableList<String>
+    context: RefProcessingContext
 ): Map<String, RefWithAnyValue> {
+    val toolchain = context.toolchain
     log.d { "Processing refs of toolchain <${toolchain.name}>" }
 
     val (optionals, required) = toolchain.parameters.partition { it.optional }
 
-    val refAccumulator = consumeRequired(passedParams, required)
-    val unsetOptionals = consumeOptionals(refAccumulator, passedParams, optionals)
+    val refAccumulator = consumeRequired(context, required)
+    val unsetOptionals = consumeOptionals(context, refAccumulator, optionals)
 
-    processPredefined(refAccumulator, toolchain, passedParams)
+    processPredefined(context, refAccumulator)
 
     refAccumulator += getDefaultValuesFor(unsetOptionals)
     refAccumulator += getConstantsOf(toolchain)
@@ -68,10 +68,11 @@ private fun getDefaultValuesFor(unsetOptionals: Set<ParamDefinition>): Map<Strin
 }
 
 private fun consumeOptionals(
+    context: RefProcessingContext,
     refAccumulator: MutableMap<String, RefWithValue<*>>,
-    passedParams: MutableList<String>,
-    optionals: List<ParamDefinition>
+    optionals: List<ParamDefinition>,
 ): Set<ParamDefinition> {
+    val passedParams = context.passedParams
     if (optionals.isEmpty()) {
         log.d { "No optional parameters to parse" }
         return emptySet()
@@ -87,6 +88,12 @@ private fun consumeOptionals(
             first.startsWith(SHORTHAND_ARG_PREFIX) -> getParamsFromShorthandPrefixed(passedParams, optionals)
             else -> break
         }
+
+        if (newParams.isEmpty()) {
+            if (context.toolchain.allowUnmatched) break
+            else throw ParameterNotDefinedException(first)
+        }
+
         refAccumulator += newParams
         optionalsSet.removeAll(newParams.values.map { it.ref }.toSet())
     }
@@ -98,9 +105,10 @@ private fun consumeOptionals(
 }
 
 private fun consumeRequired(
-    passedParams: MutableList<String>,
+    context: RefProcessingContext,
     required: List<ParamDefinition>
 ): MutableMap<String, RefWithValue<*>> {
+    val passedParams = context.passedParams
     log.d { "Trying to parse the required params from $passedParams" }
 
     val ans = required.associate { paramDef ->
@@ -127,10 +135,10 @@ fun getNextValue(paramDef: ParamDefinition, params: MutableList<String>): String
 }
 
 private fun processPredefined(
+    context: RefProcessingContext,
     refAccumulator: MutableMap<String, RefWithAnyValue>,
-    toolchain: Toolchain,
-    passedParams: MutableList<String>
 ) {
+    val (toolchain, passedParams) = context
     log.d { "Processing unmatched parameters" }
     // Process unmatched
     val unmatchedPredefined = toolchain.predefinedParameters.find { it.name == "__UNMATCHED" } ?: return
@@ -143,26 +151,29 @@ private fun processPredefined(
 
 private fun getParamsFromShorthandPrefixed(
     passedParams: MutableList<String>,
-    optionals: List<ParamDefinition>
+    optionals: List<ParamDefinition>,
 ): Map<String, RefWithValue<String>> {
-    val next = passedParams.removeFirst().drop(SHORTHAND_ARG_PREFIX.length)
-
+    val next = passedParams.first().drop(SHORTHAND_ARG_PREFIX.length)
     val shortHandToOptionals = optionals.associateBy { it.shorthand }
+
     return when {
-        next.length > 1 -> getFlagsFromManyShorthands(shortHandToOptionals, next)
-        next.length == 1 -> getParamsFromSingleShorthand(shortHandToOptionals, next, passedParams)
+        next.length == 1 -> getParamsFromSingleShorthand(passedParams, shortHandToOptionals, next)
+        next.length > 1 -> getFlagsFromManyShorthands(passedParams, shortHandToOptionals, next)
         else -> throw Exception("Cannot pass empty shorthand")
     }
 }
 
 private fun getParamsFromSingleShorthand(
+    passedParams: MutableList<String>,
     shortHandToOptionals: Map<String?, ParamDefinition>,
     name: String,
-    passedParams: MutableList<String>
 ): Map<String, RefWithValue<String>> {
+
     log.d { "Trying to resolve shorthand param named <$name>" }
 
-    val paramDef = shortHandToOptionals[name] ?: throw ParameterNotDefinedException(name)
+    val paramDef = shortHandToOptionals[name] ?: return emptyMap()
+
+    passedParams.removeFirst()
     val paramValue = when (paramDef) {
         is FlagDefinition -> true.toString()
         is ArgDefinition -> getNextValue(paramDef, passedParams)
@@ -174,11 +185,12 @@ private fun getParamsFromSingleShorthand(
 }
 
 private fun getFlagsFromManyShorthands(
+    passedParams: MutableList<String>,
     shortHandToOptionals: Map<String?, ParamDefinition>,
     next: String
 ): Map<String, RefWithValue<String>> {
     log.d { "Trying to resolve shorthand flags: <$next>" }
-
+    passedParams.removeFirst()
     return next.map {
         shortHandToOptionals[it.toString()] ?: throw ParameterNotDefinedException(it.toString())
     }.onEach {
@@ -196,16 +208,20 @@ private fun getFlagsFromManyShorthands(
 
 private fun getParamsFromNamePrefixed(
     passedParams: MutableList<String>,
-    optionals: List<ParamDefinition>
+    optionals: List<ParamDefinition>,
 ): Map<String, RefWithValue<String>> {
-    val name = passedParams.removeFirst().drop(ARG_PREFIX.length)
+    val name = passedParams.first().drop(ARG_PREFIX.length)
 
     log.d { "Trying to resolve param named: <$name>" }
 
     if (name.isEmpty()) {
         throw Exception("Cannot pass empty arg name") // TODO proper error
     }
-    val paramDef = optionals.firstOrNull { it.name == name } ?: throw ParameterNotDefinedException(name)
+
+    val paramDef = optionals.firstOrNull { it.name == name } ?: return emptyMap() // TODO null instead of emptyMap
+
+    passedParams.removeFirst()
+
     val paramValue = when (paramDef) {
         is ArgDefinition -> getNextValue(paramDef, passedParams)
         is FlagDefinition -> true.toString()

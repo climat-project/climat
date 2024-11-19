@@ -1,7 +1,3 @@
----
-climat_version: 0.0.5
----
-```clidsl title=mapping-flags.cli
 hello-world(goodDay: flag) {
     sub foo {
         action "echo Hello World $(goodDay)"
@@ -13,4 +9,3 @@ hello-world(goodDay: flag) {
         action "echo Hello World $(!goodDay:today-is-NOT-a-good-day)"
     }
 }
-```

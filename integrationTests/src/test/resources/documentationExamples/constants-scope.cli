@@ -1,12 +1,7 @@
----
-climat_version: 0.0.5
----
-```clidsl title="templates.cli"
 my-toolchain {
   const my-const = "My Dear Constant Value"
-  
+
   sub my-child {
     action "echo Child $(my-const)"
   }
 }
-```
