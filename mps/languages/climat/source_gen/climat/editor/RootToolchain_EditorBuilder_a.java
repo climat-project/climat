@@ -121,7 +121,7 @@ import org.jetbrains.mps.openapi.language.SConcept;
       }
     }
     protected String getNoTargetText() {
-      return "<no annotationSection>";
+      return "";
     }
   }
   private EditorCell createCollection_1() {
@@ -227,7 +227,7 @@ import org.jetbrains.mps.openapi.language.SConcept;
       }
     }
     protected String getNoTargetText() {
-      return "<no body>";
+      return "";
     }
   }
   private EditorCell createConstant_1() {

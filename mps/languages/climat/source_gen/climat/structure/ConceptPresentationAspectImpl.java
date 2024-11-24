@@ -13,10 +13,13 @@ public class ConceptPresentationAspectImpl extends ConceptPresentationAspectBase
   private ConceptPresentation props_Annotation;
   private ConceptPresentation props_AnnotationSection;
   private ConceptPresentation props_Constant;
+  private ConceptPresentation props_CustomScriptAction;
   private ConceptPresentation props_InterpolationTemplatePiece;
+  private ConceptPresentation props_JavaScriptAction;
   private ConceptPresentation props_Parameter;
   private ConceptPresentation props_Referenceable;
   private ConceptPresentation props_RootToolchain;
+  private ConceptPresentation props_ShellAction;
   private ConceptPresentation props_StringTemplatePiece;
   private ConceptPresentation props_TemplatePiece;
   private ConceptPresentation props_Toolchain;
@@ -56,6 +59,13 @@ public class ConceptPresentationAspectImpl extends ConceptPresentationAspectBase
           props_Constant = cpb.create();
         }
         return props_Constant;
+      case LanguageConceptSwitch.CustomScriptAction:
+        if (props_CustomScriptAction == null) {
+          ConceptPresentationBuilder cpb = new ConceptPresentationBuilder();
+          cpb.rawPresentation("CustomScriptAction");
+          props_CustomScriptAction = cpb.create();
+        }
+        return props_CustomScriptAction;
       case LanguageConceptSwitch.InterpolationTemplatePiece:
         if (props_InterpolationTemplatePiece == null) {
           ConceptPresentationBuilder cpb = new ConceptPresentationBuilder();
@@ -63,6 +73,13 @@ public class ConceptPresentationAspectImpl extends ConceptPresentationAspectBase
           props_InterpolationTemplatePiece = cpb.create();
         }
         return props_InterpolationTemplatePiece;
+      case LanguageConceptSwitch.JavaScriptAction:
+        if (props_JavaScriptAction == null) {
+          ConceptPresentationBuilder cpb = new ConceptPresentationBuilder();
+          cpb.rawPresentation("JavaScriptAction");
+          props_JavaScriptAction = cpb.create();
+        }
+        return props_JavaScriptAction;
       case LanguageConceptSwitch.Parameter:
         if (props_Parameter == null) {
           ConceptPresentationBuilder cpb = new ConceptPresentationBuilder();
@@ -83,6 +100,13 @@ public class ConceptPresentationAspectImpl extends ConceptPresentationAspectBase
           props_RootToolchain = cpb.create();
         }
         return props_RootToolchain;
+      case LanguageConceptSwitch.ShellAction:
+        if (props_ShellAction == null) {
+          ConceptPresentationBuilder cpb = new ConceptPresentationBuilder();
+          cpb.rawPresentation("ShellAction");
+          props_ShellAction = cpb.create();
+        }
+        return props_ShellAction;
       case LanguageConceptSwitch.StringTemplatePiece:
         if (props_StringTemplatePiece == null) {
           ConceptPresentationBuilder cpb = new ConceptPresentationBuilder();

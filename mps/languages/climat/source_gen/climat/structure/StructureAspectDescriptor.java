@@ -20,10 +20,13 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
   /*package*/ final ConceptDescriptor myConceptAnnotation = createDescriptorForAnnotation();
   /*package*/ final ConceptDescriptor myConceptAnnotationSection = createDescriptorForAnnotationSection();
   /*package*/ final ConceptDescriptor myConceptConstant = createDescriptorForConstant();
+  /*package*/ final ConceptDescriptor myConceptCustomScriptAction = createDescriptorForCustomScriptAction();
   /*package*/ final ConceptDescriptor myConceptInterpolationTemplatePiece = createDescriptorForInterpolationTemplatePiece();
+  /*package*/ final ConceptDescriptor myConceptJavaScriptAction = createDescriptorForJavaScriptAction();
   /*package*/ final ConceptDescriptor myConceptParameter = createDescriptorForParameter();
   /*package*/ final ConceptDescriptor myConceptReferenceable = createDescriptorForReferenceable();
   /*package*/ final ConceptDescriptor myConceptRootToolchain = createDescriptorForRootToolchain();
+  /*package*/ final ConceptDescriptor myConceptShellAction = createDescriptorForShellAction();
   /*package*/ final ConceptDescriptor myConceptStringTemplatePiece = createDescriptorForStringTemplatePiece();
   /*package*/ final ConceptDescriptor myConceptTemplatePiece = createDescriptorForTemplatePiece();
   /*package*/ final ConceptDescriptor myConceptToolchain = createDescriptorForToolchain();
@@ -45,7 +48,7 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
 
   @Override
   public Collection<ConceptDescriptor> getDescriptors() {
-    return Arrays.asList(myConceptAction, myConceptAnnotation, myConceptAnnotationSection, myConceptConstant, myConceptInterpolationTemplatePiece, myConceptParameter, myConceptReferenceable, myConceptRootToolchain, myConceptStringTemplatePiece, myConceptTemplatePiece, myConceptToolchain, myConceptToolchainBody, myConceptToolchainSignature);
+    return Arrays.asList(myConceptAction, myConceptAnnotation, myConceptAnnotationSection, myConceptConstant, myConceptCustomScriptAction, myConceptInterpolationTemplatePiece, myConceptJavaScriptAction, myConceptParameter, myConceptReferenceable, myConceptRootToolchain, myConceptShellAction, myConceptStringTemplatePiece, myConceptTemplatePiece, myConceptToolchain, myConceptToolchainBody, myConceptToolchainSignature);
   }
 
   @Override
@@ -60,14 +63,20 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
         return myConceptAnnotationSection;
       case LanguageConceptSwitch.Constant:
         return myConceptConstant;
+      case LanguageConceptSwitch.CustomScriptAction:
+        return myConceptCustomScriptAction;
       case LanguageConceptSwitch.InterpolationTemplatePiece:
         return myConceptInterpolationTemplatePiece;
+      case LanguageConceptSwitch.JavaScriptAction:
+        return myConceptJavaScriptAction;
       case LanguageConceptSwitch.Parameter:
         return myConceptParameter;
       case LanguageConceptSwitch.Referenceable:
         return myConceptReferenceable;
       case LanguageConceptSwitch.RootToolchain:
         return myConceptRootToolchain;
+      case LanguageConceptSwitch.ShellAction:
+        return myConceptShellAction;
       case LanguageConceptSwitch.StringTemplatePiece:
         return myConceptStringTemplatePiece;
       case LanguageConceptSwitch.TemplatePiece:
@@ -93,11 +102,10 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
   }
 
   private static ConceptDescriptor createDescriptorForAction() {
-    ConceptDescriptorBuilder2 b = new ConceptDescriptorBuilder2("climat", "Action", 0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x5db90e988aad407bL);
+    ConceptDescriptorBuilder2 b = new ConceptDescriptorBuilder2("climat", "Action", 0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x17380d383dde6703L);
     b.class_(false, false, false);
-    b.origin("r:a703dee7-679c-4011-a20a-7f09be120d3f(climat.structure)/6753445164543197307");
+    b.origin("r:a703dee7-679c-4011-a20a-7f09be120d3f(climat.structure)/1673101796775454467");
     b.version(3);
-    b.aggregate("pieces", 0x5db90e988aad407cL).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x572def6ab655ab32L).optional(true).ordered(true).multiple(true).origin("6753445164543197308").done();
     return b.create();
   }
   private static ConceptDescriptor createDescriptorForAnnotation() {
@@ -126,6 +134,17 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
     b.aggregate("pieces", 0x572def6ab655af03L).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x572def6ab655ab32L).optional(true).ordered(true).multiple(true).origin("6281940296856350467").done();
     return b.create();
   }
+  private static ConceptDescriptor createDescriptorForCustomScriptAction() {
+    ConceptDescriptorBuilder2 b = new ConceptDescriptorBuilder2("climat", "CustomScriptAction", 0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x17380d383ddf3596L);
+    b.class_(false, false, false);
+    // extends: climat.structure.Action
+    b.super_(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x17380d383dde6703L);
+    b.origin("r:a703dee7-679c-4011-a20a-7f09be120d3f(climat.structure)/1673101796775507350");
+    b.version(3);
+    b.property("runtimePath", 0x17380d383ddf3ed5L).type(PrimitiveTypeId.STRING).origin("1673101796775509717").done();
+    b.property("customScript", 0x17380d383ddf3ed6L).type(PrimitiveTypeId.STRING).origin("1673101796775509718").done();
+    return b.create();
+  }
   private static ConceptDescriptor createDescriptorForInterpolationTemplatePiece() {
     ConceptDescriptorBuilder2 b = new ConceptDescriptorBuilder2("climat", "InterpolationTemplatePiece", 0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x572def6ab655ab36L);
     b.class_(false, false, false);
@@ -133,6 +152,16 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
     b.origin("r:a703dee7-679c-4011-a20a-7f09be120d3f(climat.structure)/6281940296856349494");
     b.version(3);
     b.associate("reference", 0x5db90e988abe43d8L).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x5db90e988abe43d1L).optional(false).origin("6753445164544312280").done();
+    return b.create();
+  }
+  private static ConceptDescriptor createDescriptorForJavaScriptAction() {
+    ConceptDescriptorBuilder2 b = new ConceptDescriptorBuilder2("climat", "JavaScriptAction", 0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x17380d383dde6706L);
+    b.class_(false, false, false);
+    // extends: climat.structure.Action
+    b.super_(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x17380d383dde6703L);
+    b.origin("r:a703dee7-679c-4011-a20a-7f09be120d3f(climat.structure)/1673101796775454470");
+    b.version(3);
+    b.property("javascript", 0x17380d383ddf35acL).type(PrimitiveTypeId.STRING).origin("1673101796775507372").done();
     return b.create();
   }
   private static ConceptDescriptor createDescriptorForParameter() {
@@ -143,6 +172,7 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
     b.version(3);
     b.property("type", 0x5db90e988aaf5f20L).type(MetaIdFactory.dataTypeId(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x5db90e988ab86fc5L)).origin("6753445164543336224").done();
     b.property("presence", 0x5db90e988ab12f71L).type(MetaIdFactory.dataTypeId(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x5db90e988ab86fcbL)).origin("6753445164543455089").done();
+    b.property("shortHand", 0x17380d383dc76824L).type(PrimitiveTypeId.STRING).origin("1673101796773947428").done();
     b.aggregate("defaultDataType", 0x5db90e988abc156cL).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x572def6ab655ab32L).optional(true).ordered(true).multiple(true).origin("6753445164544169324").done();
     return b.create();
   }
@@ -162,6 +192,16 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
     b.version(3);
     b.aggregate("annotationSection", 0x572def6ab66119f3L).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x572def6ab66288ffL).optional(true).ordered(true).multiple(false).origin("6281940296857098739").done();
     b.aggregate("body", 0x572def6ab66119cfL).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x572def6ab6628906L).optional(true).ordered(true).multiple(false).origin("6281940296857098703").done();
+    return b.create();
+  }
+  private static ConceptDescriptor createDescriptorForShellAction() {
+    ConceptDescriptorBuilder2 b = new ConceptDescriptorBuilder2("climat", "ShellAction", 0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x5db90e988aad407bL);
+    b.class_(false, false, false);
+    // extends: climat.structure.Action
+    b.super_(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x17380d383dde6703L);
+    b.origin("r:a703dee7-679c-4011-a20a-7f09be120d3f(climat.structure)/6753445164543197307");
+    b.version(3);
+    b.aggregate("pieces", 0x5db90e988aad407cL).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x572def6ab655ab32L).optional(true).ordered(true).multiple(true).origin("6753445164543197308").done();
     return b.create();
   }
   private static ConceptDescriptor createDescriptorForStringTemplatePiece() {
@@ -199,7 +239,7 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
     b.origin("r:a703dee7-679c-4011-a20a-7f09be120d3f(climat.structure)/6281940296857192710");
     b.version(3);
     b.aggregate("constants", 0x572def6ab6628908L).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x572def6ab654f578L).optional(true).ordered(true).multiple(true).origin("6281940296857192712").done();
-    b.aggregate("action", 0x5db90e988aad407eL).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x5db90e988aad407bL).optional(true).ordered(true).multiple(false).origin("6753445164543197310").done();
+    b.aggregate("action", 0x5db90e988aad407eL).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x17380d383dde6703L).optional(true).ordered(true).multiple(false).origin("6753445164543197310").done();
     b.aggregate("toolchains", 0x572def6ab662890aL).target(0x73bee2cc69694dd7L, 0xabeb6acc8e6703a8L, 0x572def6ab655c228L).optional(true).ordered(true).multiple(true).origin("6281940296857192714").done();
     return b.create();
   }
