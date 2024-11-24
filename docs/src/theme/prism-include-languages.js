@@ -53,6 +53,10 @@ export default function prismIncludeLanguages(PrismObject) {
       pattern: /\@alias/,
       alias: 'keyword'
     },
+    'javascript': {
+      pattern: /javascript/,
+      alias: 'keyword'
+    },
     'comment': {
       pattern: /\/\/.*|\/\*[\s\S]*?(?:\*\/|$)/,
       greedy: true
