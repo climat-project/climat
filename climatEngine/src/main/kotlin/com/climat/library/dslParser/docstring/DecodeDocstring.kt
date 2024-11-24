@@ -8,22 +8,16 @@ internal fun decodeDocstring(cliDsl: String, docstring: DslParser.DocstringConte
     if (docstring == null) {
         return Docstring.empty
     }
-
     val entries = docstring.docstringEntry()
     if (entries.isEmpty()) {
         return Docstring.empty
     }
-    val first = entries.first()
+    val content = entries.first().Docstring_CONTENT()
 
-    return first.Docstring_CONTENT().let {
-        if (it != null) {
-            Docstring(
-                it.text.trim(),
-                pair(cliDsl, entries.drop(1))
-            )
-        } else {
-            Docstring(emptyString(), pair(cliDsl, entries))
-        }
+    return if (content != null) {
+        Docstring(content.text.trim(), pair(cliDsl, entries.drop(1)))
+    } else {
+        Docstring(emptyString(), pair(cliDsl, entries))
     }
 }
 
