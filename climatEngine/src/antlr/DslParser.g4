@@ -20,19 +20,25 @@ paramShort: IDENTIFIER;
 subBody: LCURLY subStatements* RCURLY;
 subStatements: rootStatements;
 
-action: ACTION_PROP actionValue;
-constDef: CONST IDENTIFIER EQ literal;
+action: shellAction | javascriptAction | SCOPE_PARAMS;
 
-actionValue: stringTemplate | SCOPE_PARAMS | customScript;
-customScript: IDENTIFIER? CUSTOM_SCRIPT_BEGIN CustomScript_SCRIPT? CustomScript_END;
+shellAction: ACTION_PROP_BEGIN actionTemplateEntry* ActionTemplate_CLOSE;
+javascriptAction: JAVASCRIPT_ACTION_PROP_BEGIN CustomScript_SCRIPT? CustomScript_END;
+
+constDef: CONST IDENTIFIER EQ literal;
 
 literal: stringTemplate | booleanLiteral;
 booleanLiteral: TRUE | FALSE;
 
-stringTemplate: DOUBLE_QUOTE entry* Template_CLOSE;
-entry: content | interpolation;
-content: Template_CONTENT;
-interpolation: Template_INTERPOLATION_OPEN Interpolation_NEGATE? Interpolation_IDENTIFIER mapping? Interpolation_RPAREN;
+stringTemplate: DOUBLE_QUOTE stringTemplateEntry* Template_CLOSE;
+stringTemplateEntry: stringTemplateContent | stringTemplateInterpolation;
+stringTemplateContent: Template_CONTENT;
+stringTemplateInterpolation: Template_INTERPOLATION_OPEN Interpolation_NEGATE? Interpolation_IDENTIFIER mapping? Interpolation_RPAREN;
+
+actionTemplateEntry: actionTemplateContent | actionTemplateInterpolation;
+actionTemplateContent: ActionTemplate_CONTENT;
+actionTemplateInterpolation: ActionTemplate_INTERPOLATION_OPEN Interpolation_NEGATE? Interpolation_IDENTIFIER mapping? Interpolation_RPAREN;
+
 mapping: Interpolation_COLON Interpolation_IDENTIFIER;
 
 docstring: DOCSTRING_BEGIN docstringEntry* Docstring_END;

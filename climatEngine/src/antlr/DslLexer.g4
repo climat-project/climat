@@ -26,7 +26,8 @@ FLAG: 'flag';
 ARGUMENT: 'arg';
 
 // Props
-ACTION_PROP: 'action';
+ACTION_PROP_BEGIN: 'action' ' '* SCRIPT_ACTION_CONTENT_BEGIN -> pushMode(ActionTemplate);
+JAVASCRIPT_ACTION_PROP_BEGIN: 'javascript' ' '* 'action' ' '* SCRIPT_ACTION_CONTENT_BEGIN -> pushMode(CustomScript);
 
 // Default
 OVERRIDE: 'override';
@@ -46,8 +47,9 @@ MOD_ALLOW_UNMATCHED: '@allow-unmatched';
 SUB: 'sub';
 
 // Actions
-SCOPE_PARAMS: 'scope params';
-CUSTOM_SCRIPT_BEGIN: '<' -> pushMode(CustomScript);
+SCOPE_PARAMS: 'action scope params';
+SCRIPT_ACTION_CONTENT_BEGIN: '<%';
+SCRIPT_ACTION_CONTENT_END: '%>';
 
 // Docstring
 DOCSTRING_BEGIN: '"""' -> pushMode(Docstring);
@@ -60,6 +62,11 @@ mode Template;
 Template_CONTENT: ('\\$' | '\\"' | ~[$"])+;
 Template_INTERPOLATION_OPEN: '$' LPAREN -> pushMode(Interpolation);
 Template_CLOSE: '"' -> popMode;
+
+mode ActionTemplate;
+ActionTemplate_CONTENT: ('\\$' | '\\%' | ~[$%])+;
+ActionTemplate_INTERPOLATION_OPEN: '$' LPAREN -> pushMode(Interpolation);
+ActionTemplate_CLOSE: SCRIPT_ACTION_CONTENT_END -> popMode;
 
 mode Interpolation;
 Interpolation_IDENTIFIER: IDENTIFIER;
@@ -77,5 +84,5 @@ mode DocstringRef;
 Docstring_IDENTIFIER: IDENTIFIER WS -> popMode;
 
 mode CustomScript;
-CustomScript_SCRIPT: (~[>] | '>>')+;
-CustomScript_END: '>' -> popMode;
+CustomScript_SCRIPT: (~[%] | '\\%')+;
+CustomScript_END: SCRIPT_ACTION_CONTENT_END -> popMode;

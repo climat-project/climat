@@ -1,7 +1,7 @@
 package com.climat
 
 import child_process.ExecSyncOptions
-import com.climat.library.domain.action.CustomScriptActionValue
+import com.climat.library.domain.action.JavaScriptActionValue
 import com.climat.library.domain.action.TemplateActionValue
 import com.climat.library.domain.toolchain.Toolchain
 import kotlinx.coroutines.await
@@ -30,7 +30,7 @@ fun doExec(
                 is TemplateActionValue -> {
                     child_process.execSync(command.value!!, jsObjectOf("stdio" to "inherit") as ExecSyncOptions)
                 }
-                is CustomScriptActionValue -> handleCustomScript(command, toolchain)
+                is JavaScriptActionValue -> handleCustomScript(command, toolchain)
                 else -> throw Exception("${command.type} not supported")
             }
         },
@@ -39,13 +39,9 @@ fun doExec(
 }
 
 fun handleCustomScript(
-    command: CustomScriptActionValue,
+    command: JavaScriptActionValue,
     toolchain: Toolchain,
 ) {
-    if (command.name != "js") {
-        throw Exception("${command.name ?: "default"} custom script not supported")
-    }
-
     val params: dynamic = object {}
     command.valueForJs?.entries?.forEach {
         params[it.key] = it.value
@@ -60,8 +56,4 @@ fun handleCustomScript(
         )
 
     runInContext(command.customScript, createContext(scope), "")
-}
-
-fun camelise(s: String): String {
-    return s // TODO properly
 }

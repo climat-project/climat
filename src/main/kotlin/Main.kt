@@ -3,7 +3,7 @@ package com.climat
 import com.climat.library.commandParser.execute
 import com.climat.library.commandParser.getValidations
 import com.climat.library.commandParser.parse
-import com.climat.library.domain.action.CustomScriptActionValue
+import com.climat.library.domain.action.JavaScriptActionValue
 import com.climat.library.validation.ValidationResult.ValidationEntryType.Error
 import com.climat.library.validation.ValidationResult.ValidationEntryType.Warning
 import com.climat.output.ColoredLogger
@@ -45,7 +45,7 @@ fun main() =
             process.argv.drop(2).toTypedArray(),
             toolchain,
             prettify { command, _ ->
-                if (command is CustomScriptActionValue) {
+                if (command is JavaScriptActionValue) {
                     // Params used inside `eval`
                     @Suppress("UNUSED_VARIABLE")
                     val params = command.valueForJs

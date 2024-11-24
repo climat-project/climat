@@ -29,7 +29,7 @@ class ParserSanityCheck {
                p5: arg? = "wat",
                p6: flag) {
                const myConst = "abc $(p1) cde"
-               action "random action"
+               action <% random action %>
             }
             
             sub c4 {
@@ -42,7 +42,6 @@ class ParserSanityCheck {
                 @shift sub bb{
                 }
                 @seal @shift sub cc{
-                    action <random script>
                 }
                 @shift @seal sub dd{}
             }

@@ -2,7 +2,7 @@ package com.climat.library.dslParser.dsl
 
 import climat.lang.DslParser
 import com.climat.library.domain.action.ActionValueBase
-import com.climat.library.domain.action.CustomScriptActionValue
+import com.climat.library.domain.action.JavaScriptActionValue
 import com.climat.library.domain.action.ScopeParamsActionValue
 import com.climat.library.domain.action.TemplateActionValue
 import com.climat.library.dslParser.exception.assertRequire
@@ -14,29 +14,24 @@ internal fun decodeSubAction(cliDsl: String, statements: List<DslParser.SubState
     decodeRootAction(cliDsl, statements.map { it.rootStatements() })
 
 internal fun decodeRootAction(cliDsl: String, statements: List<DslParser.RootStatementsContext>): ActionValueBase<*> {
-    val actions = statements.mapNotNull { it.action() }
-        .toList()
-    if (actions.size >= 2) {
-        actions[1].throwExpected("More than one action property is not allowed", cliDsl)
-    }
+    val actions = statements.mapNotNull { it.action() }.toList()
+    if (actions.size >= 2) actions[1].throwExpected("More than one action property is not allowed", cliDsl)
+    if (actions.size != 1) return noopAction()
 
-    if (actions.size == 1) {
-        val child = actions.first()
-        return child.assertRequire(cliDsl) { actionValue() }.let {
-            it.stringTemplate()?.let {
-                TemplateActionValue(
-                    decodeTemplate(cliDsl, it),
-                    it.position
-                )
-            } ?: it.SCOPE_PARAMS()?.text?.let { ScopeParamsActionValue() }
-                ?: it.assertRequire(cliDsl) { customScript() }.let {
-                    CustomScriptActionValue(
-                        it.IDENTIFIER()?.text,
-                        it.assertRequire(cliDsl) { CustomScript_SCRIPT() }.text,
-                        it.position
-                    )
-                }
-        }
-    }
-    return noopAction()
+    val child = actions.first()
+    return child.shellAction()?.let {
+         TemplateActionValue(
+             decodeTemplate(cliDsl, it.actionTemplateEntry()),
+             it.position
+         )
+     }
+
+         ?: child.javascriptAction()?.let {
+             JavaScriptActionValue(
+                 it.assertRequire(cliDsl) { CustomScript_SCRIPT() }.text,
+                 it.position
+             )
+         }
+
+         ?: child.assertRequire(cliDsl) { SCOPE_PARAMS() }.text.let { ScopeParamsActionValue() }
 }
