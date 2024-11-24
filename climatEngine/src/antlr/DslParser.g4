@@ -22,26 +22,26 @@ subStatements: rootStatements;
 
 action: shellAction | javascriptAction | SCOPE_PARAMS;
 
-shellAction: ACTION_PROP_BEGIN actionTemplateEntry* ActionTemplate_CLOSE;
-javascriptAction: JAVASCRIPT_ACTION_PROP_BEGIN CustomScript_SCRIPT? CustomScript_END;
+shellAction: ActionTemplate_BEGIN actionTemplateEntry* ActionTemplate_CLOSE;
+javascriptAction: CustomScript_JAVASCRIPT_BEGIN CustomScript_SCRIPT? CustomScript_END;
 
 constDef: CONST IDENTIFIER EQ literal;
 
 literal: stringTemplate | booleanLiteral;
 booleanLiteral: TRUE | FALSE;
 
-stringTemplate: DOUBLE_QUOTE stringTemplateEntry* Template_CLOSE;
+stringTemplate: DOUBLE_QUOTE stringTemplateEntry* StringTemplate_CLOSE;
 stringTemplateEntry: stringTemplateContent | stringTemplateInterpolation;
-stringTemplateContent: Template_CONTENT;
-stringTemplateInterpolation: Template_INTERPOLATION_OPEN Interpolation_NEGATE? Interpolation_IDENTIFIER mapping? Interpolation_RPAREN;
+stringTemplateContent: StringTemplate_CONTENT;
+stringTemplateInterpolation: StringTemplate_Interpolation_OPEN Interpolation_NEGATE? Interpolation_IDENTIFIER mapping? Interpolation_CLOSE;
 
 actionTemplateEntry: actionTemplateContent | actionTemplateInterpolation;
 actionTemplateContent: ActionTemplate_CONTENT;
-actionTemplateInterpolation: ActionTemplate_INTERPOLATION_OPEN Interpolation_NEGATE? Interpolation_IDENTIFIER mapping? Interpolation_RPAREN;
+actionTemplateInterpolation: ActionTemplate_Interpolation_OPEN Interpolation_NEGATE? Interpolation_IDENTIFIER mapping? Interpolation_CLOSE;
 
 mapping: Interpolation_COLON Interpolation_IDENTIFIER;
 
-docstring: DOCSTRING_BEGIN docstringEntry* Docstring_END;
+docstring: Docstring_BEGIN docstringEntry* Docstring_END;
 docstringEntry: Docstring_CONTENT | paramTag;
 paramTag: Docstring_AT_PARAM Docstring_IDENTIFIER;
 

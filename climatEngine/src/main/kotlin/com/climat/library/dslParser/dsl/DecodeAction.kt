@@ -19,19 +19,18 @@ internal fun decodeRootAction(cliDsl: String, statements: List<DslParser.RootSta
     if (actions.size != 1) return noopAction()
 
     val child = actions.first()
-    return child.shellAction()?.let {
-         TemplateActionValue(
-             decodeTemplate(cliDsl, it.actionTemplateEntry()),
-             it.position
-         )
-     }
+    val shellAction = child.shellAction()
+    val javascriptAction = child.javascriptAction()
 
-         ?: child.javascriptAction()?.let {
-             JavaScriptActionValue(
-                 it.assertRequire(cliDsl) { CustomScript_SCRIPT() }.text,
-                 it.position
-             )
-         }
-
-         ?: child.assertRequire(cliDsl) { SCOPE_PARAMS() }.text.let { ScopeParamsActionValue() }
+    return when {
+        shellAction != null -> TemplateActionValue(
+            decodeTemplate(cliDsl, shellAction.actionTemplateEntry()),
+            shellAction.position
+        )
+        javascriptAction != null -> JavaScriptActionValue(
+            javascriptAction.assertRequire(cliDsl) { CustomScript_SCRIPT() }.text,
+            javascriptAction.position
+        )
+        else -> child.assertRequire(cliDsl) { SCOPE_PARAMS() }.text.let { ScopeParamsActionValue() }
+    }
 }

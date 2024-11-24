@@ -6,12 +6,12 @@ import com.climat.library.domain.ref.ParamDefinition
 import com.climat.library.domain.toolchain.Toolchain
 import com.climat.library.utils.joinToStringIfNotEmpty
 import com.climat.library.utils.newLine
-import com.climat.library.utils.times
+import com.climat.library.utils.newLines
 import com.climat.library.utils.tpl
 
 internal fun getParameterUsageHint(pathToRoot: List<Toolchain>): String =
     getRequiredPlaceholders(pathToRoot) +
-    2 * newLine() +
+    2.newLines() +
     getParameterDescriptions(pathToRoot.last().parameters) +
     newLine()
 
@@ -19,7 +19,7 @@ internal fun getSubcommandUsageHint(pathToRoot: List<Toolchain>): String =
     pathToRoot.last().children.let { children ->
         getRequiredPlaceholders(pathToRoot) +
             children.joinToStringIfNotEmpty(separator = "|", prefix = " (", postfix = ")") { it.name } +
-            children.joinToStringIfNotEmpty(newLine(), prefix = "${2 * newLine()}Subcommands:${newLine()}") {
+            children.joinToStringIfNotEmpty(newLine(), prefix = "${2.newLines()}Subcommands:${newLine()}") {
                 "${it.name} - ${it.description}"
             } +
             newLine()
@@ -46,12 +46,16 @@ fun getParameterDescriptions(params: Array<ParamDefinition>) =
         optionals.joinToStringIfNotEmpty(
             separator = newLine(),
             prefix = "Optional: ${newLine()}",
-            postfix = 2 * newLine()
-        ) { paramDefWithDescription(it) } +
+            postfix = 2.newLines()
+        ) {
+            paramDefWithDescription(it)
+        } +
             required.joinToStringIfNotEmpty(
                 separator = newLine(),
                 prefix = "Required: ${newLine()}"
-            ) { paramDefWithDescription(it) }
+            ) {
+                paramDefWithDescription(it)
+            }
     }
 
 private fun paramDefWithDescription(it: ParamDefinition) =
