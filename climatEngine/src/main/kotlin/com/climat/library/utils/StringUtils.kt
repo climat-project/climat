@@ -39,3 +39,6 @@ internal fun <T> Iterable<T>.joinToStringIfNotEmpty(
     if (this.any()) {
         this.joinToString(separator, prefix, postfix, limit, truncated, transform)
     } else emptyString()
+
+internal fun String.unescape(char: Char): String = replace("\\$char", char.toString())
+internal fun String.unescape(string: String): String = replace("\\$string", string)

@@ -7,6 +7,7 @@ import com.climat.library.domain.action.template.SimpleString
 import com.climat.library.domain.action.template.Template
 import com.climat.library.dslParser.exception.assertRequire
 import com.climat.library.dslParser.exception.throwUnexpected
+import com.climat.library.utils.unescape
 
 internal fun decodeTemplate(cliDsl: String, templateEntries: List<ActionTemplateEntryContext>): Template =
     templateEntries.map { entry ->
@@ -14,7 +15,7 @@ internal fun decodeTemplate(cliDsl: String, templateEntries: List<ActionTemplate
         val actionTemplateInterpolation = entry.actionTemplateInterpolation()
 
         when {
-            actionTemplateContent != null -> SimpleString.create(actionTemplateContent.text)
+            actionTemplateContent != null -> SimpleString(actionTemplateContent.text.unescape('$').unescape("%>"))
 
             actionTemplateInterpolation != null -> Interpolation(
                 name = actionTemplateInterpolation.assertRequire(cliDsl) { Interpolation_IDENTIFIER() }.text,
@@ -32,7 +33,7 @@ internal fun decodeTemplate(cliDsl: String, templateEntries: List<StringTemplate
         val stringTemplateInterpolation = entry.stringTemplateInterpolation()
 
         when {
-            stringTemplateContent != null -> SimpleString.create(stringTemplateContent.text)
+            stringTemplateContent != null -> SimpleString(stringTemplateContent.text.unescape('$').unescape('"'))
 
             stringTemplateInterpolation != null -> Interpolation(
                 name = stringTemplateInterpolation.assertRequire(cliDsl) { Interpolation_IDENTIFIER() }.text,

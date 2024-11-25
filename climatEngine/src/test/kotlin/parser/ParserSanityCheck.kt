@@ -1,9 +1,10 @@
 package parser
 
 import com.climat.library.dslParser.dsl.decodeCliDsl
+import e2e.E2ETestBase
 import kotlin.test.Test
 
-class ParserSanityCheck {
+class ParserSanityCheck : E2ETestBase() {
 
     val cliDsl = """
         @alias(root2)
@@ -51,5 +52,17 @@ class ParserSanityCheck {
     @Test
     fun test() {
         decodeCliDsl(cliDsl)
+    }
+
+
+    @Test
+    fun testActionTemplateEscape() {
+        """
+            root {
+                action <% echo 'ab\%>' %>
+            }
+        """.assertResults(
+            "" to "echo 'ab%>'"
+        )
     }
 }

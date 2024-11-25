@@ -88,5 +88,5 @@ mode DocstringRef;
 Docstring_IDENTIFIER: IDENTIFIER WS -> popMode;
 
 mode CustomScript;
-CustomScript_SCRIPT: (~[%] | '\\%')+;
+CustomScript_SCRIPT: ('%' ~'>' | ~'%' | '\\%>')+;
 CustomScript_END: SCRIPT_ACTION_CONTENT_END -> popMode;

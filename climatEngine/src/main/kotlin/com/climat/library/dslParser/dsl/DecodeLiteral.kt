@@ -13,7 +13,7 @@ internal fun decodeLiteral(cliDsl: String, literal: LiteralContext): Template {
     else
         literal.assertRequire(cliDsl) { booleanLiteral() }
         .text
-        .let(SimpleString::create)
+        .let(::SimpleString)
         .let(::listOf)
         .let(::Template)
 }
