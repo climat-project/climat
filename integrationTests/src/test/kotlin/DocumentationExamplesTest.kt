@@ -68,4 +68,11 @@ class DocumentationExamplesTest {
         "Is that correct?"
     }
 
+    @Test fun escapeSequences() {
+        runClimat("install $DOCUMENTATION_EXAMPLES/escape-sequences.cli")
+        run("escape-sequences") shouldBe "Action body is surrounded by <% %>\n" +
+                "Constant values are surrounded by \"\n" +
+                "Default arg values are surrounded by \""
+    }
+
 }

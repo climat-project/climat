@@ -66,10 +66,14 @@ export default function prismIncludeLanguages(PrismObject) {
       alias: 'comment',
     },
     'string': {
-      pattern: /(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?!\s*:)/,
+      pattern: /(^|[^\\])(?:"|<%)(?:\\.|[^\\"\r\n])*(?:"|%>)(?!\s*:)/,
       lookbehind: true,
       greedy: true
     },
+    'actionContent': {
+      pattern: /(?:^|[^\\])<%(?:.|\n|[^\\])*%>(?!\s*:)/,
+      alias: 'string',
+    }
   }
 
   delete globalThis.Prism;

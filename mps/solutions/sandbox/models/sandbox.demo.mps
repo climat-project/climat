@@ -10,6 +10,9 @@
       <concept id="1673101796775454470" name="climat.structure.JavaScriptAction" flags="ng" index="ETACY">
         <property id="1673101796775507372" name="javascript" index="ETNyk" />
       </concept>
+      <concept id="1673101796775507350" name="climat.structure.CustomScriptAction" flags="ng" index="ETNyI">
+        <property id="1673101796775509717" name="runtimePath" index="ETNfH" />
+      </concept>
       <concept id="6753445164543197307" name="climat.structure.ShellAction" flags="ng" index="3n54Vz">
         <child id="6753445164543197308" name="pieces" index="3n54V$" />
       </concept>
@@ -100,6 +103,17 @@
         <node concept="3xjQpG" id="1sS3jwXS38r" role="3xjQpI">
           <node concept="ETACY" id="1sS3jwXSirS" role="3n54VA">
             <property role="ETNyk" value="wergerg" />
+          </node>
+        </node>
+      </node>
+      <node concept="3xu2P2" id="1qlCtBHsWbG" role="3xjQpw">
+        <property role="TrG5h" value="erq" />
+        <node concept="3n5Jyb" id="1qlCtBHsWbH" role="3n2o5A">
+          <node concept="3n5_66" id="1qlCtBHsWbI" role="3n5Jyc" />
+        </node>
+        <node concept="3xjQpG" id="1qlCtBHsWbJ" role="3xjQpI">
+          <node concept="ETNyI" id="1qlCtBHsWbK" role="3n54VA">
+            <property role="ETNfH" value="/erq" />
           </node>
         </node>
       </node>
