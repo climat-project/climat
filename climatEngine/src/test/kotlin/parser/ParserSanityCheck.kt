@@ -59,10 +59,11 @@ class ParserSanityCheck : E2ETestBase() {
     fun testActionTemplateEscape() {
         """
             root {
-                action <% echo 'ab\%>' %>
+                const cst = "my statement\""
+                action <% echo 'ab\%>' $(cst) %>
             }
         """.assertResults(
-            "" to "echo 'ab%>'"
+            "" to "echo 'ab%>' my statement\""
         )
     }
 }
