@@ -2,7 +2,7 @@ package com.climat.library.commandParser
 
 import com.climat.library.commandParser.exception.ParameterException
 import com.climat.library.domain.action.ActionValueBase
-import com.climat.library.domain.action.CustomScriptActionValue
+import com.climat.library.domain.action.JavaScriptActionValue
 import com.climat.library.domain.action.NoopActionValue
 import com.climat.library.domain.action.ScopeParamsActionValue
 import com.climat.library.domain.action.TemplateActionValue
@@ -117,7 +117,7 @@ private fun setActualCommand(
 ) {
     when (action) {
         is TemplateActionValue -> action.value = action.template.str(values)
-        is CustomScriptActionValue -> action.value = values.associate { it.ref.name to it.value }
+        is JavaScriptActionValue -> action.value = values.associate { it.ref.name to it.value }
         is ScopeParamsActionValue -> action.value = values.associate { it.ref.name to it.value }
         is NoopActionValue -> { /* By definition, do nothing */ }
         else -> throw Exception("Type `${action::class}` not supported")

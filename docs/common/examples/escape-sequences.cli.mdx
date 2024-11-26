@@ -1,0 +1,15 @@
+---
+climat_version: 0.0.5
+---
+```clidsl title="escape-sequences.cli"
+escape-sequences(arg-statement: arg? = "Default arg values are surrounded by \"") {
+
+    const const-statement = "Constant values are surrounded by \""
+    action <%
+        echo Action body is surrounded by <% %\%> &&
+        echo $(const-statement) &&
+        echo $(arg-statement)
+    %>
+
+}
+```

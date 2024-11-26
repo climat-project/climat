@@ -2,6 +2,7 @@ package com.climat.library.dslParser.dsl
 
 import climat.lang.DslLexer
 import climat.lang.DslParser
+import climat.lang.DslParser.RootContext
 import com.climat.library.domain.toolchain.RootToolchain
 import com.climat.library.dslParser.docstring.decodeDocstring
 import com.climat.library.dslParser.exception.CliDslErrorListener
@@ -37,7 +38,7 @@ internal fun decodeCliDsl(cliDsl: String): RootToolchain {
     )
 }
 
-private fun getRoot(cliDsl: String): DslParser.RootContext {
+private fun getRoot(cliDsl: String): RootContext {
     val lexer = DslLexer(CharStreams.fromString(cliDsl))
     val parser = DslParser(CommonTokenStream(lexer))
     parser.addErrorListener(CliDslErrorListener(cliDsl))

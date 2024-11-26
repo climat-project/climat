@@ -190,7 +190,7 @@
       <property role="IQ2ns" value="6753445164543197310" />
       <property role="20lmBu" value="fLJjDmT/aggregation" />
       <property role="20kJfa" value="action" />
-      <ref role="20lvS9" node="5QT3DyaFk1V" resolve="Action" />
+      <ref role="20lvS9" node="1sS3jwXRAs3" resolve="Action" />
     </node>
     <node concept="1TJgyj" id="5sHVQEQoC$a" role="1TKVEi">
       <property role="IQ2ns" value="6281940296857192714" />
@@ -202,8 +202,8 @@
   </node>
   <node concept="1TIwiD" id="5QT3DyaFk1V">
     <property role="EcuMT" value="6753445164543197307" />
-    <property role="TrG5h" value="Action" />
-    <ref role="1TJDcQ" to="tpck:gw2VY9q" />
+    <property role="TrG5h" value="ShellAction" />
+    <ref role="1TJDcQ" node="1sS3jwXRAs3" resolve="Action" />
     <node concept="1TJgyj" id="5QT3DyaFk1W" role="1TKVEi">
       <property role="IQ2ns" value="6753445164543197308" />
       <property role="20lmBu" value="fLJjDmT/aggregation" />
@@ -224,6 +224,11 @@
       <property role="IQ2nx" value="6753445164543455089" />
       <property role="TrG5h" value="presence" />
       <ref role="AX2Wp" node="5QT3DyaI6Zb" resolve="ParameterPresence" />
+    </node>
+    <node concept="1TJgyi" id="1sS3jwXLQw$" role="1TKVEl">
+      <property role="IQ2nx" value="1673101796773947428" />
+      <property role="TrG5h" value="shortHand" />
+      <ref role="AX2Wp" to="tpck:fKAOsGN" resolve="string" />
     </node>
     <node concept="1TJgyj" id="5QT3DyaJ1lG" role="1TKVEi">
       <property role="IQ2ns" value="6753445164544169324" />
@@ -280,6 +285,36 @@
     <property role="TrG5h" value="Referenceable" />
     <node concept="PrWs8" id="5QT3DyaJ$fi" role="PrDN$">
       <ref role="PrY4T" to="tpck:h0TrEE$" resolve="INamedConcept" />
+    </node>
+  </node>
+  <node concept="1TIwiD" id="1sS3jwXRAs3">
+    <property role="EcuMT" value="1673101796775454467" />
+    <property role="TrG5h" value="Action" />
+    <ref role="1TJDcQ" to="tpck:gw2VY9q" />
+  </node>
+  <node concept="1TIwiD" id="1sS3jwXRAs6">
+    <property role="EcuMT" value="1673101796775454470" />
+    <property role="TrG5h" value="JavaScriptAction" />
+    <ref role="1TJDcQ" node="1sS3jwXRAs3" resolve="Action" />
+    <node concept="1TJgyi" id="1sS3jwXRNmG" role="1TKVEl">
+      <property role="IQ2nx" value="1673101796775507372" />
+      <property role="TrG5h" value="javascript" />
+      <ref role="AX2Wp" to="tpck:fKAOsGN" resolve="string" />
+    </node>
+  </node>
+  <node concept="1TIwiD" id="1sS3jwXRNmm">
+    <property role="EcuMT" value="1673101796775507350" />
+    <property role="TrG5h" value="CustomScriptAction" />
+    <ref role="1TJDcQ" node="1sS3jwXRAs3" resolve="Action" />
+    <node concept="1TJgyi" id="1sS3jwXRNVl" role="1TKVEl">
+      <property role="IQ2nx" value="1673101796775509717" />
+      <property role="TrG5h" value="runtimePath" />
+      <ref role="AX2Wp" to="tpck:fKAOsGN" resolve="string" />
+    </node>
+    <node concept="1TJgyi" id="1sS3jwXRNVm" role="1TKVEl">
+      <property role="IQ2nx" value="1673101796775509718" />
+      <property role="TrG5h" value="customScript" />
+      <ref role="AX2Wp" to="tpck:fKAOsGN" resolve="string" />
     </node>
   </node>
 </model>

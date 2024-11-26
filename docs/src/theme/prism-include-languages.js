@@ -53,6 +53,10 @@ export default function prismIncludeLanguages(PrismObject) {
       pattern: /\@alias/,
       alias: 'keyword'
     },
+    'javascript': {
+      pattern: /javascript/,
+      alias: 'keyword'
+    },
     'comment': {
       pattern: /\/\/.*|\/\*[\s\S]*?(?:\*\/|$)/,
       greedy: true
@@ -62,10 +66,14 @@ export default function prismIncludeLanguages(PrismObject) {
       alias: 'comment',
     },
     'string': {
-      pattern: /(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?!\s*:)/,
+      pattern: /(^|[^\\])(?:"|<%)(?:\\.|[^\\"\r\n])*(?:"|%>)(?!\s*:)/,
       lookbehind: true,
       greedy: true
     },
+    'actionContent': {
+      pattern: /(?:^|[^\\])<%(?:.|\n|[^\\])*%>(?!\s*:)/,
+      alias: 'string',
+    }
   }
 
   delete globalThis.Prism;

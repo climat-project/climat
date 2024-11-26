@@ -15,7 +15,7 @@ abstract class ActionValueBase<VType> internal constructor() : SourceTraceable()
 
     val type: Type = when (this) {
         is TemplateActionValue -> Type.Template
-        is CustomScriptActionValue -> Type.CustomScript
+        is JavaScriptActionValue -> Type.CustomScript
         is ScopeParamsActionValue -> Type.ScopeParams
         is NoopActionValue -> Type.Noop
         else -> throw Exception("${this::class} is not supported")

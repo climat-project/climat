@@ -7,8 +7,7 @@ import kotlin.js.JsExport
 
 @OptIn(ExperimentalJsExport::class)
 @JsExport
-class CustomScriptActionValue internal constructor(
-    val name: String?,
+class JavaScriptActionValue internal constructor(
     val customScript: String,
     override val sourceMap: Position?
 ) : ActionValueBase<Map<String, Any>>() {
